@@ -2,5 +2,10 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#4070ff</color>
+
+    <color name="list_item_bg_pressed">#22b6b6b6</color>
+    <color name="colorShared">#41101010</color>
+    <color name="colorNavigation">#f62e3e4c</color>
+    <color name="colorPageIndicator">#ffffff</color>
 </resources>
