@@ -7,6 +7,10 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.neocampus.wifishared.sql.database.ExempleTable1;
+import com.neocampus.wifishared.sql.database.TableConfiguration;
+import com.neocampus.wifishared.sql.database.TableConsommation;
+
+import java.util.Locale;
 
 /**
  * Created by Jean on 23/07/2015.
@@ -65,6 +69,34 @@ public class SQLManager {
             }
         }
         return values;
+    }
+
+
+    public int ajouterConf(String ssid, String password){
+        ContentValues value = new ContentValues();
+
+        value.put(TableConfiguration.SSID,ssid);
+        value.put(TableConfiguration.Pwd,password);
+        database.insert(TableConfiguration._NAME,null,value);
+
+        return 2;
+    }
+
+    public int ajouterConso(String date, int nbreuser, int periode, double conso){
+        ContentValues value = new ContentValues();
+
+        value.put(TableConsommation._Date, date);
+        value.put(TableConsommation.NbreUser, nbreuser);
+        value.put(TableConsommation._Periode, periode);
+        value.put(TableConsommation._Consommation, conso);
+        database.insert(TableConsommation._NAME, null, value);
+
+        return 2;
+    }
+
+    public void supprimerConso(int iD){
+        String delete = String.format(Locale.FRANCE,"%DexUtils = %d", TableConsommation._ID, iD);
+        database.delete(TableConsommation._NAME, delete, null);
     }
 
 
