@@ -8,7 +8,7 @@ import com.neocampus.wifishared.sql.annotations.Table;
 /**
  * Created by Asus on 10/01/2017.
  */
-@Table(TableName = "TableConsommation", Order = 2)
+@Table(TableName = "TableConsommation", Order = 1)
 public class TableConsommation extends SqlDataSchema {
     public static final String _NAME = "TableConsommation" ;
 
@@ -26,15 +26,6 @@ public class TableConsommation extends SqlDataSchema {
 
     @Column(Type = SqlType.REAL, Nullable = false)
     public static final String _Consommation = "Consommation";
-
-    @Column(Type = SqlType.INTEGER, Nullable = false, value = "15")
-    public static final String LimiteBatterie = "Limite_Batterie";
-
-    @Column(Type = SqlType.DOUBLE, Nullable = false, value = "1")
-    public static final String LimiteConsommation = "Limite_Consommation";
-
-    @Column(Type = SqlType.DOUBLE, Nullable = false, value = "300")
-    public static final String LimiteTemps = "Limite_Temps";
 
 
     public TableConsommation(ContentValues values) {
@@ -76,16 +67,4 @@ public class TableConsommation extends SqlDataSchema {
     public void setConsommation(String conso){
         this.values.put(_Consommation,conso);
     }
-
-    public int getLimiteBatterie(){ return this.values.getAsInteger(LimiteBatterie);}
-
-    public void setLimiteBatterie(String lim_bat){ this.values.put(LimiteBatterie, lim_bat);}
-
-    public Double getLimiteConsommation(){ return this.values.getAsDouble(LimiteConsommation);}
-
-    public void setLimiteConsommation(String lim_conso){ this.values.put(LimiteConsommation, lim_conso);}
-
-    public Double getLimiteTemps(){ return this.values.getAsDouble(LimiteTemps);}
-
-    public void setLimiteTemps(String lim_tmp){ this.values.put(LimiteTemps, lim_tmp);}
 }

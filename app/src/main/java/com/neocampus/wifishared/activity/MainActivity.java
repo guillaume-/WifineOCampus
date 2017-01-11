@@ -5,6 +5,9 @@ import android.net.wifi.WifiConfiguration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,14 +21,20 @@ import android.widget.Button;
 
 import com.neocampus.wifishared.R;
 import com.neocampus.wifishared.fragments.Home;
+import com.neocampus.wifishared.fragments.Users;
+import com.neocampus.wifishared.listeners.OnFragmentInteractionListener;
 import com.neocampus.wifishared.utils.WifiApControl;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, Home.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, OnFragmentInteractionListener {
 
     private WifiApControl apControl;
     private WifiConfiguration defaultWifiConfiguration;
+    private Fragment fragment = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +57,7 @@ public class MainActivity extends AppCompatActivity
 
         if (apControl != null) {
             defaultWifiConfiguration = apControl.getWifiApConfiguration();
+            fragment = showInstance(Home.class);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             finishAndRemoveTask();
         } else {
@@ -84,10 +94,14 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
+        if (id == R.id.nav_home) {
+            if(fragment.getClass() != Home.class) {
+                fragment = showInstance(Home.class);
+            }
+        } else if (id == R.id.nav_users) {
+            if(fragment.getClass() != Users.class) {
+                fragment = showInstance(Users.class);
+            }
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
@@ -110,14 +124,14 @@ public class MainActivity extends AppCompatActivity
         Snackbar.make(v, action, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
         switch (button.getText().toString()) {
-            case "Lancer le partage":
+            case "Activer le Partage":
                 if (apControl.isWifiApEnabled()) {
                     apControl.disable();
                 }
                 apControl.setEnabled(getUPSWifiConfiguration(), true);
-                button.setText("Arrêter le partage");
+                button.setText("Arrêter le Partage");
                 break;
-            case "Arrêter le partage":
+            case "Arrêter le Partage":
                 if (apControl.isWifiApEnabled()) {
                     apControl.disable();
                 }
@@ -131,6 +145,24 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    @Override
+    public int getClientCount() {
+        List<WifiApControl.Client> clients
+                = apControl.getClients();
+        if(clients == null)
+            return 0;
+        return clients.size();
+    }
+
+    @Override
+    public List<WifiApControl.Client> getClients() {
+        List<WifiApControl.Client>
+                clients = apControl.getClients();
+        if(clients == null)
+            return new ArrayList<>() ;
+        return clients;
     }
 
 
@@ -147,5 +179,43 @@ public class MainActivity extends AppCompatActivity
         wifiConfiguration.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
 
         return wifiConfiguration;
+    }
+
+    private Fragment showInstance(Class<?> aClass) {
+        /*Check if already create*/
+        List<Fragment> fragments =
+                getSupportFragmentManager().getFragments();
+        Fragment fragment = null;
+        if (fragments != null)
+        {
+            for (Fragment fragmentStored : fragments) {
+                if (fragmentStored.getClass() == aClass) {
+                    fragment = fragmentStored;
+                    break;
+                }
+            }
+        }
+        if(fragment == null)
+        {
+            try {
+                fragment = (Fragment) aClass.newInstance();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        final FragmentManager fm = getSupportFragmentManager();
+        final FragmentTransaction ft = fm.beginTransaction();
+        // We can also animate the changing of fragment.
+        ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+        // Replace current fragment by the new one.
+        ft.replace(R.id.iDFragmentShowing, fragment);
+        // Null on the back stack to return on the previous fragment when user
+        // press on back button.
+        ft.addToBackStack(null);
+        // Commit changes.
+        ft.commit();
+        return fragment;
     }
 }

@@ -4,28 +4,28 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.neocampus.wifishared.R;
-import com.neocampus.wifishared.listeners.OnConnectionListener;
 import com.neocampus.wifishared.listeners.OnFragmentInteractionListener;
-import com.neocampus.wifishared.views.CirclePageIndicator;
-import com.neocampus.wifishared.views.CirclePagerAdapter;
+import com.neocampus.wifishared.utils.WifiApControl;
+import com.neocampus.wifishared.views.LinearLayoutUsers;
+
+import java.util.List;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link Home.OnFragmentInteractionListener} interface
+ * {@link Users.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link Home#newInstance} factory method to
+ * Use the {@link Users#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Home extends Fragment implements OnConnectionListener {
+public class Users extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -37,7 +37,7 @@ public class Home extends Fragment implements OnConnectionListener {
 
     private OnFragmentInteractionListener mListener;
 
-    public Home() {
+    public Users() {
         // Required empty public constructor
     }
 
@@ -50,8 +50,8 @@ public class Home extends Fragment implements OnConnectionListener {
      * @return A new instance of fragment Home.
      */
     // TODO: Rename and change types and number of parameters
-    public static Home newInstance(String param1, String param2) {
-        Home fragment = new Home();
+    public static Users newInstance(String param1, String param2) {
+        Users fragment = new Users();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -73,25 +73,20 @@ public class Home extends Fragment implements OnConnectionListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.id_view_pager);
-        CirclePageIndicator indicator = (CirclePageIndicator) view.findViewById(R.id.id_circle_indicator);
+        View view = inflater.inflate(R.layout.fragment_users, container, false);
+        LinearLayoutUsers layoutUsers =
+                (LinearLayoutUsers) view.findViewById(R.id.iDLinearLayoutUsers);
+
         TextView textView = (TextView) view.findViewById(R.id.iDClientCount);
 
-        textView.setText("(" + mListener.getClientCount() + ")");
-        viewPager.setAdapter(new CirclePagerAdapter(viewPager));
-        indicator.setViewPager(viewPager);
+        List<WifiApControl.Client> clients = mListener.getClients();
 
+
+        textView.setText("(" + clients.size() + ")");
+        layoutUsers.showClients(clients);
         return view;
     }
 
-    @Override
-    public void onConnected(int count) {
-        View view = getView();
-        if(view != null) {
-
-        }
-    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -116,6 +111,5 @@ public class Home extends Fragment implements OnConnectionListener {
         super.onDetach();
         mListener = null;
     }
-
 
 }

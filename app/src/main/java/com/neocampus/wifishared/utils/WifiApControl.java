@@ -380,7 +380,7 @@ final public class WifiApControl extends Observable {
                 }
 
                 String ipAddr = parts[0];
-                String hwAddr = parts[3];
+                String hwAddr = parts[3].toUpperCase();
                 String device = parts[5];
 
                 if (!device.equals(deviceName)) {
