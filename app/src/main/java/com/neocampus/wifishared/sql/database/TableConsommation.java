@@ -25,7 +25,7 @@ public class TableConsommation extends SqlDataSchema {
     public static final String _Periode = "Periode";
 
     @Column(Type = SqlType.REAL, Nullable = false)
-    public static final String _Consommation = "Conssommation";
+    public static final String _Consommation = "Consommation";
 
 
     public TableConsommation(ContentValues values) {
