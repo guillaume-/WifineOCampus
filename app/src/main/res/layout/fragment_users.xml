@@ -16,7 +16,6 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/button"
             android:paddingTop="20dp">
 
             <LinearLayout
@@ -34,7 +33,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Connectés"
+                        android:text="@string/connect_s"
                         android:typeface="serif"
                         android:textAppearance="@style/AppTheme.TextSmallStyle"
                         android:textStyle="normal|bold"
@@ -48,7 +47,7 @@
                         android:layout_weight="1">
 
                         <TextView
-                            android:text="Utilisateurs "
+                            android:text="@string/utilisateurs"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorTextContent"
                             android:typeface="monospace"
@@ -58,7 +57,7 @@
                             android:layout_width="0dp" />
 
                         <TextView
-                            android:text=":"
+                            android:text="@string/deux_points"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorTextContent"
                             android:typeface="monospace"
@@ -70,7 +69,7 @@
                             android:layout_marginEnd="10dp" />
 
                         <TextView
-                            android:text="(0)"
+                            android:text="@string/wait_count"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorTextContent"
                             android:typeface="monospace"
@@ -108,7 +107,7 @@
                     android:background="@drawable/cu_solid_bottom_border">
 
                     <TextView
-                        android:text="Adresse Physique"
+                        android:text="@string/adresse_physique"
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorTextContent"
                         android:typeface="monospace"
@@ -120,7 +119,7 @@
                         android:gravity="center_vertical" />
 
                     <TextView
-                        android:text="Adresse IP"
+                        android:text="@string/adresse_ip"
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorTextContent"
                         android:typeface="monospace"

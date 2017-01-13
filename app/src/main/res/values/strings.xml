@@ -5,6 +5,24 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Paramètres</string>
+    <string name="connect_s">Connectés</string>
+    <string name="utilisateurs">Utilisateurs</string>
+    <string name="deux_points">:</string>
+    <string name="wait_count">(?)</string>
+    <string name="utilisations">Utilisations</string>
+    <string name="total_transmission">Total transmission</string>
+    <string name="wait_info">\?</string>
+    <string name="taux_batterie_restant">Taux batterie restant</string>
+    <string name="temps_d_utilisation_restant">Temps d\'utilisation restant</string>
+    <string name="arret_automatique">Arrêt automatique</string>
+    <string name="limite_d_utilisations">Limite d\'utilisations</string>
+    <string name="seuil_de_transmission">Seuil de transmission</string>
+    <string name="seuil_de_la_batterie">Seuil de la batterie</string>
+    <string name="seuil_de_temps">Seuil de temps</string>
+    <string name="activer_le_partage">Lancer le Partage</string>
+    <string name="desactiver_le_partage">Arrêter le Partage</string>
+    <string name="adresse_physique">Adresse Physique</string>
+    <string name="adresse_ip">Adresse IP</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 </resources>
