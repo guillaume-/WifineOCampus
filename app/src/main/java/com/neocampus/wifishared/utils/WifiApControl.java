@@ -31,6 +31,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+import com.neocampus.wifishared.listeners.OnReachableClientListener;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -62,12 +64,16 @@ final public class WifiApControl extends Observable {
     private static Method getWifiApStateMethod;
     private static Method isWifiApEnabledMethod;
     private static Method setWifiApEnabledMethod;
+    private static Method setWifiApConfiguration;
 
     static {
         for (Method method : WifiManager.class.getDeclaredMethods()) {
             switch (method.getName()) {
                 case "getWifiApConfiguration":
                     getWifiApConfigurationMethod = method;
+                    break;
+                case "setWifiApConfiguration":
+                    setWifiApConfiguration = method;
                     break;
                 case "getWifiApState":
                     getWifiApStateMethod = method;
@@ -82,7 +88,11 @@ final public class WifiApControl extends Observable {
         }
     }
 
+
+
     public static int CODE_WRITE_SETTINGS_PERMISSION = 1555;
+
+    public static final String EXTRA_WIFI_AP_STATE = "wifi_state";
 
     public static final int WIFI_AP_STATE_DISABLING = 10;
     public static final int WIFI_AP_STATE_DISABLED  = 11;
@@ -129,14 +139,23 @@ final public class WifiApControl extends Observable {
     // the actual class when first called.
     public static WifiApControl getInstance(Context context) {
         if (instance == null) {
-            boolean permission;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                permission = Settings.System.canWrite(context);
-            } else {
-                permission = ContextCompat.checkSelfPermission(context,
-                        Manifest.permission.WRITE_SETTINGS) == PackageManager.PERMISSION_GRANTED;
-            }
-            if (!permission) {
+
+            instance = new WifiApControl(context);
+        }
+        return instance;
+    }
+
+    public static boolean checkPermission(Context context, boolean... request)
+    {
+        boolean permission;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            permission = Settings.System.canWrite(context);
+        } else {
+            permission = ContextCompat.checkSelfPermission(context,
+                    Manifest.permission.WRITE_SETTINGS) == PackageManager.PERMISSION_GRANTED;
+        }
+        if (!permission) {
+            if (request.length > 0 && request[0]) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     Intent intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
                     intent.setData(Uri.parse("package:" + context.getPackageName()));
@@ -147,11 +166,26 @@ final public class WifiApControl extends Observable {
                             new String[]{Manifest.permission.WRITE_SETTINGS},
                             CODE_WRITE_SETTINGS_PERMISSION);
                 }
-                return null;
             }
-            instance = new WifiApControl(context);
+            return false;
         }
-        return instance;
+        return true;
+    }
+
+    public static WifiConfiguration getUPSWifiConfiguration() {
+
+        WifiConfiguration wifiConfiguration = new WifiConfiguration();
+        wifiConfiguration.SSID = "Wifi neOCampus   ıllıllı";
+        wifiConfiguration.preSharedKey = "Wifi neOCampus   ıllıllı";
+        wifiConfiguration.wepKeys[0] = "Wifi neOCampus   ıllıllı";
+        wifiConfiguration.hiddenSSID = false;
+
+        wifiConfiguration.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
+        wifiConfiguration.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
+        wifiConfiguration.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+        wifiConfiguration.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
+
+        return wifiConfiguration;
     }
 
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
@@ -260,6 +294,10 @@ final public class WifiApControl extends Observable {
         return (WifiConfiguration) result;
     }
 
+    public void setWifiApConfiguration(WifiConfiguration configuration) {
+        invokeQuietly(setWifiApConfiguration, wm, configuration);
+    }
+
     // getConfiguration is a commodity function alias for
     // getWifiApConfiguration.
     public WifiConfiguration getConfiguration() {
@@ -341,6 +379,14 @@ final public class WifiApControl extends Observable {
         return null;
     }
 
+    public static boolean equals(WifiConfiguration configuration1,
+                                 WifiConfiguration configuration2)
+    {
+        byte[] bytes1 = ParcelableUtil.marshall(configuration1);
+        byte[] bytes2 = ParcelableUtil.marshall(configuration2);
+        return Arrays.equals(bytes1, bytes2);
+    }
+
     // Client describes a Wi-Fi AP device connected to the network.
     public static class Client {
 
@@ -354,9 +400,22 @@ final public class WifiApControl extends Observable {
             this.ipAddr = ipAddr;
             this.hwAddr = hwAddr;
         }
+
+        @Override
+        public boolean equals(Object obj) {
+            if(obj instanceof Client) {
+                return ((Client)obj).hwAddr.equals(hwAddr);
+            }
+            return super.equals(obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return 1;
+        }
     }
 
-    // getClients returns a list of all clients connected to the network.
+    // getReachableClients returns a list of all clients connected to the network.
     // Since the information is pulled from ARP, which is cached for up to
     // five minutes, this method may yield clients that disconnected
     // minutes ago.
@@ -408,28 +467,15 @@ final public class WifiApControl extends Observable {
         return result;
     }
 
-    // ReachableClientListener is an interface to collect the results
-    // provided by getReachableClients via callbacks.
-    public interface ReachableClientListener {
-
-        // onReachableClient is called each time a reachable client is
-        // found.
-        void onReachableClient(Client c);
-
-        // onComplete is called when we are done looking for reachable
-        // clients
-        void onComplete();
-    }
-
     // getReachableClients fetches the clients connected to the network
-    // much like getClients, but only those which are reachable. Since
+    // much like getReachableClients, but only those which are reachable. Since
     // checking for reachability requires network I/O, the reachable
     // clients are returned via callbacks. All the clients are returned
-    // like in getClients so that the callback returns a subset of the
+    // like in getReachableClients so that the callback returns a subset of the
     // same objects.
     public List<Client> getReachableClients(final int timeout,
-                                            final ReachableClientListener listener) {
-        List<Client> clients = getClients();
+                                            final OnReachableClientListener listener) {
+        final List<Client> clients = getClients();
         if (clients == null) {
             return null;
         }
@@ -442,6 +488,9 @@ final public class WifiApControl extends Observable {
                         InetAddress ip = InetAddress.getByName(c.ipAddr);
                         if (ip.isReachable(timeout)) {
                             listener.onReachableClient(c);
+                        }
+                        else {
+                            clients.remove(c);
                         }
                     } catch (IOException e) {
                         Log.e(TAG, "", e);
@@ -457,7 +506,7 @@ final public class WifiApControl extends Observable {
                 } catch (InterruptedException e) {
                     Log.e(TAG, "", e);
                 }
-                listener.onComplete();
+                listener.onReachableClients(clients);
             }
         }.start();
         return clients;

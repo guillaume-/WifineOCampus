@@ -1,5 +1,4 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -34,7 +33,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Connectés"
+                        android:text="@string/connect_s"
                         android:typeface="serif"
                         android:textAppearance="@style/AppTheme.TextSmallStyle"
                         android:textStyle="normal|bold"
@@ -48,7 +47,7 @@
                         android:layout_weight="1">
 
                         <TextView
-                            android:text="Utilisateurs "
+                            android:text="@string/utilisateurs"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorTextContent"
                             android:typeface="monospace"
@@ -58,7 +57,7 @@
                             android:layout_width="0dp" />
 
                         <TextView
-                            android:text=":"
+                            android:text="@string/deux_points"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorTextContent"
                             android:typeface="monospace"
@@ -70,7 +69,7 @@
                             android:layout_marginEnd="10dp" />
 
                         <TextView
-                            android:text="(0)"
+                            android:text="@string/wait_count"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorTextContent"
                             android:typeface="monospace"
@@ -117,7 +116,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Utilisations"
+                            android:text="@string/utilisations"
                             android:typeface="serif"
                             android:textAppearance="@style/AppTheme.TextSmallStyle"
                             android:textStyle="normal|bold" />
@@ -130,7 +129,7 @@
                         android:layout_marginTop="20dp">
 
                         <TextView
-                            android:text="Total transmission"
+                            android:text="@string/total_transmission"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorTextContent"
                             android:typeface="monospace"
@@ -140,7 +139,7 @@
                             android:layout_width="0dp" />
 
                         <TextView
-                            android:text=":"
+                            android:text="@string/deux_points"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorTextContent"
                             android:typeface="monospace"
@@ -152,7 +151,7 @@
                             android:layout_marginStart="10dp" />
 
                         <TextView
-                            android:text="3 Go"
+                            android:text="@string/wait_info"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorTextContent"
                             android:typeface="monospace"
@@ -169,7 +168,7 @@
                         android:layout_marginTop="20dp">
 
                         <TextView
-                            android:text="Taux batterie restant"
+                            android:text="@string/taux_batterie_restant"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorTextContent"
                             android:typeface="monospace"
@@ -179,7 +178,7 @@
                             android:layout_width="0dp" />
 
                         <TextView
-                            android:text=":"
+                            android:text="@string/deux_points"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorTextContent"
                             android:typeface="monospace"
@@ -191,7 +190,7 @@
                             android:layout_marginEnd="10dp" />
 
                         <TextView
-                            android:text="30 %"
+                            android:text="@string/wait_info"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorTextContent"
                             android:typeface="monospace"
@@ -208,7 +207,7 @@
                         android:layout_marginTop="20dp">
 
                         <TextView
-                            android:text="Temps d'utilisation restant"
+                            android:text="@string/temps_d_utilisation_restant"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorTextContent"
                             android:typeface="monospace"
@@ -218,7 +217,7 @@
                             android:layout_width="0dp" />
 
                         <TextView
-                            android:text=":"
+                            android:text="@string/deux_points"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorTextContent"
                             android:typeface="monospace"
@@ -230,7 +229,7 @@
                             android:layout_marginEnd="10dp" />
 
                         <TextView
-                            android:text="Indéfinie"
+                            android:text="@string/wait_info"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorTextContent"
                             android:typeface="monospace"
@@ -247,7 +246,7 @@
                         android:layout_marginTop="20dp">
 
                         <TextView
-                            android:text="Arrêt automatique"
+                            android:text="@string/arret_automatique"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorTextContent"
                             android:typeface="monospace"
@@ -257,7 +256,7 @@
                             android:layout_width="0dp" />
 
                         <TextView
-                            android:text=":"
+                            android:text="@string/deux_points"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorTextContent"
                             android:typeface="monospace"
@@ -269,14 +268,14 @@
                             android:layout_marginEnd="10dp" />
 
                         <TextView
+                            android:text="@string/wait_info"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorTextContent"
                             android:typeface="monospace"
                             android:fontFamily="serif"
                             android:layout_gravity="center_horizontal"
                             android:layout_weight="0.35"
-                            android:layout_width="0dp"
-                            android:text="Désactiver" />
+                            android:layout_width="0dp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -296,7 +295,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Limite d'utilisations"
+                            android:text="@string/limite_d_utilisations"
                             android:typeface="serif"
                             android:textAppearance="@style/AppTheme.TextSmallStyle"
                             android:textStyle="normal|bold" />
@@ -309,7 +308,7 @@
                         android:layout_marginTop="20dp">
 
                         <TextView
-                            android:text="Seuil de transmission "
+                            android:text="@string/seuil_de_transmission"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorTextContent"
                             android:typeface="monospace"
@@ -319,7 +318,7 @@
                             android:layout_width="0dp" />
 
                         <TextView
-                            android:text=":"
+                            android:text="@string/deux_points"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorTextContent"
                             android:typeface="monospace"
@@ -331,7 +330,7 @@
                             android:layout_marginEnd="10dp" />
 
                         <TextView
-                            android:text="3 Go"
+                            android:text="@string/wait_info"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorTextContent"
                             android:typeface="monospace"
@@ -348,7 +347,7 @@
                         android:layout_marginTop="20dp">
 
                         <TextView
-                            android:text="Seuil de la batterie"
+                            android:text="@string/seuil_de_la_batterie"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorTextContent"
                             android:typeface="monospace"
@@ -370,7 +369,7 @@
                             android:layout_marginEnd="10dp" />
 
                         <TextView
-                            android:text="30 %"
+                            android:text="@string/wait_info"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorTextContent"
                             android:typeface="monospace"
@@ -387,7 +386,7 @@
                         android:layout_marginTop="20dp">
 
                         <TextView
-                            android:text="Seuil de temps"
+                            android:text="@string/seuil_de_temps"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorTextContent"
                             android:typeface="monospace"
@@ -397,7 +396,7 @@
                             android:layout_width="0dp" />
 
                         <TextView
-                            android:text=":"
+                            android:text="@string/deux_points"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorTextContent"
                             android:typeface="monospace"
@@ -409,7 +408,7 @@
                             android:layout_marginEnd="10dp" />
 
                         <TextView
-                            android:text="Indéfinie"
+                            android:text="@string/wait_info"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorTextContent"
                             android:typeface="monospace"
@@ -426,7 +425,7 @@
                         android:layout_marginTop="20dp">
 
                         <TextView
-                            android:text="Arrêt automatique"
+                            android:text="@string/arret_automatique"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorTextContent"
                             android:typeface="monospace"
@@ -436,7 +435,7 @@
                             android:layout_width="0dp" />
 
                         <TextView
-                            android:text=":"
+                            android:text="@string/deux_points"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorTextContent"
                             android:typeface="monospace"
@@ -455,7 +454,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_weight="0.35"
                             android:layout_width="0dp"
-                            android:text="Désactiver" />
+                            android:text="@string/wait_info" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -476,7 +475,7 @@
         </LinearLayout>
 
         <Button
-            android:text="Activer le Partage"
+            android:text="@string/activer_le_partage"
             android:layout_width="match_parent"
             android:id="@+id/button"
             android:layout_gravity="bottom"

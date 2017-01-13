@@ -27,7 +27,7 @@
 
         <receiver android:name=".receivers.OnHotspotReceiver">
             <intent-filter>
-                <action android:name="android.net.wifi.WIFI_HOTSPOT_CLIENTS_CHANGED" />
+                <action android:name="android.net.wifi.WIFI_AP_STATE_CHANGED" />
             </intent-filter>
         </receiver>
     </application>

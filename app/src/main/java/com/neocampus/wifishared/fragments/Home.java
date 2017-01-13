@@ -11,21 +11,25 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.neocampus.wifishared.R;
-import com.neocampus.wifishared.listeners.OnConnectionListener;
-import com.neocampus.wifishared.listeners.OnFragmentInteractionListener;
+import com.neocampus.wifishared.listeners.OnActivitySetListener;
+import com.neocampus.wifishared.listeners.OnFragmentSetListener;
+import com.neocampus.wifishared.listeners.OnReachableClientListener;
+import com.neocampus.wifishared.utils.WifiApControl;
 import com.neocampus.wifishared.views.CirclePageIndicator;
 import com.neocampus.wifishared.views.CirclePagerAdapter;
+
+import java.util.List;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link Home.OnFragmentInteractionListener} interface
+ * {@link OnFragmentSetListener} interface
  * to handle interaction events.
  * Use the {@link Home#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Home extends Fragment implements OnConnectionListener {
+public class Home extends Fragment implements OnFragmentSetListener, OnReachableClientListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -34,8 +38,9 @@ public class Home extends Fragment implements OnConnectionListener {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private View view;
 
-    private OnFragmentInteractionListener mListener;
+    private OnActivitySetListener mListener;
 
     public Home() {
         // Required empty public constructor
@@ -73,41 +78,64 @@ public class Home extends Fragment implements OnConnectionListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.id_view_pager);
-        CirclePageIndicator indicator = (CirclePageIndicator) view.findViewById(R.id.id_circle_indicator);
-        TextView textView = (TextView) view.findViewById(R.id.iDClientCount);
-
-        textView.setText("(" + mListener.getClientCount() + ")");
+        this.view = inflater.inflate(R.layout.fragment_home, container, false);
+        ViewPager viewPager = (ViewPager) this.view.findViewById(R.id.id_view_pager);
+        CirclePageIndicator indicator = (CirclePageIndicator) this.view.findViewById(R.id.id_circle_indicator);
         viewPager.setAdapter(new CirclePagerAdapter(viewPager));
         indicator.setViewPager(viewPager);
+
+        List<WifiApControl.Client> result = this.mListener.getReachableClients(this);
+        if(result.isEmpty()) {
+            TextView textView = (TextView) view.findViewById(R.id.iDClientCount);
+            textView.setText("(0)");
+        }
 
         return view;
     }
 
     @Override
-    public void onConnected(int count) {
-        View view = getView();
-        if(view != null) {
+    public void onReachableClient(WifiApControl.Client c) {
+    }
 
+    @Override
+    public void onReachableClients(final List<WifiApControl.Client> clients) {
+        if(view != null) {
+            view.post(new Runnable() {
+                @Override
+                public void run() {
+                    TextView textView = (TextView) view.findViewById(R.id.iDClientCount);
+                    textView.setText("(" + clients.size() + ")");
+                }
+            });
+        }
+    }
+
+
+    @Override
+    public void onRefreshNotify() {
+        if(view != null) {
+            List<WifiApControl.Client> result = this.mListener.getReachableClients(this);
+            if (result.isEmpty()) {
+                TextView textView = (TextView) view.findViewById(R.id.iDClientCount);
+                textView.setText("(0)");
+            }
         }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
         }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnActivitySetListener) {
+            mListener = (OnActivitySetListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnActivitySetListener");
         }
     }
 

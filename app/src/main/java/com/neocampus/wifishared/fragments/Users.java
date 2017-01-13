@@ -10,7 +10,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.neocampus.wifishared.R;
-import com.neocampus.wifishared.listeners.OnFragmentInteractionListener;
+import com.neocampus.wifishared.listeners.OnActivitySetListener;
+import com.neocampus.wifishared.listeners.OnFragmentSetListener;
+import com.neocampus.wifishared.listeners.OnReachableClientListener;
 import com.neocampus.wifishared.utils.WifiApControl;
 import com.neocampus.wifishared.views.LinearLayoutUsers;
 
@@ -20,12 +22,12 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link Users.OnFragmentInteractionListener} interface
+ * {@link OnFragmentSetListener} interface
  * to handle interaction events.
  * Use the {@link Users#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Users extends Fragment {
+public class Users extends Fragment implements OnFragmentSetListener,  OnReachableClientListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -34,8 +36,9 @@ public class Users extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private View view;
 
-    private OnFragmentInteractionListener mListener;
+    private OnActivitySetListener mListener;
 
     public Users() {
         // Required empty public constructor
@@ -73,36 +76,72 @@ public class Users extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View view = inflater.inflate(R.layout.fragment_users, container, false);
-        LinearLayoutUsers layoutUsers =
-                (LinearLayoutUsers) view.findViewById(R.id.iDLinearLayoutUsers);
-
-        TextView textView = (TextView) view.findViewById(R.id.iDClientCount);
-
-        List<WifiApControl.Client> clients = mListener.getClients();
-
-
-        textView.setText("(" + clients.size() + ")");
-        layoutUsers.showClients(clients);
+        this.view = inflater.inflate(R.layout.fragment_users, container, false);
+        List<WifiApControl.Client> result = this.mListener.getReachableClients(this);
+        if(result.isEmpty()) {
+            TextView textView = (TextView) view.findViewById(R.id.iDClientCount);
+            textView.setText("(0)");
+        }
         return view;
     }
 
+    @Override
+    public void onReachableClient(final WifiApControl.Client c) {
+        if(view != null) {
+            view.post(new Runnable() {
+                @Override
+                public void run() {
+                    LinearLayoutUsers layoutUsers =
+                            (LinearLayoutUsers) view.findViewById(R.id.iDLinearLayoutUsers);
+                    layoutUsers.showClient(c);
+                }
+            });
+        }
+    }
+
+
+    @Override
+    public void onReachableClients(final List<WifiApControl.Client> clients) {
+        if(view != null) {
+            view.post(new Runnable() {
+                @Override
+                public void run() {
+                    TextView textView = (TextView) view.findViewById(R.id.iDClientCount);
+                    textView.setText("(" + clients.size() + ")");
+                    LinearLayoutUsers layoutUsers =
+                            (LinearLayoutUsers) view.findViewById(R.id.iDLinearLayoutUsers);
+                    layoutUsers.setClients(clients);
+                }
+            });
+        }
+    }
+
+
+    @Override
+    public void onRefreshNotify() {
+        if(view != null) {
+            List<WifiApControl.Client> result = this.mListener.getReachableClients(this);
+            if (result.isEmpty()) {
+                TextView textView = (TextView) view.findViewById(R.id.iDClientCount);
+                textView.setText("(0)");
+            }
+        }
+    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
         }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnActivitySetListener) {
+            mListener = (OnActivitySetListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnActivitySetListener");
         }
     }
 
@@ -111,5 +150,6 @@ public class Users extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
 
 }
