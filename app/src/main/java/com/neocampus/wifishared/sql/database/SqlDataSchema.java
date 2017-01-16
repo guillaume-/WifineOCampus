@@ -2,6 +2,7 @@ package com.neocampus.wifishared.sql.database;
 
 import android.content.ContentValues;
 
+
 /**
  * Created by Hirochi on 02/10/2016.
  */

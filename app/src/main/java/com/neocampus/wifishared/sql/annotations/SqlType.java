@@ -9,7 +9,8 @@ public enum SqlType {
     BLOB ("BLOB"),
     REAL ("REAL"),
     NUMERIC ("NUMERIC"),
-    INTEGER ("INTEGER");
+    INTEGER ("INTEGER"),
+    DOUBLE ("DOUBLE");
 
     private final String name;
     private SqlType(String s) {
