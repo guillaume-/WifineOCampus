@@ -72,23 +72,26 @@ public class SQLManager {
     }
 
 
-    public int ajouterConf(String ssid, String password){
+    public int ajouterConf(String conf){
         ContentValues value = new ContentValues();
 
-        value.put(TableConfiguration.SSID,ssid);
-        value.put(TableConfiguration.Pwd,password);
+        value.put(TableConfiguration.Configuration,conf);
         database.insert(TableConfiguration._NAME,null,value);
 
         return 2;
     }
 
-    public int ajouterConso(String date, int nbreuser, int periode, double conso){
+    public int ajouterConso(String date, int nbreuser, int periode, double conso, int limbat, double limconso, double limtmp){
         ContentValues value = new ContentValues();
 
         value.put(TableConsommation._Date, date);
         value.put(TableConsommation.NbreUser, nbreuser);
         value.put(TableConsommation._Periode, periode);
         value.put(TableConsommation._Consommation, conso);
+        value.put(TableConsommation.LimiteBatterie, limbat);
+        value.put(TableConsommation.LimiteConsommation, limconso);
+        value.put(TableConsommation.LimiteTemps, limtmp);
+
         database.insert(TableConsommation._NAME, null, value);
 
         return 2;
