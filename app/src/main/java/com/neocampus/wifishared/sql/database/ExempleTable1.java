@@ -9,7 +9,7 @@ import com.neocampus.wifishared.sql.annotations.Table;
 /**
  * Created by Hirochi ☠ on 09/01/17.
  */
-@Table(TableName = "exemple1_table_name", Order = 1)
+@Table(TableName = "exemple1_table_name", Order = 1, enabled = false)
 public class ExempleTable1 extends SqlDataSchema {
 
     public static final String _NAME = "exemple1_table_name";

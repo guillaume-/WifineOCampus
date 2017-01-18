@@ -2,12 +2,14 @@ package com.neocampus.wifishared.fragments;
 
 import android.content.Context;
 import android.net.Uri;
+import android.net.wifi.WifiConfiguration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.neocampus.wifishared.R;
@@ -19,6 +21,7 @@ import com.neocampus.wifishared.views.CirclePageIndicator;
 import com.neocampus.wifishared.views.CirclePagerAdapter;
 
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -39,6 +42,8 @@ public class Home extends Fragment implements OnFragmentSetListener, OnReachable
     private String mParam1;
     private String mParam2;
     private View view;
+    private TextView batterieLevel;
+    private TextView batterieLimite;
 
     private OnActivitySetListener mListener;
 
@@ -79,6 +84,10 @@ public class Home extends Fragment implements OnFragmentSetListener, OnReachable
         // Inflate the layout for this fragment
 
         this.view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        this.batterieLevel = (TextView) view.findViewById(R.id.batterie_level_result);
+        this.batterieLimite = (TextView) view.findViewById(R.id.batterie_level_limit);
+
         ViewPager viewPager = (ViewPager) this.view.findViewById(R.id.id_view_pager);
         CirclePageIndicator indicator = (CirclePageIndicator) this.view.findViewById(R.id.id_circle_indicator);
         viewPager.setAdapter(new CirclePagerAdapter(viewPager));
@@ -90,6 +99,25 @@ public class Home extends Fragment implements OnFragmentSetListener, OnReachable
             textView.setText("(0)");
         }
 
+        int batterie_level = this.mListener.getCurrentBatterieLevel();
+        int batterie_limite_level = this.mListener.getLimiteBatterieLevel();
+
+        batterieLimite.setText(String.format(Locale.FRANCE, "%d %% ", batterie_limite_level));
+        batterieLevel.setText(String.format(Locale.FRANCE, "%d %% ", batterie_level - batterie_limite_level));
+
+        if (WifiApControl.checkPermission(getContext(), true)) {
+            WifiApControl apControl = WifiApControl.getInstance(getContext());
+            WifiConfiguration
+                    configuration = apControl.getWifiApConfiguration();
+            WifiConfiguration upsConfig = WifiApControl.getUPSWifiConfiguration();
+            if (WifiApControl.equals(configuration, upsConfig))
+            {
+                if(apControl.isEnabled()) {
+                    Button button = (Button) view.findViewById(R.id.button);
+                    button.setText("Arrêter le Partage");
+                }
+            }
+        }
         return view;
     }
 
@@ -119,6 +147,11 @@ public class Home extends Fragment implements OnFragmentSetListener, OnReachable
                 TextView textView = (TextView) view.findViewById(R.id.iDClientCount);
                 textView.setText("(0)");
             }
+            int batterie_level = this.mListener.getCurrentBatterieLevel();
+            int batterie_limite_level = this.mListener.getLimiteBatterieLevel();
+
+            batterieLimite.setText(String.format(Locale.FRANCE, "%d %% ", batterie_limite_level));
+            batterieLevel.setText(String.format(Locale.FRANCE, "%d %% ", batterie_level - batterie_limite_level));
         }
     }
 

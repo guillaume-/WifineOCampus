@@ -10,4 +10,6 @@ import java.util.List;
 
 public interface OnActivitySetListener {
     List<WifiApControl.Client> getReachableClients(OnReachableClientListener listener);
+    int getLimiteBatterieLevel();
+    int getCurrentBatterieLevel();
 }

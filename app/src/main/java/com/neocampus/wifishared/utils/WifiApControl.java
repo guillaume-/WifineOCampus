@@ -298,7 +298,7 @@ final public class WifiApControl extends Observable {
         invokeQuietly(setWifiApConfiguration, wm, configuration);
     }
 
-    // getConfiguration is a commodity function alias for
+    // getWifiConfiguration is a commodity function alias for
     // getWifiApConfiguration.
     public WifiConfiguration getConfiguration() {
         return getWifiApConfiguration();
