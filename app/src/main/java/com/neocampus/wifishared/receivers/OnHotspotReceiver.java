@@ -3,6 +3,12 @@ package com.neocampus.wifishared.receivers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.WifiConfiguration;
+
+import com.neocampus.wifishared.sql.database.TableConfiguration;
+import com.neocampus.wifishared.sql.manage.SQLManager;
+import com.neocampus.wifishared.utils.ParcelableUtil;
+import com.neocampus.wifishared.utils.WifiApControl;
 
 import static com.neocampus.wifishared.utils.WifiApControl.EXTRA_WIFI_AP_STATE;
 import static com.neocampus.wifishared.utils.WifiApControl.WIFI_AP_STATE_DISABLED;
@@ -28,8 +34,8 @@ public class OnHotspotReceiver extends BroadcastReceiver {
     }
 
     private boolean replaceUserWifiConfiguration(Context context) {
-        /*
-        if (!checkPermission(context))
+
+        if (!WifiApControl.checkPermission(context))
             return false;
 
         WifiApControl apControl = WifiApControl.getInstance(context);
@@ -44,12 +50,14 @@ public class OnHotspotReceiver extends BroadcastReceiver {
         sqlManager.open();
 
         try {
-
             tableConfiguration = sqlManager.getConfiguration();
-            byte[] bytes = tableConfiguration.getUserConfiguration();
-            WifiConfiguration userConfiguration
-                    = ParcelableUtil.unmarshall(bytes, WifiConfiguration.class);
-            apControl.setWifiApConfiguration(userConfiguration);
+            byte[] bytes = tableConfiguration.getWifiConfiguration();
+            if(bytes != null) {
+                WifiConfiguration userConfiguration
+                        = ParcelableUtil.unmarshall(bytes, WifiConfiguration.class);
+                apControl.setWifiApConfiguration(userConfiguration);
+                sqlManager.setConfiguration(null);
+            }
 
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
@@ -59,7 +67,7 @@ public class OnHotspotReceiver extends BroadcastReceiver {
         finally {
             sqlManager.close();
         }
-        */
+
         return true;
     }
 }

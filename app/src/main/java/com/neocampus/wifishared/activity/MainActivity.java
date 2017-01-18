@@ -27,7 +27,9 @@ import com.neocampus.wifishared.fragments.Users;
 import com.neocampus.wifishared.listeners.OnActivitySetListener;
 import com.neocampus.wifishared.listeners.OnFragmentSetListener;
 import com.neocampus.wifishared.listeners.OnReachableClientListener;
+import com.neocampus.wifishared.sql.database.TableConfiguration;
 import com.neocampus.wifishared.sql.manage.SQLManager;
+import com.neocampus.wifishared.utils.BatterieUtils;
 import com.neocampus.wifishared.utils.ParcelableUtil;
 import com.neocampus.wifishared.utils.WifiApControl;
 
@@ -52,10 +54,10 @@ public class MainActivity extends AppCompatActivity
 
         /*Check if permission is enabled for wifi configuration*/
         if (WifiApControl.checkPermission(this, true)) {
-            /*
+
             this.sqlManager = new SQLManager(this);
             this.sqlManager.open();
-            */
+
             this.apControl = WifiApControl.getInstance(this);
 
             View bar_content = LayoutInflater.from(this)
@@ -179,7 +181,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             WifiConfiguration userConfiguration = apControl.getConfiguration();
             byte[] bytes = ParcelableUtil.marshall(userConfiguration);
-            //TODO /*Sauvegarder [ bytes ] dans la base de données*/
+            sqlManager.setConfiguration(bytes);
             apControl.setEnabled(configuration, true);
             button.setText("Arrêter le Partage");
         }
@@ -194,6 +196,21 @@ public class MainActivity extends AppCompatActivity
             return new ArrayList<>();
         return clients;
     }
+
+    @Override
+    public int getLimiteBatterieLevel() {
+        TableConfiguration tableConfiguration = sqlManager.getConfiguration();
+        if(tableConfiguration != null) {
+            return tableConfiguration.getLimiteBatterie();
+        }
+        return BatterieUtils.BATTERIE_DEFAULT_LIMIT;
+    }
+
+    @Override
+    public int getCurrentBatterieLevel() {
+        return (int) BatterieUtils.getBatteryLevel(this);
+    }
+
 
     private boolean isUPSWifiConfiguration(WifiConfiguration upsConfig) {
         WifiConfiguration

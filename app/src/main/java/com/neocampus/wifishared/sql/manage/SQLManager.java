@@ -6,14 +6,14 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.neocampus.wifishared.sql.database.ExempleTable1;
 import com.neocampus.wifishared.sql.database.TableConfiguration;
 import com.neocampus.wifishared.sql.database.TableConsommation;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 /**
- * Created by Jean on 23/07/2015.
+ * Created by NALINGA on 23/07/2015.
  */
 public class SQLManager {
 
@@ -71,44 +71,105 @@ public class SQLManager {
         return values;
     }
 
+    public int setConfiguration(byte[] config) {
+        int result;
+        String selection = TableConfiguration._ID + " = 1";
 
-    public int ajouterConf(String conf){
         ContentValues value = new ContentValues();
 
-        value.put(TableConfiguration.Configuration,conf);
-        database.insert(TableConfiguration._NAME,null,value);
+        value.put(TableConfiguration._Wifi_Configuration, config);
 
-        return 2;
+        if ((result = database.update(TableConfiguration._NAME, value, selection, null)) == 0) {
+            return (int) database.insert(TableConfiguration._NAME, null, value);
+        }
+        return result;
     }
 
-    public int ajouterConso(String date, int nbreuser, int periode, double conso, int limbat, double limconso, double limtmp){
+    public int setConfiguration(byte[] config, int limite_batterie,
+                                long limite_conso, long limite_temps) {
+        int result;
+        String selection = TableConfiguration._ID + " = 1";
+
+        ContentValues value = new ContentValues();
+
+        value.put(TableConfiguration._Wifi_Configuration, config);
+        value.put(TableConfiguration._LimiteBatterie, limite_batterie);
+        value.put(TableConfiguration._LimiteConsommation, limite_conso);
+        value.put(TableConfiguration._LimiteTemps, limite_temps);
+
+        if ((result = database.update(TableConfiguration._NAME, value, selection, null)) == 0) {
+            return (int) database.insert(TableConfiguration._NAME, null, value);
+        }
+        return result;
+    }
+
+    public TableConfiguration getConfiguration() {
+        Cursor c = null;
+        TableConfiguration tableConfiguration = null;
+        try {
+            String DexUtils = String.format(Locale.FRANCE,
+                    "SELECT * FROM %s WHERE %S = 1",
+                    TableConfiguration._NAME, TableConfiguration._ID);
+            c = database.rawQuery(DexUtils, null);
+            c.moveToFirst();
+            if (!c.isAfterLast()) {
+                tableConfiguration =
+                        new TableConfiguration(cursorToContentValues(c));
+            }
+            return tableConfiguration;
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+    }
+
+    public int addConsommation(long date,
+                               int nbre_user, int periode, double consommation) {
+
         ContentValues value = new ContentValues();
 
         value.put(TableConsommation._Date, date);
-        value.put(TableConsommation.NbreUser, nbreuser);
+        value.put(TableConsommation._NbreUser, nbre_user);
         value.put(TableConsommation._Periode, periode);
-        value.put(TableConsommation._Consommation, conso);
-        value.put(TableConsommation.LimiteBatterie, limbat);
-        value.put(TableConsommation.LimiteConsommation, limconso);
-        value.put(TableConsommation.LimiteTemps, limtmp);
+        value.put(TableConsommation._Consommation, consommation);
 
-        database.insert(TableConsommation._NAME, null, value);
-
-        return 2;
+        return (int) database.insert(TableConsommation._NAME, null, value);
     }
 
-    public void supprimerConso(int iD){
-        String delete = String.format(Locale.FRANCE,"%DexUtils = %d", TableConsommation._ID, iD);
+    public ArrayList<TableConsommation> getAllConsommations() {
+        Cursor c = null;
+        ArrayList<TableConsommation> consommations = new ArrayList<>();
+        try {
+            String s = String.format(Locale.FRANCE,
+                    "SELECT * FROM %s", TableConsommation._NAME);
+            c = database.rawQuery(s, null);
+            c.moveToFirst();
+            while (!c.isAfterLast()) {
+                TableConsommation consommation =
+                        new TableConsommation(cursorToContentValues(c));
+                consommations.add(consommation);
+                c.moveToNext();
+            }
+            return consommations;
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+    }
+
+    public void removeConsommationByID(int iD) {
+
+        String delete = String.format(Locale.FRANCE,
+                "%s = %d", TableConsommation._ID, iD);
         database.delete(TableConsommation._NAME, delete, null);
     }
 
-
-    public int insert(String ssid, String password) {
-        ContentValues values = new ContentValues();
-        values.put(ExempleTable1._URL, ssid);
-        database.insert(ExempleTable1._NAME, null, values);
-        return -1;
+    public void removeAllConsommations() {
+        database.delete(TableConsommation._NAME, null, null);
     }
+
 
 //
 //    public void insertMultiple(Object[] objects) {
