@@ -158,7 +158,8 @@
                             android:fontFamily="serif"
                             android:layout_gravity="center_horizontal"
                             android:layout_weight="0.35"
-                            android:layout_width="0dp" />
+                            android:layout_width="0dp"
+                            android:id="@+id/data_level_result" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -338,7 +339,8 @@
                             android:fontFamily="serif"
                             android:layout_gravity="center_horizontal"
                             android:layout_weight="0.35"
-                            android:layout_width="0dp" />
+                            android:layout_width="0dp"
+                            android:id="@+id/data_level_limit"  />
                     </LinearLayout>
 
                     <LinearLayout

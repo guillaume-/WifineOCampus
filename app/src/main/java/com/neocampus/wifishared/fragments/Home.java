@@ -1,6 +1,7 @@
 package com.neocampus.wifishared.fragments;
 
 import android.content.Context;
+import android.net.TrafficStats;
 import android.net.Uri;
 import android.net.wifi.WifiConfiguration;
 import android.os.Bundle;
@@ -42,9 +43,11 @@ public class Home extends Fragment implements OnFragmentSetListener, OnReachable
     private String mParam1;
     private String mParam2;
     private View view;
-    private TextView batterieLevel;
-    private TextView batterieLimite;
-
+    private TextView batterieLevel,
+                     batterieLimite,
+                     dataLevel,
+                     dataLimite;
+    private boolean dataUsable;
     private OnActivitySetListener mListener;
 
     public Home() {
@@ -87,6 +90,8 @@ public class Home extends Fragment implements OnFragmentSetListener, OnReachable
 
         this.batterieLevel = (TextView) view.findViewById(R.id.batterie_level_result);
         this.batterieLimite = (TextView) view.findViewById(R.id.batterie_level_limit);
+        this.dataLevel = (TextView) view.findViewById(R.id.data_level_result);
+        this.dataLimite = (TextView) view.findViewById(R.id.data_level_limit);
 
         ViewPager viewPager = (ViewPager) this.view.findViewById(R.id.id_view_pager);
         CirclePageIndicator indicator = (CirclePageIndicator) this.view.findViewById(R.id.id_circle_indicator);
@@ -101,9 +106,16 @@ public class Home extends Fragment implements OnFragmentSetListener, OnReachable
 
         int batterie_level = this.mListener.getCurrentBatterieLevel();
         int batterie_limite_level = this.mListener.getLimiteBatterieLevel();
-
-        batterieLimite.setText(String.format(Locale.FRANCE, "%d %% ", batterie_limite_level));
         batterieLevel.setText(String.format(Locale.FRANCE, "%d %% ", batterie_level - batterie_limite_level));
+        batterieLimite.setText(String.format(Locale.FRANCE, "%d %% ", batterie_limite_level));
+        dataUsable = (TrafficStats.getMobileRxBytes() != TrafficStats.UNSUPPORTED);
+        if(dataUsable) {
+            dataLevel.setText("0 octets");
+            dataLimite.setText("Non défini");
+        }else {
+            dataLevel.setText("Non supporté");
+            dataLimite.setText("Non supporté");
+        }
 
         if (WifiApControl.checkPermission(getContext(), true)) {
             WifiApControl apControl = WifiApControl.getInstance(getContext());
@@ -149,9 +161,10 @@ public class Home extends Fragment implements OnFragmentSetListener, OnReachable
             }
             int batterie_level = this.mListener.getCurrentBatterieLevel();
             int batterie_limite_level = this.mListener.getLimiteBatterieLevel();
-
             batterieLimite.setText(String.format(Locale.FRANCE, "%d %% ", batterie_limite_level));
             batterieLevel.setText(String.format(Locale.FRANCE, "%d %% ", batterie_level - batterie_limite_level));
+            if(dataUsable)
+                dataLevel.setText(""+this.mListener.getDataTx()+" octets");
         }
     }
 
