@@ -6,35 +6,26 @@ import com.neocampus.wifishared.sql.annotations.SqlType;
 import com.neocampus.wifishared.sql.annotations.Table;
 
 /**
- * Created by Asus on 10/01/2017.
+ * Created by NALINGA on 10/01/2017.
  */
-@Table(TableName = "TableConsommation", Order = 2)
+@Table(TableName = "TableConsommation", Order = 1)
 public class TableConsommation extends SqlDataSchema {
     public static final String _NAME = "TableConsommation" ;
 
     @Column(Primary = true, Auto = true, Nullable = false, Type = SqlType.INTEGER)
     public static final String _ID =  "Column_ID";
 
-    @Column(Type = SqlType.TEXT, Nullable = false)
+    @Column(Type = SqlType.INTEGER, Nullable = false)
     public static final String _Date = "Column_Date";
 
-    @Column(Type = SqlType.INTEGER, Nullable = false)
-    public static final String NbreUser = "NombreUser";
+    @Column(Type = SqlType.INTEGER, Nullable = true, value = "0")
+    public static final String _NbreUser = "Column_NombreUser";
 
     @Column(Type = SqlType.INTEGER, Nullable = false)
-    public static final String _Periode = "Periode";
+    public static final String _Periode = "Column_Periode";
 
-    @Column(Type = SqlType.REAL, Nullable = false)
-    public static final String _Consommation = "Consommation";
-
-    @Column(Type = SqlType.INTEGER, Nullable = false, value = "15")
-    public static final String LimiteBatterie = "Limite_Batterie";
-
-    @Column(Type = SqlType.DOUBLE, Nullable = false, value = "1")
-    public static final String LimiteConsommation = "Limite_Consommation";
-
-    @Column(Type = SqlType.DOUBLE, Nullable = false, value = "300")
-    public static final String LimiteTemps = "Limite_Temps";
+    @Column(Type = SqlType.INTEGER, Nullable = true, value = "0")
+    public static final String _Consommation = "Column_Consommation";
 
 
     public TableConsommation(ContentValues values) {
@@ -45,20 +36,20 @@ public class TableConsommation extends SqlDataSchema {
         return this.values.getAsInteger(_ID);
     }
 
-    public String getDATE(){
-        return  this.values.getAsString(_Date);
+    public long getDATE(){
+        return  this.values.getAsLong(_Date);
     }
 
-    public void setDate(String dte){
-        this.values.put(_Date,dte);
+    public void setDate(long date){
+        this.values.put(_Date, date);
     }
 
     public int getNBREUSER(){
-        return this.values.getAsInteger(NbreUser);
+        return this.values.getAsInteger(_NbreUser);
     }
 
     public void setNbreUser(int nbre_user){
-        this.values.put(NbreUser,nbre_user);
+        this.values.put(_NbreUser,nbre_user);
     }
 
     public int getPERIODE(){
@@ -69,23 +60,11 @@ public class TableConsommation extends SqlDataSchema {
         this.values.put(_Periode,period);
     }
 
-    public String getCONSOMMATION(){
-        return this.values.getAsString(_Consommation);
+    public long getCONSOMMATION(){
+        return this.values.getAsLong(_Consommation);
     }
 
-    public void setConsommation(String conso){
-        this.values.put(_Consommation,conso);
+    public void setConsommation(long consommation){
+        this.values.put(_Consommation, consommation);
     }
-
-    public int getLimiteBatterie(){ return this.values.getAsInteger(LimiteBatterie);}
-
-    public void setLimiteBatterie(String lim_bat){ this.values.put(LimiteBatterie, lim_bat);}
-
-    public Double getLimiteConsommation(){ return this.values.getAsDouble(LimiteConsommation);}
-
-    public void setLimiteConsommation(String lim_conso){ this.values.put(LimiteConsommation, lim_conso);}
-
-    public Double getLimiteTemps(){ return this.values.getAsDouble(LimiteTemps);}
-
-    public void setLimiteTemps(String lim_tmp){ this.values.put(LimiteTemps, lim_tmp);}
 }

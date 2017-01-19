@@ -2,14 +2,11 @@ package com.neocampus.wifishared.fragments;
 
 import android.content.Context;
 import android.net.Uri;
-import android.net.wifi.WifiConfiguration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.neocampus.wifishared.R;
@@ -17,11 +14,9 @@ import com.neocampus.wifishared.listeners.OnActivitySetListener;
 import com.neocampus.wifishared.listeners.OnFragmentSetListener;
 import com.neocampus.wifishared.listeners.OnReachableClientListener;
 import com.neocampus.wifishared.utils.WifiApControl;
-import com.neocampus.wifishared.views.CirclePageIndicator;
-import com.neocampus.wifishared.views.CirclePagerAdapter;
+import com.neocampus.wifishared.views.LinearLayoutUsers;
 
 import java.util.List;
-import java.util.Locale;
 
 
 /**
@@ -29,10 +24,10 @@ import java.util.Locale;
  * Activities that contain this fragment must implement the
  * {@link OnFragmentSetListener} interface
  * to handle interaction events.
- * Use the {@link Home#newInstance} factory method to
+ * Use the {@link Users#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Home extends Fragment implements OnFragmentSetListener, OnReachableClientListener {
+public class Users extends Fragment implements OnFragmentSetListener,  OnReachableClientListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -42,12 +37,10 @@ public class Home extends Fragment implements OnFragmentSetListener, OnReachable
     private String mParam1;
     private String mParam2;
     private View view;
-    private TextView batterieLevel;
-    private TextView batterieLimite;
 
     private OnActivitySetListener mListener;
 
-    public Home() {
+    public Users() {
         // Required empty public constructor
     }
 
@@ -60,8 +53,8 @@ public class Home extends Fragment implements OnFragmentSetListener, OnReachable
      * @return A new instance of fragment Home.
      */
     // TODO: Rename and change types and number of parameters
-    public static Home newInstance(String param1, String param2) {
-        Home fragment = new Home();
+    public static Users newInstance(String param1, String param2) {
+        Users fragment = new Users();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -83,47 +76,29 @@ public class Home extends Fragment implements OnFragmentSetListener, OnReachable
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        this.view = inflater.inflate(R.layout.fragment_home, container, false);
-
-        this.batterieLevel = (TextView) view.findViewById(R.id.batterie_level_result);
-        this.batterieLimite = (TextView) view.findViewById(R.id.batterie_level_limit);
-
-        ViewPager viewPager = (ViewPager) this.view.findViewById(R.id.id_view_pager);
-        CirclePageIndicator indicator = (CirclePageIndicator) this.view.findViewById(R.id.id_circle_indicator);
-        viewPager.setAdapter(new CirclePagerAdapter(viewPager));
-        indicator.setViewPager(viewPager);
-
+        this.view = inflater.inflate(R.layout.fragment_users, container, false);
         List<WifiApControl.Client> result = this.mListener.getReachableClients(this);
         if(result.isEmpty()) {
             TextView textView = (TextView) view.findViewById(R.id.iDClientCount);
             textView.setText("(0)");
         }
-
-        int batterie_level = this.mListener.getCurrentBatterieLevel();
-        int batterie_limite_level = this.mListener.getLimiteBatterieLevel();
-
-        batterieLimite.setText(String.format(Locale.FRANCE, "%d %% ", batterie_limite_level));
-        batterieLevel.setText(String.format(Locale.FRANCE, "%d %% ", batterie_level - batterie_limite_level));
-
-        if (WifiApControl.checkPermission(getContext(), true)) {
-            WifiApControl apControl = WifiApControl.getInstance(getContext());
-            WifiConfiguration
-                    configuration = apControl.getWifiApConfiguration();
-            WifiConfiguration upsConfig = WifiApControl.getUPSWifiConfiguration();
-            if (WifiApControl.equals(configuration, upsConfig))
-            {
-                if(apControl.isEnabled()) {
-                    Button button = (Button) view.findViewById(R.id.button);
-                    button.setText("Arrêter le Partage");
-                }
-            }
-        }
         return view;
     }
 
     @Override
-    public void onReachableClient(WifiApControl.Client c) {
+    public void onReachableClient(final WifiApControl.Client c) {
+        if(view != null) {
+            view.post(new Runnable() {
+                @Override
+                public void run() {
+                    LinearLayoutUsers layoutUsers =
+                            (LinearLayoutUsers) view.findViewById(R.id.iDLinearLayoutUsers);
+                    layoutUsers.showClient(c);
+                }
+            });
+        }
     }
+
 
     @Override
     public void onReachableClients(final List<WifiApControl.Client> clients) {
@@ -133,6 +108,9 @@ public class Home extends Fragment implements OnFragmentSetListener, OnReachable
                 public void run() {
                     TextView textView = (TextView) view.findViewById(R.id.iDClientCount);
                     textView.setText("(" + clients.size() + ")");
+                    LinearLayoutUsers layoutUsers =
+                            (LinearLayoutUsers) view.findViewById(R.id.iDLinearLayoutUsers);
+                    layoutUsers.setClients(clients);
                 }
             });
         }
@@ -147,11 +125,6 @@ public class Home extends Fragment implements OnFragmentSetListener, OnReachable
                 TextView textView = (TextView) view.findViewById(R.id.iDClientCount);
                 textView.setText("(0)");
             }
-            int batterie_level = this.mListener.getCurrentBatterieLevel();
-            int batterie_limite_level = this.mListener.getLimiteBatterieLevel();
-
-            batterieLimite.setText(String.format(Locale.FRANCE, "%d %% ", batterie_limite_level));
-            batterieLevel.setText(String.format(Locale.FRANCE, "%d %% ", batterie_level - batterie_limite_level));
         }
     }
 

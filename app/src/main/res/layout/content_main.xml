@@ -9,14 +9,9 @@
     tools:context="com.neocampus.wifishared.activity.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <fragment
-        android:id="@+id/list"
+    <FrameLayout
+        android:id="@+id/iDFragmentShowing"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:name="com.neocampus.wifishared.fragments.Home"
-        android:orientation="horizontal"
-        tools:layout="@layout/fragment_home">
-    </fragment>
-
+        android:layout_height="fill_parent" />
 
 </RelativeLayout>

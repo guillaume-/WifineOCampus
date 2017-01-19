@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:text="@string/app_name"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        style="@style/TextAppearance.Widget.ActionBar.Title"
+        android:gravity="center_vertical" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:layout_gravity="center_vertical"
+        android:onClick="onClickToRefresh">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/progress"
+            android:layout_alignBottom="@+id/progress"
+            android:layout_alignEnd="@+id/progress"
+            android:layout_alignStart="@+id/progress"
+            android:src="@drawable/cu_bar_update_rotate"
+            android:id="@+id/updatebutton" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateDrawable="@drawable/cu_bar_update_rotate"
+            android:indeterminateBehavior="repeat"
+            android:indeterminateDuration="700"
+            android:id="@+id/progress"
+            android:visibility="invisible" />
+
+    </RelativeLayout>
+
+</LinearLayout>

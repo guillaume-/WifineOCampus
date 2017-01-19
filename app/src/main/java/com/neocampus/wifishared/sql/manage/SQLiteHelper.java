@@ -191,7 +191,41 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        onUpgrade(db, oldVersion, newVersion);
+    public void onDowngrade(SQLiteDatabase database, int oldVersion, int newVersion) {
+        try {
+            Set<Class<?>> classes = AnnotationUtils.
+                    getAnnotationClasses(context, Table.class);
+            List<Class<?>> listClasses = new ArrayList<>();
+            for (Class<?> aClass : classes) {
+                Table table = aClass.getAnnotation(Table.class);
+                if (table.enabled()) {
+                    listClasses.add(aClass);
+                }
+            }
+            Collections.sort(listClasses, new Table.IComparator());
+
+            Cursor c = database.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
+            if (c.moveToFirst()) {
+                while ( !c.isAfterLast() ) {
+                    String tableName = c.getString(0);
+                    if(!"android_metadata".equals(tableName)
+                            && !"sqlite_sequence".equals(tableName)) {
+                        database.execSQL("DROP TABLE IF EXISTS " + tableName);
+                        System.out.println("DROP TABLE IF EXISTS " + tableName);
+                    }
+                    c.moveToNext();
+                }
+            }
+
+            /*Create all tables*/
+            for (Class<?> aClass : listClasses) {
+                String createTable = buildSQL(aClass);
+                database.execSQL(createTable);
+            }
+
+        } catch (ClassNotFoundException | PackageManager.NameNotFoundException
+                | IOException | NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 }
