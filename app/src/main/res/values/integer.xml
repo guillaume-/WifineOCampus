@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="scale_a" format="float" type="integer">0.55</item>
+    <item name="scale_b" format="float" type="integer">0.05</item>
+    <item name="scale_c" format="float" type="integer">0.25</item>
+</resources>

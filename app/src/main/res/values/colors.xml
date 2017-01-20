@@ -9,6 +9,9 @@
     <color name="colorNavigation">#f62e3e4c</color>
     <color name="colorPageIndicator">@android:color/black</color>
     <color name="colorGrayLight">#6ac6c0c0</color>
-
+    <color name="colorSwitchEnable">#cf365775</color>
+    <color name="colorSwitchDisable">#c7c1c1</color>
+    <color name="colorSurfaceBackground">#f5f3f3</color>
+    <color name="colorSurfaceText">#7c879b</color>
     <color name="colorTextContent">#545454</color>
 </resources>

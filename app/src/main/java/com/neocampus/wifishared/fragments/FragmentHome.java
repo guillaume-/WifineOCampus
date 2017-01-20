@@ -1,7 +1,6 @@
 package com.neocampus.wifishared.fragments;
 
 import android.content.Context;
-import android.net.TrafficStats;
 import android.net.Uri;
 import android.net.wifi.WifiConfiguration;
 import android.os.Bundle;
@@ -30,10 +29,10 @@ import java.util.Locale;
  * Activities that contain this fragment must implement the
  * {@link OnFragmentSetListener} interface
  * to handle interaction events.
- * Use the {@link Home#newInstance} factory method to
+ * Use the {@link FragmentHome#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Home extends Fragment implements OnFragmentSetListener, OnReachableClientListener {
+public class FragmentHome extends Fragment implements OnFragmentSetListener, OnReachableClientListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -43,16 +42,13 @@ public class Home extends Fragment implements OnFragmentSetListener, OnReachable
     private String mParam1;
     private String mParam2;
     private View view;
-    private TextView batterieLevel,
-                     batterieLimite,
-                     dataLevel,
-                     dataLimite;
-    private long dataT0;
-    private boolean isDataUsable;
+    private TextView batterieLevel;
+    private TextView batterieLimite;
+    private TextView dataLimite;
 
     private OnActivitySetListener mListener;
 
-    public Home() {
+    public FragmentHome() {
         // Required empty public constructor
     }
 
@@ -62,11 +58,11 @@ public class Home extends Fragment implements OnFragmentSetListener, OnReachable
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment Home.
+     * @return A new instance of fragment FragmentHome.
      */
     // TODO: Rename and change types and number of parameters
-    public static Home newInstance(String param1, String param2) {
-        Home fragment = new Home();
+    public static FragmentHome newInstance(String param1, String param2) {
+        FragmentHome fragment = new FragmentHome();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -87,13 +83,14 @@ public class Home extends Fragment implements OnFragmentSetListener, OnReachable
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        this.mListener.hideAppBarSaveConfig();
+        this.mListener.showAppBarRefresh();
 
         this.view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        batterieLevel = (TextView) view.findViewById(R.id.batterie_level_result);
-        batterieLimite = (TextView) view.findViewById(R.id.batterie_level_limit);
-        dataLevel = (TextView) view.findViewById(R.id.data_level);
-        dataLimite = (TextView) view.findViewById(R.id.data_limit);
+        this.batterieLevel = (TextView) view.findViewById(R.id.batterie_level_result);
+        this.batterieLimite = (TextView) view.findViewById(R.id.batterie_level_limit);
+        this.dataLimite = (TextView) view.findViewById(R.id.data_limit);
 
         ViewPager viewPager = (ViewPager) this.view.findViewById(R.id.id_view_pager);
         CirclePageIndicator indicator = (CirclePageIndicator) this.view.findViewById(R.id.id_circle_indicator);
@@ -108,17 +105,12 @@ public class Home extends Fragment implements OnFragmentSetListener, OnReachable
 
         int batterie_level = this.mListener.getCurrentBatterieLevel();
         int batterie_limite_level = this.mListener.getLimiteBatterieLevel();
+
         batterieLimite.setText(String.format(Locale.FRANCE, "%d %% ", batterie_limite_level));
         batterieLevel.setText(String.format(Locale.FRANCE, "%d %% ", batterie_level - batterie_limite_level));
-        isDataUsable = (TrafficStats.getMobileRxBytes() != TrafficStats.UNSUPPORTED);
-        if(isDataUsable) {
-            dataT0 = TrafficStats.getTotalRxBytes()+TrafficStats.getTotalTxBytes();
-            dataLevel.setText("0 octet");
-            dataLimite.setText("Non défini");
-        } else {
-            dataLevel.setText("Non supporté");
-            dataLimite.setText("Non supporté");
-        }
+
+        onRefreshConfigNotify();
+
 
         if (WifiApControl.checkPermission(getContext(), true)) {
             WifiApControl apControl = WifiApControl.getInstance(getContext());
@@ -164,13 +156,23 @@ public class Home extends Fragment implements OnFragmentSetListener, OnReachable
             }
             int batterie_level = this.mListener.getCurrentBatterieLevel();
             int batterie_limite_level = this.mListener.getLimiteBatterieLevel();
+
             batterieLimite.setText(String.format(Locale.FRANCE, "%d %% ", batterie_limite_level));
             batterieLevel.setText(String.format(Locale.FRANCE, "%d %% ", batterie_level - batterie_limite_level));
-            if(isDataUsable) {
-                long dataTx = TrafficStats.getTotalRxBytes()+TrafficStats.getTotalTxBytes();
-                dataLevel.setText(dataToStr(dataTx-dataT0));
-            }
         }
+    }
+
+    @Override
+    public void onRefreshConfigNotify() {
+        String limiteData;
+        float data_limite_trafic = this.mListener.getLimiteDataTrafic();
+        if(data_limite_trafic >= 1.0f) {
+            limiteData = String.format(Locale.FRANCE, "%.3f Go", data_limite_trafic);
+        }
+        else {
+            limiteData = String.format(Locale.FRANCE, "%d Mo", (int)(data_limite_trafic * 1000.f));
+        }
+        dataLimite.setText(limiteData);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -196,15 +198,5 @@ public class Home extends Fragment implements OnFragmentSetListener, OnReachable
         mListener = null;
     }
 
-    public String dataToStr(long data){
-        if(data > 1000000000)
-            return ""+(data/1000000000)+" Go";
-        else if(data > 1000000)
-            return ""+(data/1000000)+" Mo";
-        else if(data > 1000)
-            return ""+(data/1000)+" Ko";
-        else if(data > 1)
-            return ""+(data)+" octets";
-        return ""+(data)+" octet";
-    }
+
 }

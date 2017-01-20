@@ -14,7 +14,7 @@
     <string name="wait_info">\?</string>
     <string name="taux_batterie_restant">Taux batterie restant</string>
     <string name="temps_d_utilisation_restant">Temps d\'utilisation restant</string>
-    <string name="arret_automatique">Arrêt automatique</string>
+    <string name="notification">Notification</string>
     <string name="limite_d_utilisations">Limite d\'utilisations</string>
     <string name="seuil_de_transmission">Seuil de transmission</string>
     <string name="seuil_de_la_batterie">Seuil de la batterie</string>
@@ -25,4 +25,6 @@
     <string name="adresse_ip">Adresse IP</string>
 
     <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

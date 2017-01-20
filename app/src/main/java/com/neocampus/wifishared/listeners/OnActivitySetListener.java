@@ -12,4 +12,11 @@ public interface OnActivitySetListener {
     List<WifiApControl.Client> getReachableClients(OnReachableClientListener listener);
     int getLimiteBatterieLevel();
     int getCurrentBatterieLevel();
+    float getLimiteDataTrafic();
+
+    /**/
+    void hideAppBarRefresh();
+    void showAppBarRefresh();
+    void hideAppBarSaveConfig();
+    void showAppBarSaveConfig();
 }
