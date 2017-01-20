@@ -6,4 +6,5 @@ package com.neocampus.wifishared.listeners;
 
 public interface OnFragmentSetListener {
     void onRefreshNotify();
+    void onRefreshConfigNotify();
 }

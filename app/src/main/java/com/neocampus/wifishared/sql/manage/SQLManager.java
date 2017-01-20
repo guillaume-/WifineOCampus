@@ -85,6 +85,48 @@ public class SQLManager {
         return result;
     }
 
+    public int setConfiguration(int limite_batterie) {
+        int result;
+        String selection = TableConfiguration._ID + " = 1";
+
+        ContentValues value = new ContentValues();
+
+        value.put(TableConfiguration._LimiteBatterie, limite_batterie);
+
+        if ((result = database.update(TableConfiguration._NAME, value, selection, null)) == 0) {
+            return (int) database.insert(TableConfiguration._NAME, null, value);
+        }
+        return result;
+    }
+
+    public int setConfigurationC(long limite_conso) {
+        int result;
+        String selection = TableConfiguration._ID + " = 1";
+
+        ContentValues value = new ContentValues();
+
+        value.put(TableConfiguration._LimiteConsommation, limite_conso);
+
+        if ((result = database.update(TableConfiguration._NAME, value, selection, null)) == 0) {
+            return (int) database.insert(TableConfiguration._NAME, null, value);
+        }
+        return result;
+    }
+
+    public int setConfigurationT(long limite_temps) {
+        int result;
+        String selection = TableConfiguration._ID + " = 1";
+
+        ContentValues value = new ContentValues();
+
+        value.put(TableConfiguration._LimiteTemps, limite_temps);
+
+        if ((result = database.update(TableConfiguration._NAME, value, selection, null)) == 0) {
+            return (int) database.insert(TableConfiguration._NAME, null, value);
+        }
+        return result;
+    }
+
     public int setConfiguration(byte[] config, int limite_batterie,
                                 long limite_conso, long limite_temps) {
         int result;

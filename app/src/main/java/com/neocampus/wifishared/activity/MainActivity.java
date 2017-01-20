@@ -20,11 +20,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.neocampus.wifishared.R;
-import com.neocampus.wifishared.fragments.Home;
-import com.neocampus.wifishared.fragments.Users;
+import com.neocampus.wifishared.fragments.FragmentTraffic;
+import com.neocampus.wifishared.fragments.FragmentHome;
+import com.neocampus.wifishared.fragments.FragmentUsers;
 import com.neocampus.wifishared.listeners.OnActivitySetListener;
+import com.neocampus.wifishared.listeners.OnFragmentConfigListener;
 import com.neocampus.wifishared.listeners.OnFragmentSetListener;
 import com.neocampus.wifishared.listeners.OnReachableClientListener;
 import com.neocampus.wifishared.sql.database.TableConfiguration;
@@ -43,6 +46,7 @@ public class MainActivity extends AppCompatActivity
     private SQLManager sqlManager;
     private WifiApControl apControl;
     private Fragment fragment = null;
+    private View appBarContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,11 +64,11 @@ public class MainActivity extends AppCompatActivity
 
             this.apControl = WifiApControl.getInstance(this);
 
-            View bar_content = LayoutInflater.from(this)
+            this.appBarContent = LayoutInflater.from(this)
                     .inflate(R.layout.app_bar_content, null, false);
             ActionBar.LayoutParams params = new ActionBar.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            toolbar.addView(bar_content, params);
+            toolbar.addView(appBarContent, params);
 
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -75,7 +79,8 @@ public class MainActivity extends AppCompatActivity
             NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
             navigationView.setNavigationItemSelectedListener(this);
 
-            this.fragment = showInstance(Home.class);
+            this.fragment = showInstance(FragmentHome.class);
+//            this.fragment = showInstance(FragmentTraffic.class);
 
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             finishAndRemoveTask();
@@ -113,12 +118,12 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            if (fragment.getClass() != Home.class) {
-                fragment = showInstance(Home.class);
+            if (fragment.getClass() != FragmentHome.class) {
+                fragment = showInstance(FragmentHome.class);
             }
         } else if (id == R.id.nav_users) {
-            if (fragment.getClass() != Users.class) {
-                fragment = showInstance(Users.class);
+            if (fragment.getClass() != FragmentUsers.class) {
+                fragment = showInstance(FragmentUsers.class);
             }
         } else if (id == R.id.nav_slideshow) {
 
@@ -161,6 +166,23 @@ public class MainActivity extends AppCompatActivity
         }, 3000);
     }
 
+    public void onClickToSaveConfig(final View v)
+    {
+        v.startAnimation(AnimationUtils.
+                loadAnimation(v.getContext(), R.anim.pressed_anim));
+        if(fragment instanceof OnFragmentConfigListener) {
+            float limite_data = ((OnFragmentConfigListener) fragment).getLimiteDataTraffic();
+            long limite_in_octet = (long) ((1000.0f * 1000.0f* 1000.0f) * limite_data);
+            this.sqlManager.setConfigurationC(limite_in_octet);
+        }
+        super.onBackPressed();
+        fragment = getVisibleFragment();
+
+        if(fragment != null && fragment instanceof OnFragmentSetListener) {
+            ((OnFragmentSetListener) fragment).onRefreshNotify();
+        }
+    }
+
     public void onClickToRunAPWifi(View v) {
 
         v.startAnimation(AnimationUtils.
@@ -187,6 +209,30 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    public void onClickToDataConfig(final View v) {
+        v.startAnimation(AnimationUtils.
+                loadAnimation(v.getContext(), R.anim.pressed_anim));
+        TableConfiguration tableConfiguration = sqlManager.getConfiguration();
+        long limite_data = tableConfiguration.getLimiteConsommation();
+        float limite_conso = limite_data / (1000.0f * 1000.0f * 1000.0f);
+        Fragment fragment = FragmentTraffic.newInstance(limite_conso);
+        this.fragment = showInstance(fragment,
+                R.anim.circle_zoom, R.anim.circle_inverse_zoom);
+
+    }
+
+    public void onClickToBatterieConfig(final View v) {
+        v.startAnimation(AnimationUtils.
+                loadAnimation(v.getContext(), R.anim.pressed_anim));
+        Toast.makeText(this, "En maintenance", Toast.LENGTH_LONG).show();
+    }
+
+    public void onClickToTimeConfig(final View v) {
+        v.startAnimation(AnimationUtils.
+                loadAnimation(v.getContext(), R.anim.pressed_anim));
+        Toast.makeText(this, "En maintenance", Toast.LENGTH_LONG).show();
+    }
+
     @Override
     public List<WifiApControl.Client> getReachableClients(
             OnReachableClientListener listener) {
@@ -211,6 +257,35 @@ public class MainActivity extends AppCompatActivity
         return (int) BatterieUtils.getBatteryLevel(this);
     }
 
+    @Override
+    public float getLimiteDataTrafic() {
+        TableConfiguration tableConfiguration = sqlManager.getConfiguration();
+        long consommation = tableConfiguration.getLimiteConsommation();
+        float value = consommation / (1000.0f * 1000.0f* 1000.0f);
+        return value;
+    }
+
+    @Override
+    public void hideAppBarRefresh() {
+        appBarContent.findViewById(R.id.app_bar_refresh).setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void showAppBarRefresh() {
+        appBarContent.findViewById(R.id.app_bar_refresh).setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideAppBarSaveConfig() {
+        appBarContent.findViewById(R.id.app_bar_save_config).setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void showAppBarSaveConfig() {
+        appBarContent.findViewById(R.id.app_bar_save_config).setVisibility(View.VISIBLE);
+    }
+
+
 
     private boolean isUPSWifiConfiguration(WifiConfiguration upsConfig) {
         WifiConfiguration
@@ -218,14 +293,14 @@ public class MainActivity extends AppCompatActivity
         return WifiApControl.equals(configuration, upsConfig);
     }
 
-    private Fragment showInstance(Class<?> aClass) {
+    private Fragment showInstance(Class<?> aClass, Integer... animations) {
         /*Check if already create*/
         List<Fragment> fragments =
                 getSupportFragmentManager().getFragments();
         Fragment fragment = null;
         if (fragments != null) {
             for (Fragment fragmentStored : fragments) {
-                if (fragmentStored.getClass() == aClass) {
+                if (fragmentStored != null && fragmentStored.getClass() == aClass) {
                     fragment = fragmentStored;
                     break;
                 }
@@ -243,7 +318,13 @@ public class MainActivity extends AppCompatActivity
         final FragmentManager fm = getSupportFragmentManager();
         final FragmentTransaction ft = fm.beginTransaction();
         // We can also animate the changing of fragment.
-        ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+        if (animations.length == 0) {
+            ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+        } else if (animations.length == 1) {
+            ft.setCustomAnimations(animations[0], animations[0]);
+        } else {
+            ft.setCustomAnimations(animations[0], animations[1]);
+        }
         // Replace current fragment by the new one.
         ft.replace(R.id.iDFragmentShowing, fragment);
         // Null on the back stack to return on the previous fragment when user
@@ -252,5 +333,46 @@ public class MainActivity extends AppCompatActivity
         // Commit changes.
         ft.commit();
         return fragment;
+    }
+
+    private Fragment showInstance(Fragment fragment, Integer... animations) {
+        /*Check if already create*/
+        if (fragment == null) {
+            try {
+                throw new Exception();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        final FragmentManager fm = getSupportFragmentManager();
+        final FragmentTransaction ft = fm.beginTransaction();
+        // We can also animate the changing of fragment.
+        if (animations.length == 0) {
+            ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+        } else if (animations.length == 1) {
+            ft.setCustomAnimations(animations[0], animations[0]);
+        } else {
+            ft.setCustomAnimations(animations[0], animations[1]);
+        }
+        // Replace current fragment by the new one.
+        ft.replace(R.id.iDFragmentShowing, fragment);
+        // Null on the back stack to return on the previous fragment when user
+        // press on back button.
+        ft.addToBackStack(null);
+        // Commit changes.
+        ft.commit();
+        return fragment;
+    }
+
+    public Fragment getVisibleFragment(){
+        FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
+        List<Fragment> fragments = fragmentManager.getFragments();
+        if(fragments != null){
+            for(Fragment fragment : fragments){
+                if(fragment != null && fragment.isVisible())
+                    return fragment;
+            }
+        }
+        return null;
     }
 }

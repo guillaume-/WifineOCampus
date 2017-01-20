@@ -1,4 +1,5 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -53,7 +54,7 @@
                             android:typeface="monospace"
                             android:fontFamily="serif"
                             android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.7"
+                            android:layout_weight="@integer/scale_a"
                             android:layout_width="0dp" />
 
                         <TextView
@@ -135,7 +136,7 @@
                             android:typeface="monospace"
                             android:fontFamily="serif"
                             android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.7"
+                            android:layout_weight="@integer/scale_a"
                             android:layout_width="0dp" />
 
                         <TextView
@@ -174,7 +175,7 @@
                             android:typeface="monospace"
                             android:fontFamily="serif"
                             android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.7"
+                            android:layout_weight="@integer/scale_a"
                             android:layout_width="0dp" />
 
                         <TextView
@@ -214,7 +215,7 @@
                             android:typeface="monospace"
                             android:fontFamily="serif"
                             android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.7"
+                            android:layout_weight="@integer/scale_a"
                             android:layout_width="0dp" />
 
                         <TextView
@@ -247,13 +248,13 @@
                         android:layout_marginTop="20dp">
 
                         <TextView
-                            android:text="@string/arret_automatique"
+                            android:text="@string/notification"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorTextContent"
                             android:typeface="monospace"
                             android:fontFamily="serif"
                             android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.7"
+                            android:layout_weight="@integer/scale_a"
                             android:layout_width="0dp" />
 
                         <TextView
@@ -315,7 +316,7 @@
                             android:typeface="monospace"
                             android:fontFamily="serif"
                             android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.7"
+                            android:layout_weight="@integer/scale_a"
                             android:layout_width="0dp" />
 
                         <TextView
@@ -325,7 +326,7 @@
                             android:typeface="monospace"
                             android:fontFamily="serif"
                             android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.05"
+                            android:layout_weight="@integer/scale_b"
                             android:layout_width="0dp"
                             android:layout_marginStart="10dp"
                             android:layout_marginEnd="10dp" />
@@ -337,8 +338,15 @@
                             android:typeface="monospace"
                             android:fontFamily="serif"
                             android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.35"
-                            android:layout_width="0dp" />
+                            android:layout_weight="@integer/scale_c"
+                            android:layout_width="0dp"
+                            android:id="@+id/data_limit" />
+
+                        <ImageView
+                            app:srcCompat="@drawable/ic_edit"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:onClick="onClickToDataConfig" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -354,7 +362,7 @@
                             android:typeface="monospace"
                             android:fontFamily="serif"
                             android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.7"
+                            android:layout_weight="@integer/scale_a"
                             android:layout_width="0dp" />
 
                         <TextView
@@ -364,7 +372,7 @@
                             android:typeface="monospace"
                             android:fontFamily="serif"
                             android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.05"
+                            android:layout_weight="@integer/scale_b"
                             android:layout_width="0dp"
                             android:layout_marginStart="10dp"
                             android:layout_marginEnd="10dp" />
@@ -376,9 +384,15 @@
                             android:typeface="monospace"
                             android:fontFamily="serif"
                             android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.35"
+                            android:layout_weight="@integer/scale_c"
                             android:layout_width="0dp"
                             android:id="@+id/batterie_level_limit" />
+
+                        <ImageView
+                            app:srcCompat="@drawable/ic_edit"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:onClick="onClickToBatterieConfig" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -394,7 +408,7 @@
                             android:typeface="monospace"
                             android:fontFamily="serif"
                             android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.7"
+                            android:layout_weight="@integer/scale_a"
                             android:layout_width="0dp" />
 
                         <TextView
@@ -404,7 +418,7 @@
                             android:typeface="monospace"
                             android:fontFamily="serif"
                             android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.05"
+                            android:layout_weight="@integer/scale_b"
                             android:layout_width="0dp"
                             android:layout_marginStart="10dp"
                             android:layout_marginEnd="10dp" />
@@ -416,8 +430,14 @@
                             android:typeface="monospace"
                             android:fontFamily="serif"
                             android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.35"
+                            android:layout_weight="@integer/scale_c"
                             android:layout_width="0dp" />
+
+                        <ImageView
+                            app:srcCompat="@drawable/ic_edit"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:onClick="onClickToTimeConfig" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -427,13 +447,13 @@
                         android:layout_marginTop="20dp">
 
                         <TextView
-                            android:text="@string/arret_automatique"
+                            android:text="@string/notification"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorTextContent"
                             android:typeface="monospace"
                             android:fontFamily="serif"
                             android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.7"
+                            android:layout_weight="@integer/scale_a"
                             android:layout_width="0dp" />
 
                         <TextView
@@ -443,7 +463,7 @@
                             android:typeface="monospace"
                             android:fontFamily="serif"
                             android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.05"
+                            android:layout_weight="@integer/scale_b"
                             android:layout_width="0dp"
                             android:layout_marginStart="10dp"
                             android:layout_marginEnd="10dp" />
@@ -454,9 +474,15 @@
                             android:typeface="monospace"
                             android:fontFamily="serif"
                             android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.35"
+                            android:layout_weight="@integer/scale_c"
                             android:layout_width="0dp"
                             android:text="@string/wait_info" />
+
+                        <ImageView
+                            app:srcCompat="@drawable/ic_edit"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:visibility="invisible" />
                     </LinearLayout>
                 </LinearLayout>
 
