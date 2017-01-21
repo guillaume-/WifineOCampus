@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.neocampus.wifishared.R;
 import com.neocampus.wifishared.fragments.FragmentBatterie;
+import com.neocampus.wifishared.fragments.FragmentSettings;
 import com.neocampus.wifishared.fragments.FragmentTraffic;
 import com.neocampus.wifishared.fragments.FragmentHome;
 import com.neocampus.wifishared.fragments.FragmentUsers;
@@ -81,7 +82,6 @@ public class MainActivity extends AppCompatActivity
             navigationView.setNavigationItemSelectedListener(this);
 
             this.fragment = showInstance(FragmentHome.class);
-//            this.fragment = showInstance(FragmentTraffic.class);
 
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             finishAndRemoveTask();
@@ -126,16 +126,13 @@ public class MainActivity extends AppCompatActivity
             if (fragment.getClass() != FragmentUsers.class) {
                 fragment = showInstance(FragmentUsers.class);
             }
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.nav_setting) {
+            if (fragment.getClass() != FragmentSettings.class) {
+                fragment = showInstance(FragmentSettings.class);
+            }
+        }  else {
+            return true;
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

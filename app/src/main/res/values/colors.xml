@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#303f9f</color>
     <color name="colorAccent">#18791c</color>
 
+
     <color name="list_item_bg_pressed">#22b6b6b6</color>
     <color name="colorShared">#74182c4a</color>
     <color name="colorNavigation">#f62e3e4c</color>
@@ -17,5 +18,6 @@
     <color name="colorBatterieBackgroundOn">#eff1f4</color>
     <color name="colorBatterieBackgroundOff">#7c879b</color>
     <color name="colorTextContent">#545454</color>
+    <color name="colorTitleSetting">#303f9f</color>
     <color name="test">#c5cee7</color>
 </resources>
