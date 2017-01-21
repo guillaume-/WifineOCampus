@@ -1,7 +1,6 @@
 package com.neocampus.wifishared.fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.net.wifi.WifiConfiguration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -98,18 +97,7 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener, OnR
         viewPager.setAdapter(new CirclePagerAdapter(viewPager));
         indicator.setViewPager(viewPager);
 
-        List<WifiApControl.Client> result = this.mListener.getReachableClients(this);
-        if(result.isEmpty()) {
-            TextView textView = (TextView) view.findViewById(R.id.iDClientCount);
-            textView.setText("(0)");
-        }
-
-        int batterie_level = this.mListener.getCurrentBatterieLevel();
-        int batterie_limite_level = this.mListener.getLimiteBatterieLevel();
-
-        batterieLimite.setText(String.format(Locale.FRANCE, "%d %% ", batterie_limite_level));
-        batterieLevel.setText(String.format(Locale.FRANCE, "%d %% ", batterie_level - batterie_limite_level));
-
+        onRefreshNotify();
         onRefreshConfigNotify();
 
 
@@ -174,12 +162,6 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener, OnR
             limiteData = String.format(Locale.FRANCE, "%d Mo", (int)(data_limite_trafic * 1000.f));
         }
         dataLimite.setText(limiteData);
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-        }
     }
 
     @Override
