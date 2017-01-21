@@ -85,7 +85,7 @@ public class SQLManager {
         return result;
     }
 
-    public int setConfiguration(int limite_batterie) {
+    public int setConfigurationB(int limite_batterie) {
         int result;
         String selection = TableConfiguration._ID + " = 1";
 

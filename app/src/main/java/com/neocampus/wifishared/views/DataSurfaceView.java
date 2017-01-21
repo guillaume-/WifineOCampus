@@ -11,7 +11,6 @@ import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.ViewTreeObserver;
 
 import com.neocampus.wifishared.R;
 
@@ -26,7 +25,6 @@ public class DataSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private SurfaceHolder holder;
     private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
     private Paint paintText = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
-    private ViewTreeObserver observer;
     private Rect textBounds = new Rect();
     private float limiteData = 0.0f;
 
@@ -59,7 +57,7 @@ public class DataSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         paintText.setColor(colorText);
         paint.setColor(colorText);
         setLayerType(LAYER_TYPE_SOFTWARE, paintText);
-        paintText.setShadowLayer(4.0f, 0.0f, 2.0f, Color.BLACK);
+        paintText.setShadowLayer(2.0f, 0.0f, 2.0f, Color.BLACK);
         paint.setStrokeWidth(5);
     }
 
@@ -77,7 +75,7 @@ public class DataSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         int startX = 150;
         int startY = 200;
         canvas.drawLine(startX, SizeH - startY, SizeW - startX, SizeH - startY, paint);
-        canvas.drawCircle(SizeW - startX, SizeH - startY + 20, 20, paint);
+        canvas.drawCircle(SizeW - startX - 5, SizeH - startY + 15, 20, paint);
         String level;
         if(limiteData >= 1.0f) {
             level = String.format(Locale.FRANCE, "%.3f Go", limiteData);

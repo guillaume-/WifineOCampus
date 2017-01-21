@@ -44,6 +44,7 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener, OnR
     private View view;
     private TextView batterieLevel;
     private TextView batterieLimite;
+    private TextView dataLevel;
     private TextView dataLimite;
 
     private OnActivitySetListener mListener;

@@ -13,5 +13,9 @@
     <color name="colorSwitchDisable">#c7c1c1</color>
     <color name="colorSurfaceBackground">#f5f3f3</color>
     <color name="colorSurfaceText">#7c879b</color>
+    <color name="colorBatterieText">#b2b4b8</color>
+    <color name="colorBatterieBackgroundOn">#eff1f4</color>
+    <color name="colorBatterieBackgroundOff">#7c879b</color>
     <color name="colorTextContent">#545454</color>
+    <color name="test">#c5cee7</color>
 </resources>
