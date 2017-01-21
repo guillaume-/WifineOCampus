@@ -13,6 +13,7 @@ public interface OnActivitySetListener {
     int getLimiteBatterieLevel();
     int getCurrentBatterieLevel();
     float getLimiteDataTrafic();
+    int getLimiteBatterie();
 
     /**/
     void hideAppBarRefresh();

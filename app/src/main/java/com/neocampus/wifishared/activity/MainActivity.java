@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.neocampus.wifishared.R;
+import com.neocampus.wifishared.fragments.FragmentBatterie;
 import com.neocampus.wifishared.fragments.FragmentTraffic;
 import com.neocampus.wifishared.fragments.FragmentHome;
 import com.neocampus.wifishared.fragments.FragmentUsers;
@@ -166,14 +167,19 @@ public class MainActivity extends AppCompatActivity
         }, 3000);
     }
 
-    public void onClickToSaveConfig(final View v)
-    {
+    public void onClickToSaveConfig(final View v) {
         v.startAnimation(AnimationUtils.
                 loadAnimation(v.getContext(), R.anim.pressed_anim));
         if(fragment instanceof OnFragmentConfigListener) {
-            float limite_data = ((OnFragmentConfigListener) fragment).getLimiteDataTraffic();
-            long limite_in_octet = (long) ((1000.0f * 1000.0f* 1000.0f) * limite_data);
-            this.sqlManager.setConfigurationC(limite_in_octet);
+            if(fragment instanceof FragmentTraffic) {
+                float limite_data = ((OnFragmentConfigListener) fragment).getLimiteDataTraffic();
+                long limite_in_octet = (long) ((1000.0f * 1000.0f * 1000.0f) * limite_data);
+                this.sqlManager.setConfigurationC(limite_in_octet);
+            }
+            else if(fragment instanceof FragmentBatterie) {
+                int limite_batterie = ((OnFragmentConfigListener) fragment).getLimiteBatterie();
+                this.sqlManager.setConfigurationB(limite_batterie);
+            }
         }
         super.onBackPressed();
         fragment = getVisibleFragment();
@@ -224,7 +230,11 @@ public class MainActivity extends AppCompatActivity
     public void onClickToBatterieConfig(final View v) {
         v.startAnimation(AnimationUtils.
                 loadAnimation(v.getContext(), R.anim.pressed_anim));
-        Toast.makeText(this, "En maintenance", Toast.LENGTH_LONG).show();
+        TableConfiguration tableConfiguration = sqlManager.getConfiguration();
+        int limite_batterie = tableConfiguration.getLimiteBatterie();
+        Fragment fragment = FragmentBatterie.newInstance(limite_batterie);
+        this.fragment = showInstance(fragment,
+                R.anim.circle_zoom, R.anim.circle_inverse_zoom);
     }
 
     public void onClickToTimeConfig(final View v) {
@@ -263,6 +273,12 @@ public class MainActivity extends AppCompatActivity
         long consommation = tableConfiguration.getLimiteConsommation();
         float value = consommation / (1000.0f * 1000.0f* 1000.0f);
         return value;
+    }
+
+    @Override
+    public int getLimiteBatterie() {
+        TableConfiguration tableConfiguration = sqlManager.getConfiguration();
+        return tableConfiguration.getLimiteBatterie();
     }
 
     @Override

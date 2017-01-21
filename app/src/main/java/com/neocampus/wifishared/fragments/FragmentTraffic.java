@@ -144,5 +144,10 @@ public class FragmentTraffic extends Fragment implements OnFragmentSetListener,
         return this.dataSurfaceView.getLimiteData();
     }
 
+    @Override
+    public int getLimiteBatterie() {
+        return 0;
+    }
+
 
 }
