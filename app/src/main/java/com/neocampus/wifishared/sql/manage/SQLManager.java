@@ -166,6 +166,13 @@ public class SQLManager {
         }
     }
 
+    public int newConsommation(long date)
+    {
+        ContentValues value = new ContentValues();
+        value.put(TableConsommation._Date, date);
+        return (int) database.insert(TableConsommation._NAME, null, value);
+    }
+
     public int addConsommation(long date,
                                int nbre_user, int periode, double consommation) {
 

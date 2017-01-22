@@ -9,7 +9,7 @@ import java.lang.reflect.Field;
  * Created by Hirochi ☠ on 12/01/17.
  */
 
-public class ParcelableUtil {
+public class ParcelableUtils {
     public static byte[] marshall(Parcelable parceable) {
         Parcel parcel = Parcel.obtain();
         parceable.writeToParcel(parcel, 0);

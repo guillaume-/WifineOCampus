@@ -1,8 +1,14 @@
 package com.neocampus.wifishared.activity;
 
+import android.app.ActivityManager;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.net.wifi.WifiConfiguration;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -24,34 +30,43 @@ import android.widget.Toast;
 
 import com.neocampus.wifishared.R;
 import com.neocampus.wifishared.fragments.FragmentBatterie;
+import com.neocampus.wifishared.fragments.FragmentHome;
 import com.neocampus.wifishared.fragments.FragmentSettings;
 import com.neocampus.wifishared.fragments.FragmentTraffic;
-import com.neocampus.wifishared.fragments.FragmentHome;
 import com.neocampus.wifishared.fragments.FragmentUsers;
 import com.neocampus.wifishared.listeners.OnActivitySetListener;
 import com.neocampus.wifishared.listeners.OnFragmentConfigListener;
 import com.neocampus.wifishared.listeners.OnFragmentSetListener;
 import com.neocampus.wifishared.listeners.OnReachableClientListener;
+import com.neocampus.wifishared.listeners.OnServiceSetListener;
+import com.neocampus.wifishared.observables.BatterieObservable;
+import com.neocampus.wifishared.observables.ClientObservable;
+import com.neocampus.wifishared.services.ServiceNeOCampus;
 import com.neocampus.wifishared.sql.database.TableConfiguration;
 import com.neocampus.wifishared.sql.manage.SQLManager;
 import com.neocampus.wifishared.utils.BatterieUtils;
-import com.neocampus.wifishared.utils.ParcelableUtil;
+import com.neocampus.wifishared.utils.ParcelableUtils;
 import com.neocampus.wifishared.utils.WifiApControl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, OnActivitySetListener {
+public class MainActivity extends AppCompatActivity implements ServiceConnection,
+        NavigationView.OnNavigationItemSelectedListener, OnActivitySetListener, Observer {
 
     private SQLManager sqlManager;
     private WifiApControl apControl;
     private Fragment fragment = null;
-    private View appBarContent;
+    private View mAppBarContent;
+    private Intent serviceintent;
+    private OnServiceSetListener mServiceInterraction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -66,11 +81,11 @@ public class MainActivity extends AppCompatActivity
 
             this.apControl = WifiApControl.getInstance(this);
 
-            this.appBarContent = LayoutInflater.from(this)
+            this.mAppBarContent = LayoutInflater.from(this)
                     .inflate(R.layout.app_bar_content, null, false);
             ActionBar.LayoutParams params = new ActionBar.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            toolbar.addView(appBarContent, params);
+            toolbar.addView(mAppBarContent, params);
 
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -82,6 +97,9 @@ public class MainActivity extends AppCompatActivity
             navigationView.setNavigationItemSelectedListener(this);
 
             this.fragment = showInstance(FragmentHome.class);
+
+            serviceintent = new Intent(this, ServiceNeOCampus.class);
+            connectToService();
 
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             finishAndRemoveTask();
@@ -113,7 +131,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    @SuppressWarnings("StatementWithEmptyBody")
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
@@ -130,7 +147,7 @@ public class MainActivity extends AppCompatActivity
             if (fragment.getClass() != FragmentSettings.class) {
                 fragment = showInstance(FragmentSettings.class);
             }
-        }  else {
+        } else {
             return true;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -143,15 +160,15 @@ public class MainActivity extends AppCompatActivity
         if (sqlManager != null) {
             sqlManager.close();
         }
+        disconnectToService();
         super.onDestroy();
     }
 
-    public void onClickToRefresh(final View v)
-    {
+    public void onClickToRefresh(final View v) {
         v.startAnimation(AnimationUtils.
                 loadAnimation(v.getContext(), R.anim.pressed_anim));
-        if(fragment instanceof OnFragmentSetListener) {
-            ((OnFragmentSetListener) fragment).onRefreshNotify();
+        if (fragment instanceof OnFragmentSetListener) {
+            ((OnFragmentSetListener) fragment).onRefreshAll();
         }
         v.findViewById(R.id.updatebutton).setVisibility(View.INVISIBLE);
         v.findViewById(R.id.progress).setVisibility(View.VISIBLE);
@@ -167,22 +184,20 @@ public class MainActivity extends AppCompatActivity
     public void onClickToSaveConfig(final View v) {
         v.startAnimation(AnimationUtils.
                 loadAnimation(v.getContext(), R.anim.pressed_anim));
-        if(fragment instanceof OnFragmentConfigListener) {
-            if(fragment instanceof FragmentTraffic) {
+        if (fragment instanceof OnFragmentConfigListener) {
+            if (fragment instanceof FragmentTraffic) {
                 float limite_data = ((OnFragmentConfigListener) fragment).getLimiteDataTraffic();
                 long limite_in_octet = (long) ((1000.0f * 1000.0f * 1000.0f) * limite_data);
                 this.sqlManager.setConfigurationC(limite_in_octet);
-            }
-            else if(fragment instanceof FragmentBatterie) {
+            } else if (fragment instanceof FragmentBatterie) {
                 int limite_batterie = ((OnFragmentConfigListener) fragment).getLimiteBatterie();
                 this.sqlManager.setConfigurationB(limite_batterie);
             }
         }
         super.onBackPressed();
         fragment = getVisibleFragment();
-
-        if(fragment != null && fragment instanceof OnFragmentSetListener) {
-            ((OnFragmentSetListener) fragment).onRefreshNotify();
+        if (fragment != null && fragment instanceof OnFragmentSetListener) {
+            ((OnFragmentSetListener) fragment).onRefreshAllConfig();
         }
     }
 
@@ -199,13 +214,14 @@ public class MainActivity extends AppCompatActivity
             if (apControl.isWifiApEnabled()) {
                 apControl.disable();
                 button.setText("Lancer le Partage");
+
             } else {
                 apControl.setEnabled(configuration, true);
                 button.setText("Arrêter le Partage");
             }
         } else {
             WifiConfiguration userConfiguration = apControl.getConfiguration();
-            byte[] bytes = ParcelableUtil.marshall(userConfiguration);
+            byte[] bytes = ParcelableUtils.marshall(userConfiguration);
             sqlManager.setConfiguration(bytes);
             apControl.setEnabled(configuration, true);
             button.setText("Arrêter le Partage");
@@ -240,20 +256,64 @@ public class MainActivity extends AppCompatActivity
         Toast.makeText(this, "En maintenance", Toast.LENGTH_LONG).show();
     }
 
+    private void connectToService() {
+        if (!isServiceRunning(ServiceNeOCampus.class)) {
+            startService(serviceintent);
+        }
+        bindService(serviceintent, this, Context.BIND_AUTO_CREATE);
+    }
+
+    private void disconnectToService() {
+        if (isServiceRunning(ServiceNeOCampus.class)) {
+            if(mServiceInterraction != null) {
+                mServiceInterraction.forceSave();
+            }
+            unbindService(this);
+        }
+    }
+
+    @Override
+    public void onServiceConnected(ComponentName name, IBinder service) {
+        ServiceNeOCampus.ServiceNeOCampusBinder binder =
+                (ServiceNeOCampus.ServiceNeOCampusBinder) service;
+        mServiceInterraction = binder.getOnServiceSetListener();
+        mServiceInterraction.addObserver(this);
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+        mServiceInterraction = null;
+    }
+
+    @Override
+    public void update(Observable o, Object newValue) {
+        if (fragment != null
+                && fragment instanceof OnFragmentSetListener) {
+            if (o instanceof BatterieObservable) {
+                ((OnFragmentSetListener) fragment).onRefreshBatterieLevel((Integer) newValue);
+            } else if (o instanceof ClientObservable) {
+                ((OnFragmentSetListener) fragment).onRefreshClient((WifiApControl.Client) newValue);
+                ((OnFragmentSetListener) fragment).onRefreshClientCount(((ClientObservable) o).getCount());
+            }
+        }
+        System.out.println("Activity : I am notified " + newValue);
+    }
+
     @Override
     public List<WifiApControl.Client> getReachableClients(
             OnReachableClientListener listener) {
         List<WifiApControl.Client>
-                clients = apControl.getReachableClients(1000, listener);
-        if (clients == null)
+                clients = apControl.getReachableClients(5000, listener);
+        if (clients == null) {
             return new ArrayList<>();
+        }
         return clients;
     }
 
     @Override
     public int getLimiteBatterieLevel() {
         TableConfiguration tableConfiguration = sqlManager.getConfiguration();
-        if(tableConfiguration != null) {
+        if (tableConfiguration != null) {
             return tableConfiguration.getLimiteBatterie();
         }
         return BatterieUtils.BATTERIE_DEFAULT_LIMIT;
@@ -268,7 +328,7 @@ public class MainActivity extends AppCompatActivity
     public float getLimiteDataTrafic() {
         TableConfiguration tableConfiguration = sqlManager.getConfiguration();
         long consommation = tableConfiguration.getLimiteConsommation();
-        float value = consommation / (1000.0f * 1000.0f* 1000.0f);
+        float value = consommation / (1000.0f * 1000.0f * 1000.0f);
         return value;
     }
 
@@ -280,25 +340,35 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void hideAppBarRefresh() {
-        appBarContent.findViewById(R.id.app_bar_refresh).setVisibility(View.INVISIBLE);
+        mAppBarContent.findViewById(R.id.app_bar_refresh).setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void showAppBarRefresh() {
-        appBarContent.findViewById(R.id.app_bar_refresh).setVisibility(View.VISIBLE);
+        mAppBarContent.findViewById(R.id.app_bar_refresh).setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideAppBarSaveConfig() {
-        appBarContent.findViewById(R.id.app_bar_save_config).setVisibility(View.INVISIBLE);
+        mAppBarContent.findViewById(R.id.app_bar_save_config).setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void showAppBarSaveConfig() {
-        appBarContent.findViewById(R.id.app_bar_save_config).setVisibility(View.VISIBLE);
+        mAppBarContent.findViewById(R.id.app_bar_save_config).setVisibility(View.VISIBLE);
     }
 
-
+    private boolean isServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningServiceInfo>
+                runningServiceInfos = manager.getRunningServices(Integer.MAX_VALUE);
+        for (ActivityManager.RunningServiceInfo service : runningServiceInfos) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     private boolean isUPSWifiConfiguration(WifiConfiguration upsConfig) {
         WifiConfiguration
@@ -377,15 +447,17 @@ public class MainActivity extends AppCompatActivity
         return fragment;
     }
 
-    public Fragment getVisibleFragment(){
+    public Fragment getVisibleFragment() {
         FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
         List<Fragment> fragments = fragmentManager.getFragments();
-        if(fragments != null){
-            for(Fragment fragment : fragments){
-                if(fragment != null && fragment.isVisible())
+        if (fragments != null) {
+            for (Fragment fragment : fragments) {
+                if (fragment != null && fragment.isVisible())
                     return fragment;
             }
         }
         return null;
     }
+
+
 }

@@ -21,8 +21,11 @@ public class TableConsommation extends SqlDataSchema {
     @Column(Type = SqlType.INTEGER, Nullable = true, value = "0")
     public static final String _NbreUser = "Column_NombreUser";
 
-    @Column(Type = SqlType.INTEGER, Nullable = false)
+    @Column(Type = SqlType.INTEGER, Nullable = true, value = "0")
     public static final String _Periode = "Column_Periode";
+
+    @Column(Type = SqlType.INTEGER, Nullable = true, value = "0")
+    public static final String _PeriodeUtilisation = "Column_PeriodeUtilisation";
 
     @Column(Type = SqlType.INTEGER, Nullable = true, value = "0")
     public static final String _Consommation = "Column_Consommation";

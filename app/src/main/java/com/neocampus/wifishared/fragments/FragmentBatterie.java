@@ -21,12 +21,11 @@ import com.neocampus.wifishared.views.BatterieSurfaceView;
  * Use the {@link FragmentBatterie#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentBatterie extends Fragment implements OnFragmentSetListener, OnFragmentConfigListener {
+public class FragmentBatterie extends Fragment implements OnFragmentConfigListener {
 
     private static final String ARG_PARAM1 = "param1";
-
     private BatterieSurfaceView surfaceView;
-    private int mParam1;
+    private int mBatterieLimit;
 
     private OnActivitySetListener mListener;
 
@@ -54,7 +53,7 @@ public class FragmentBatterie extends Fragment implements OnFragmentSetListener,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getInt(ARG_PARAM1);
+            mBatterieLimit = getArguments().getInt(ARG_PARAM1);
         }
     }
 
@@ -63,10 +62,10 @@ public class FragmentBatterie extends Fragment implements OnFragmentSetListener,
                              Bundle savedInstanceState) {
         this.mListener.hideAppBarRefresh();
         this.mListener.showAppBarSaveConfig();
-        // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.fragment_batterie, container, false);
         surfaceView = (BatterieSurfaceView) view.findViewById(R.id.batterie_configuration);
-        surfaceView.setLimiteBatterie(mParam1);
+        surfaceView.setLimiteBatterie(mBatterieLimit);
         return view;
     }
 
@@ -85,15 +84,6 @@ public class FragmentBatterie extends Fragment implements OnFragmentSetListener,
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    @Override
-    public void onRefreshNotify() {
-    }
-
-    @Override
-    public void onRefreshConfigNotify() {
-
     }
 
     @Override

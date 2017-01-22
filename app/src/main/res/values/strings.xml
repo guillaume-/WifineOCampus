@@ -6,7 +6,9 @@
 
     <string name="action_settings">Paramètres</string>
     <string name="connect_s">Connectés</string>
-    <string name="utilisateurs">Utilisateurs</string>
+    <string name="connect_session">Historique récent</string>
+    <string name="utilisateurs_actifs">Utilisateurs actifs</string>
+    <string name="utilisateurs_sessions">Total utilisateurs</string>
     <string name="deux_points">:</string>
     <string name="wait_count">(?)</string>
     <string name="utilisations">Utilisations</string>
@@ -21,10 +23,14 @@
     <string name="seuil_de_temps">Seuil de temps</string>
     <string name="activer_le_partage">Lancer le Partage</string>
     <string name="desactiver_le_partage">Arrêter le Partage</string>
+    <string name="no_permission">"⚠ Permission"</string>
     <string name="adresse_physique">Adresse Physique</string>
     <string name="adresse_ip">Adresse IP</string>
+    <string name="heure_debut">Heure début</string>
+    <string name="heure_fin">Heure fin</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="service_name">Service Wifi neOCampus</string>
 
 </resources>

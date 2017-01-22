@@ -1,39 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
+    android:layout_height="wrap_content"
+    android:padding="5dp">
 
     <TextView
-        android:text="Adresse Physique"
+        android:text="@string/adresse_physique"
         android:layout_height="wrap_content"
         android:textColor="@color/colorTextContent"
         android:typeface="monospace"
         android:fontFamily="serif"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="0.40"
         android:layout_width="0dp"
+        android:gravity="center_vertical"
+        android:id="@+id/addressPhysique"
         android:padding="5dp"
-        android:gravity="center_vertical|center_horizontal"
-        android:id="@+id/addressPhysique" />
+        android:layout_weight="0.40" />
 
     <TextView
-        android:text="Adresse IP"
+        android:text="@string/adresse_ip"
         android:layout_height="wrap_content"
         android:textColor="@color/colorTextContent"
         android:typeface="monospace"
         android:fontFamily="serif"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="0.40"
         android:layout_width="0dp"
         android:padding="5dp"
         android:gravity="center_vertical|center_horizontal"
-        android:id="@+id/adressIP" />
+        android:id="@+id/adressIP"
+        android:layout_weight="0.40" />
 
     <Space
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.15"
         android:background="@color/colorPrimaryDark" />
+
+
 
 </LinearLayout>

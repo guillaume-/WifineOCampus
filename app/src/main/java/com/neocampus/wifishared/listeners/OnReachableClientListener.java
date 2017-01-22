@@ -9,7 +9,7 @@ import java.util.List;
  */
 
 public interface OnReachableClientListener {
-    void onReachableClient(WifiApControl.Client client);
+//    void onReachableClient(WifiApControl.Client client);
     void onReachableClients(List<WifiApControl.Client> clients);
 
 }

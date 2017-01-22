@@ -48,7 +48,7 @@
                         android:layout_weight="1">
 
                         <TextView
-                            android:text="@string/utilisateurs"
+                            android:text="@string/utilisateurs_actifs"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorTextContent"
                             android:typeface="monospace"
@@ -78,7 +78,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_width="0dp"
                             android:layout_weight="0.35"
-                            android:id="@+id/iDClientCount" />
+                            android:id="@+id/reachable_client_count" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -346,6 +346,7 @@
                             app:srcCompat="@drawable/ic_edit"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
+                            android:visibility="gone"
                             android:onClick="onClickToDataConfig" />
                     </LinearLayout>
 
@@ -392,6 +393,7 @@
                             app:srcCompat="@drawable/ic_edit"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
+                            android:visibility="gone"
                             android:onClick="onClickToBatterieConfig" />
                     </LinearLayout>
 
@@ -437,6 +439,7 @@
                             app:srcCompat="@drawable/ic_edit"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
+                            android:visibility="gone"
                             android:onClick="onClickToTimeConfig" />
                     </LinearLayout>
 
@@ -482,7 +485,7 @@
                             app:srcCompat="@drawable/ic_edit"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:visibility="invisible" />
+                            android:visibility="gone" />
                     </LinearLayout>
                 </LinearLayout>
 

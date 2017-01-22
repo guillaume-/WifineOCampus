@@ -14,19 +14,16 @@ import android.widget.ScrollView;
 import com.neocampus.wifishared.R;
 import com.neocampus.wifishared.listeners.OnActivitySetListener;
 import com.neocampus.wifishared.listeners.OnFragmentConfigListener;
-import com.neocampus.wifishared.listeners.OnFragmentSetListener;
 import com.neocampus.wifishared.views.DataSurfaceView;
 import com.neocampus.wifishared.views.EchelleSurfaceView;
 
 
-public class FragmentTraffic extends Fragment implements OnFragmentSetListener,
-        View.OnTouchListener, ViewTreeObserver.OnScrollChangedListener, OnFragmentConfigListener {
-    // TODO: Rename parameter arguments, choose names that match
+public class FragmentTraffic extends Fragment implements View.OnTouchListener,
+        ViewTreeObserver.OnScrollChangedListener, OnFragmentConfigListener {
     private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private float mLimiteData;
+
     private ScrollView scrollView;
     private EchelleSurfaceView surfaceView;
     private DataSurfaceView dataSurfaceView;
@@ -61,6 +58,7 @@ public class FragmentTraffic extends Fragment implements OnFragmentSetListener,
                              Bundle savedInstanceState) {
         this.mListener.hideAppBarRefresh();
         this.mListener.showAppBarSaveConfig();
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_data_config, container, false);
         this.surfaceView = (EchelleSurfaceView) view.findViewById(R.id.echelle_surface);
@@ -100,14 +98,6 @@ public class FragmentTraffic extends Fragment implements OnFragmentSetListener,
         mListener = null;
     }
 
-    @Override
-    public void onRefreshNotify() {
-
-    }
-
-    @Override
-    public void onRefreshConfigNotify() {
-    }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
