@@ -19,19 +19,19 @@ import java.util.Map;
  * Created by Hirochi ☠ on 10/01/17.
  */
 
-public class LinearLayoutUsers extends LinearLayout {
+public class ReachableUserView extends LinearLayout {
 
     private HashMap<WifiApControl.Client, View> clients = new HashMap<>();
 
-    public LinearLayoutUsers(Context context) {
+    public ReachableUserView(Context context) {
         super(context);
     }
 
-    public LinearLayoutUsers(Context context, AttributeSet attrs) {
+    public ReachableUserView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public void setClients(List<WifiApControl.Client> pclients) {
+    public void showClients(List<WifiApControl.Client> pclients) {
 
         for(Iterator<Map.Entry<WifiApControl.Client, View>> it =
             this.clients.entrySet().iterator(); it.hasNext(); ) {
@@ -41,6 +41,10 @@ public class LinearLayoutUsers extends LinearLayout {
                 it.remove();
             }
         }
+
+        for(WifiApControl.Client client : pclients) {
+            showClient(client);
+        }
     }
 
     public void showClient(WifiApControl.Client client)
@@ -49,8 +53,8 @@ public class LinearLayoutUsers extends LinearLayout {
             View view = LayoutInflater.from(getContext())
                     .inflate(R.layout.app_users_layout, null, false);
 
-            TextView textView1 = (TextView) view.findViewById(R.id.iDAddressPhysique);
-            TextView textView2 = (TextView) view.findViewById(R.id.iDAdressIP);
+            TextView textView1 = (TextView) view.findViewById(R.id.addressPhysique);
+            TextView textView2 = (TextView) view.findViewById(R.id.adressIP);
 
             textView1.setText(client.hwAddr);
             textView2.setText(client.ipAddr);
@@ -63,6 +67,14 @@ public class LinearLayoutUsers extends LinearLayout {
             addView(view, params);
             clients.put(client, view);
         }
+        else if(!client.connected)
+        {
+            removeView(clients.get(client));
+            clients.remove(client);
+        }
     }
 
+    public int getCount() {
+        return clients.size();
+    }
 }

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.neocampus.wifishared.R;
 import com.neocampus.wifishared.listeners.OnActivitySetListener;
 import com.neocampus.wifishared.listeners.OnFragmentSetListener;
+import com.neocampus.wifishared.utils.WifiApControl;
 
 import java.util.Locale;
 
@@ -44,8 +45,7 @@ public class FragmentSettings extends Fragment implements OnFragmentSetListener 
         this.settingBatterie = (TextView) view.findViewById(R.id.setting_batterie);
         this.settingData = (TextView) view.findViewById(R.id.setting_data);
 
-        onRefreshNotify();
-        onRefreshConfigNotify();
+        onRefreshAllConfig();
 
         return view;
     }
@@ -68,23 +68,49 @@ public class FragmentSettings extends Fragment implements OnFragmentSetListener 
     }
 
     @Override
-    public void onRefreshNotify() {
-        if(view != null) {
-            int batterie_limite_level = this.mListener.getLimiteBatterieLevel();
-            settingBatterie.setText(String.format(Locale.FRANCE, "%d %% ", batterie_limite_level));
+    public void onRefreshAll(){
+    }
+
+    @Override
+    public void onRefreshBatterieLevel(int newLevel) {
+    }
+
+    @Override
+    public void onRefreshDataTraffic(long dataTrafficOctet) {
+    }
+
+    @Override
+    public void onRefreshClient(WifiApControl.Client client) {
+    }
+
+    @Override
+    public void onRefreshClientCount(int newCOunt) {
+    }
+
+    @Override
+    public void onRefreshAllConfig() {
+        onRefreshDataConfig(this.mListener.getLimiteDataTrafic());
+        onRefreshBatterieConfig(this.mListener.getLimiteBatterieLevel());
+    }
+
+    @Override
+    public void onRefreshBatterieConfig(int newBatterieLimit) {
+        if (settingBatterie != null) {
+            settingBatterie.setText(String.format(Locale.FRANCE, "%d %% ", newBatterieLimit));
         }
     }
 
     @Override
-    public void onRefreshConfigNotify() {
-        String limiteData;
-        float data_limite_trafic = this.mListener.getLimiteDataTrafic();
-        if(data_limite_trafic >= 1.0f) {
-            limiteData = String.format(Locale.FRANCE, "%.3f Go", data_limite_trafic);
+    public void onRefreshDataConfig(float newDataLimit) {
+        if (settingData != null) {
+            String limiteData;
+            if (newDataLimit >= 1.0f) {
+                limiteData = String.format(Locale.FRANCE, "%.3f Go", newDataLimit);
+            } else {
+                limiteData = String.format(Locale.FRANCE, "%d Mo", (int) (newDataLimit * 1000.f));
+            }
+            settingData.setText(limiteData);
         }
-        else {
-            limiteData = String.format(Locale.FRANCE, "%d Mo", (int)(data_limite_trafic * 1000.f));
-        }
-        settingData.setText(limiteData);
     }
+
 }

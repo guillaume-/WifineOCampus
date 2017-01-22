@@ -92,6 +92,7 @@ final public class WifiApControl extends Observable {
 
     public static int CODE_WRITE_SETTINGS_PERMISSION = 1555;
 
+    public static final String ACTION_WIFI_AP_CHANGED = "android.net.wifi.WIFI_AP_STATE_CHANGED";
     public static final String EXTRA_WIFI_AP_STATE = "wifi_state";
 
     public static final int WIFI_AP_STATE_DISABLING = 10;
@@ -382,31 +383,65 @@ final public class WifiApControl extends Observable {
     public static boolean equals(WifiConfiguration configuration1,
                                  WifiConfiguration configuration2)
     {
-        byte[] bytes1 = ParcelableUtil.marshall(configuration1);
-        byte[] bytes2 = ParcelableUtil.marshall(configuration2);
+        byte[] bytes1 = ParcelableUtils.marshall(configuration1);
+        byte[] bytes2 = ParcelableUtils.marshall(configuration2);
         return Arrays.equals(bytes1, bytes2);
+    }
+
+    public boolean isUPSWifiConfiguration()
+    {
+        WifiConfiguration
+                configuration = getWifiApConfiguration();
+        WifiConfiguration upsConfig = WifiApControl.getUPSWifiConfiguration();
+        if (WifiApControl.equals(configuration, upsConfig)) {
+            return true;
+        }
+        return false;
     }
 
     // Client describes a Wi-Fi AP device connected to the network.
     public static class Client {
 
+        public boolean connected;
         // ipAddr is the raw string of the IP Address client
         public String ipAddr;
 
         // hwAddr is the raw string of the MAC of the client
         public String hwAddr;
 
+        public long date_connected;
+
+        public long date_disconnected;
+
         public Client(String ipAddr, String hwAddr) {
             this.ipAddr = ipAddr;
             this.hwAddr = hwAddr;
+            this.connected = true;
+            this.date_connected = 0;
+            this.date_disconnected = 0;
         }
 
         @Override
         public boolean equals(Object obj) {
-            if(obj instanceof Client) {
-                return ((Client)obj).hwAddr.equals(hwAddr);
+            if (obj instanceof Client) {
+                return synchronised((Client) obj);
             }
             return super.equals(obj);
+        }
+
+        private boolean synchronised(Client client)
+        {
+            if(client.hwAddr.equals(hwAddr)) {
+//                long date_connected = this.date_connected == 0 ? client.date_connected : this.date_connected;
+//                long date_disconnected = this.date_disconnected < client.date_disconnected ?
+//                        client.date_disconnected : this.date_disconnected;
+//                this.date_connected = date_connected;
+//                client.date_connected = date_connected;
+//                this.date_disconnected = date_disconnected;
+//                client.date_disconnected = date_disconnected;
+                return true;
+            }
+            return false;
         }
 
         @Override
@@ -487,7 +522,7 @@ final public class WifiApControl extends Observable {
                     try {
                         InetAddress ip = InetAddress.getByName(c.ipAddr);
                         if (ip.isReachable(timeout)) {
-                            listener.onReachableClient(c);
+//                            listener.onReachableClient(c);
                         }
                         else {
                             clients.remove(c);

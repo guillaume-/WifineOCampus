@@ -1,7 +1,6 @@
 package com.neocampus.wifishared.fragments;
 
 import android.content.Context;
-import android.net.wifi.WifiConfiguration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -23,24 +22,11 @@ import java.util.List;
 import java.util.Locale;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link OnFragmentSetListener} interface
- * to handle interaction events.
- * Use the {@link FragmentHome#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class FragmentHome extends Fragment implements OnFragmentSetListener, OnReachableClientListener {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class FragmentHome extends Fragment
+        implements OnFragmentSetListener, OnReachableClientListener {
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     private View view;
+    private TextView clientCount;
     private TextView batterieLevel;
     private TextView batterieLimite;
     private TextView dataLevel;
@@ -52,31 +38,9 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener, OnR
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentHome.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FragmentHome newInstance(String param1, String param2) {
-        FragmentHome fragment = new FragmentHome();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -87,7 +51,7 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener, OnR
         this.mListener.showAppBarRefresh();
 
         this.view = inflater.inflate(R.layout.fragment_home, container, false);
-
+        this.clientCount = (TextView) view.findViewById(R.id.reachable_client_count);
         this.batterieLevel = (TextView) view.findViewById(R.id.batterie_level_result);
         this.batterieLimite = (TextView) view.findViewById(R.id.batterie_level_limit);
         this.dataLimite = (TextView) view.findViewById(R.id.data_limit);
@@ -97,71 +61,92 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener, OnR
         viewPager.setAdapter(new CirclePagerAdapter(viewPager));
         indicator.setViewPager(viewPager);
 
-        onRefreshNotify();
-        onRefreshConfigNotify();
+        onRefreshAll();
+        onRefreshAllConfig();
 
-
-        if (WifiApControl.checkPermission(getContext(), true)) {
+        if(WifiApControl.checkPermission(getContext())) {
             WifiApControl apControl = WifiApControl.getInstance(getContext());
-            WifiConfiguration
-                    configuration = apControl.getWifiApConfiguration();
-            WifiConfiguration upsConfig = WifiApControl.getUPSWifiConfiguration();
-            if (WifiApControl.equals(configuration, upsConfig))
-            {
-                if(apControl.isEnabled()) {
-                    Button button = (Button) view.findViewById(R.id.button);
-                    button.setText("Arrêter le Partage");
-                }
+            if (apControl.isEnabled()
+                    && apControl.isUPSWifiConfiguration()) {
+                Button button = (Button) view.findViewById(R.id.button);
+                button.setText(getString(R.string.desactiver_le_partage));
             }
+        }
+        else {
+            Button button = (Button) view.findViewById(R.id.button);
+            button.setText(getString(R.string.no_permission));
         }
         return view;
     }
 
     @Override
-    public void onReachableClient(WifiApControl.Client c) {
+    public void onReachableClients(List<WifiApControl.Client> clients) {
+        onRefreshClientCount(clients.size());
+    }
+
+
+    @Override
+    public void onRefreshAll() {
+        onRefreshClientCount(0);
+        this.mListener.getReachableClients(this);
+        onRefreshBatterieLevel(this.mListener.getCurrentBatterieLevel());
     }
 
     @Override
-    public void onReachableClients(final List<WifiApControl.Client> clients) {
-        if(view != null) {
-            view.post(new Runnable() {
+    public void onRefreshClient(WifiApControl.Client client) {
+    }
+
+    @Override
+    public void onRefreshClientCount(final int newCount) {
+        if (clientCount != null) {
+            clientCount.post(new Runnable() {
                 @Override
                 public void run() {
-                    TextView textView = (TextView) view.findViewById(R.id.iDClientCount);
-                    textView.setText("(" + clients.size() + ")");
+                    clientCount.setText("(" + newCount + ")");
                 }
             });
         }
     }
 
+    @Override
+    public void onRefreshDataTraffic(long dataTrafficOctet) {
+
+    }
+
+
 
     @Override
-    public void onRefreshNotify() {
-        if(view != null) {
-            List<WifiApControl.Client> result = this.mListener.getReachableClients(this);
-            if (result.isEmpty()) {
-                TextView textView = (TextView) view.findViewById(R.id.iDClientCount);
-                textView.setText("(0)");
-            }
-            int batterie_level = this.mListener.getCurrentBatterieLevel();
-            int batterie_limite_level = this.mListener.getLimiteBatterieLevel();
-
-            batterieLimite.setText(String.format(Locale.FRANCE, "%d %% ", batterie_limite_level));
-            batterieLevel.setText(String.format(Locale.FRANCE, "%d %% ", batterie_level - batterie_limite_level));
+    public void onRefreshBatterieLevel(int newBatterieLevel) {
+        if (batterieLevel != null) {
+            int batterieLimit = this.mListener.getLimiteBatterieLevel();
+            batterieLevel.setText(String.format(Locale.FRANCE, "%d %% ", newBatterieLevel - batterieLimit));
         }
     }
 
     @Override
-    public void onRefreshConfigNotify() {
-        String limiteData;
-        float data_limite_trafic = this.mListener.getLimiteDataTrafic();
-        if(data_limite_trafic >= 1.0f) {
-            limiteData = String.format(Locale.FRANCE, "%.3f Go", data_limite_trafic);
+    public void onRefreshAllConfig() {
+        onRefreshDataConfig(this.mListener.getLimiteDataTrafic());
+        onRefreshBatterieConfig(this.mListener.getLimiteBatterieLevel());
+    }
+
+    @Override
+    public void onRefreshBatterieConfig(int newBatterieLimit) {
+        if (batterieLimite != null) {
+            batterieLimite.setText(String.format(Locale.FRANCE, "%d %% ", newBatterieLimit));
         }
-        else {
-            limiteData = String.format(Locale.FRANCE, "%d Mo", (int)(data_limite_trafic * 1000.f));
+    }
+
+    @Override
+    public void onRefreshDataConfig(float newDataLimit) {
+        if (dataLimite != null) {
+            String limiteData;
+            if (newDataLimit >= 1.0f) {
+                limiteData = String.format(Locale.FRANCE, "%.3f Go", newDataLimit);
+            } else {
+                limiteData = String.format(Locale.FRANCE, "%d Mo", (int) (newDataLimit * 1000.f));
+            }
+            dataLimite.setText(limiteData);
         }
-        dataLimite.setText(limiteData);
     }
 
     @Override

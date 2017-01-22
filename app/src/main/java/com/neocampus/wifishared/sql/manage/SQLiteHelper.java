@@ -25,7 +25,7 @@ import java.util.Set;
 public class SQLiteHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "database.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 3;
     private Context context;
 
     public SQLiteHelper(Context context) {
@@ -74,12 +74,19 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             Collections.sort(listClasses, new Table.IComparator());
 
             /*Store all tables to duplicate*/
-            for (Class<?> aClass : listClasses) {
-                Table table = aClass.getAnnotation(Table.class);
-                Cursor cursor = store( database, table.TableName());
-                try {
-                    hashMap.put(table.TableName(), cursor);
-                } catch (Exception e) {
+            Cursor c = database.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
+            if (c.moveToFirst()) {
+                while ( !c.isAfterLast() ) {
+                    String tableName = c.getString(0);
+                    if(!"android_metadata".equals(tableName)
+                            && !"sqlite_sequence".equals(tableName)) {
+                        Cursor cursor = store( database, tableName);
+                        try {
+                            hashMap.put(tableName, cursor);
+                        } catch (Exception e) {
+                        }
+                    }
+                    c.moveToNext();
                 }
             }
 
@@ -96,9 +103,19 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             }
 
             /*Restore all tables*/
+            if (c.moveToFirst()) {
+                while ( !c.isAfterLast() ) {
+                    String tableName = c.getString(0);
+                    if(!"android_metadata".equals(tableName)
+                            && !"sqlite_sequence".equals(tableName)) {
+                        restore(database, tableName, hashMap.get(tableName));
+                    }
+                    c.moveToNext();
+                }
+            }
             for (Class<?> aClass : listClasses) {
                 Table table = aClass.getAnnotation(Table.class);
-                restore(database, table.TableName(), hashMap.get(table.TableName()));
+
             }
 
             /*Drop all duplicate tables*/
