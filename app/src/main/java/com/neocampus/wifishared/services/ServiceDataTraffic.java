@@ -7,6 +7,8 @@ import java.nio.channels.AlreadyConnectedException;
 
 /*
  * Created by Guillaume RIPOLL on 23/01/17.
+ * ServiceDataTraffic : background service
+ * Call Observable every lookUpPeriode
  */
 public class ServiceDataTraffic implements Runnable{
     private DataObservable observable;
