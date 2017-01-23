@@ -1,59 +1,57 @@
 package com.neocampus.wifishared.services;
 
+import android.support.annotation.Nullable;
 import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Binder;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.widget.Toast;
-
 import com.neocampus.wifishared.listeners.OnServiceSetListener;
 import com.neocampus.wifishared.observables.BatterieObservable;
 import com.neocampus.wifishared.observables.ClientObservable;
+import com.neocampus.wifishared.observables.DataObservable;
 import com.neocampus.wifishared.observables.HotspotObservable;
 import com.neocampus.wifishared.receivers.OnBatterieReceiver;
 import com.neocampus.wifishared.receivers.OnHotspotReceiver;
 import com.neocampus.wifishared.sql.database.TableConfiguration;
 import com.neocampus.wifishared.sql.manage.SQLManager;
 import com.neocampus.wifishared.utils.WifiApControl;
-
 import java.util.Observable;
 import java.util.Observer;
 
 public class ServiceNeOCampus extends Service implements
         OnServiceSetListener, Observer {
-
     private ServiceNeOCampusBinder oCampusBinder;
     private SQLManager sqlManager;
-
     private ClientObservable clientObservable;
     private HotspotObservable hotspotObservable;
     private BatterieObservable batterieObservable;
-
+    private DataObservable dataObservable;
     private ServiceTaskClients serviceTaskClients;
+    private ServiceDataTraffic serviceData;
     private OnHotspotReceiver onHotspotReceiver;
     private OnBatterieReceiver onBatterieReceiver;
 
     public ServiceNeOCampus() {
+        /* TODO change the long data by the user pref or a default value */
+        long data = 1000000000; // 1 Go
         this.oCampusBinder = new ServiceNeOCampusBinder();
         this.hotspotObservable = new HotspotObservable();
         this.clientObservable = new ClientObservable();
         this.batterieObservable = new BatterieObservable();
-
+        this.dataObservable = new DataObservable(data);
     }
 
     @Override
     public void onCreate() {
         this.sqlManager = new SQLManager(this);
         this.sqlManager.open();
-
         this.serviceTaskClients = new ServiceTaskClients(this, this.clientObservable);
         this.onHotspotReceiver = new OnHotspotReceiver(this.hotspotObservable);
         this.onBatterieReceiver = new OnBatterieReceiver(this.batterieObservable);
-
-
+        this.serviceData = new ServiceDataTraffic(this, this.dataObservable);
         this.addObserver(this);
         this.registerReceiver(this.onBatterieReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         this.registerReceiver(this.onHotspotReceiver, new IntentFilter(WifiApControl.ACTION_WIFI_AP_CHANGED));
@@ -93,6 +91,7 @@ public class ServiceNeOCampus extends Service implements
         batterieObservable.addObserver(observer);
         hotspotObservable.addObserver(observer);
         clientObservable.addObserver(observer);
+        dataObservable.addObserver(observer);
     }
 
     @Override
@@ -100,6 +99,7 @@ public class ServiceNeOCampus extends Service implements
         batterieObservable.deleteObserver(observer);
         hotspotObservable.deleteObserver(observer);
         clientObservable.deleteObserver(observer);
+        dataObservable.deleteObserver(observer);
     }
 
     @Override
