@@ -1,11 +1,9 @@
 package com.neocampus.wifishared.services;
 
 import android.content.Context;
-
 import com.neocampus.wifishared.listeners.OnReachableClientListener;
 import com.neocampus.wifishared.observables.ClientObservable;
 import com.neocampus.wifishared.utils.WifiApControl;
-
 import java.nio.channels.AlreadyConnectedException;
 import java.util.Date;
 import java.util.Iterator;

@@ -35,13 +35,11 @@ public class ServiceNeOCampus extends Service implements
     private OnBatterieReceiver onBatterieReceiver;
 
     public ServiceNeOCampus() {
-        /* TODO change the long data by the user pref or a default value */
-        long data = 1000000000; // 1 Go
         this.oCampusBinder = new ServiceNeOCampusBinder();
         this.hotspotObservable = new HotspotObservable();
         this.clientObservable = new ClientObservable();
         this.batterieObservable = new BatterieObservable();
-        this.dataObservable = new DataObservable(data);
+        this.dataObservable = new DataObservable();
     }
 
     @Override
@@ -49,9 +47,9 @@ public class ServiceNeOCampus extends Service implements
         this.sqlManager = new SQLManager(this);
         this.sqlManager.open();
         this.serviceTaskClients = new ServiceTaskClients(this, this.clientObservable);
+        this.serviceData = new ServiceDataTraffic(this, this.dataObservable);
         this.onHotspotReceiver = new OnHotspotReceiver(this.hotspotObservable);
         this.onBatterieReceiver = new OnBatterieReceiver(this.batterieObservable);
-        this.serviceData = new ServiceDataTraffic(this, this.dataObservable);
         this.addObserver(this);
         this.registerReceiver(this.onBatterieReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         this.registerReceiver(this.onHotspotReceiver, new IntentFilter(WifiApControl.ACTION_WIFI_AP_CHANGED));
@@ -66,6 +64,7 @@ public class ServiceNeOCampus extends Service implements
     @Override
     public void onDestroy() {
         this.serviceTaskClients.stopWatchDog();
+        this.serviceData.stopWatchDog();
         this.batterieObservable.deleteObservers();
         this.unregisterReceiver(onHotspotReceiver);
         this.unregisterReceiver(onBatterieReceiver);
@@ -108,24 +107,29 @@ public class ServiceNeOCampus extends Service implements
     }
 
     private void startWatchDog() {
+        this.serviceData.startWatchDog(1000);
         this.serviceTaskClients.startWatchDog(10000);
     }
 
     private void stopWatchDog() {
+        this.serviceData.stopWatchDog();
         this.serviceTaskClients.stopWatchDog();
     }
 
     public void setWatchDogState(boolean enable) {
-        if (enable) {
+        if (enable)
             startWatchDog();
-        } else {
+        else
             stopWatchDog();
-        }
+    }
+
+    public boolean isOverDataLimit(long dataLevel) {
+        TableConfiguration tableConfiguration = sqlManager.getConfiguration();
+        return tableConfiguration.getLimiteConsommation() >= dataLevel;
     }
 
     public boolean isOverBatterieLimit(int level) {
-        TableConfiguration tableConfiguration
-                = sqlManager.getConfiguration();
+        TableConfiguration tableConfiguration = sqlManager.getConfiguration();
         return tableConfiguration.getLimiteBatterie() >= level;
     }
 
@@ -143,9 +147,11 @@ public class ServiceNeOCampus extends Service implements
         if (o instanceof HotspotObservable) {
             setWatchDogState((boolean) arg);
         } else if (o instanceof BatterieObservable) {
-            if(isOverBatterieLimit((Integer) arg)) {
+            if(isOverBatterieLimit((int) arg))
                 stopHotpost();
-            }
+        } else if (o instanceof  DataObservable) {
+            if(isOverDataLimit((long) arg))
+                stopHotpost();
         }
     }
 
