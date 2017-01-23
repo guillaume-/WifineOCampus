@@ -16,7 +16,6 @@ import java.util.List;
  */
 
 public class ServiceTaskClients implements Runnable , OnReachableClientListener{
-
     private ClientObservable observable;
     private WifiApControl apControl;
     private volatile boolean running = false;
