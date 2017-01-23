@@ -18,6 +18,7 @@ import com.neocampus.wifishared.utils.WifiApControl;
 import com.neocampus.wifishared.views.CirclePageIndicator;
 import com.neocampus.wifishared.views.CirclePagerAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -31,6 +32,7 @@ public class FragmentHome extends Fragment
     private TextView batterieLimite;
     private TextView dataLevel;
     private TextView dataLimite;
+    private Button hotSpotButton;
 
     private OnActivitySetListener mListener;
 
@@ -51,10 +53,12 @@ public class FragmentHome extends Fragment
         this.mListener.showAppBarRefresh();
 
         this.view = inflater.inflate(R.layout.fragment_home, container, false);
+        this.dataLevel = (TextView) view.findViewById(R.id.data_traffic);
         this.clientCount = (TextView) view.findViewById(R.id.reachable_client_count);
         this.batterieLevel = (TextView) view.findViewById(R.id.batterie_level_result);
         this.batterieLimite = (TextView) view.findViewById(R.id.batterie_level_limit);
         this.dataLimite = (TextView) view.findViewById(R.id.data_limit);
+        this.hotSpotButton = (Button) view.findViewById(R.id.button);
 
         ViewPager viewPager = (ViewPager) this.view.findViewById(R.id.id_view_pager);
         CirclePageIndicator indicator = (CirclePageIndicator) this.view.findViewById(R.id.id_circle_indicator);
@@ -68,13 +72,11 @@ public class FragmentHome extends Fragment
             WifiApControl apControl = WifiApControl.getInstance(getContext());
             if (apControl.isEnabled()
                     && apControl.isUPSWifiConfiguration()) {
-                Button button = (Button) view.findViewById(R.id.button);
-                button.setText(getString(R.string.desactiver_le_partage));
+                hotSpotButton.setText(getString(R.string.desactiver_le_partage));
             }
         }
         else {
-            Button button = (Button) view.findViewById(R.id.button);
-            button.setText(getString(R.string.no_permission));
+            hotSpotButton.setText(getString(R.string.no_permission));
         }
         return view;
     }
@@ -88,7 +90,7 @@ public class FragmentHome extends Fragment
     @Override
     public void onRefreshAll() {
         onRefreshClientCount(0);
-        this.mListener.getReachableClients(this);
+        this.mListener.peekListClients();
         onRefreshBatterieLevel(this.mListener.getCurrentBatterieLevel());
     }
 
@@ -109,8 +111,35 @@ public class FragmentHome extends Fragment
     }
 
     @Override
-    public void onRefreshDataTraffic(long dataTrafficOctet) {
+    public void onRefreshHotpostState(boolean activate) {
+        if(hotSpotButton != null)
+        {
+            if(activate) {
+                hotSpotButton.setText(getString(R.string.desactiver_le_partage));
+            }else{
+                onReachableClients(new ArrayList<WifiApControl.Client>());
+                hotSpotButton.setText(getString(R.string.activer_le_partage));
+            }
+        }
+    }
 
+    @Override
+    public void onRefreshDataTraffic(long dataTrafficOctet) {
+        if (dataLevel != null) {
+            final String strDataTraffic;
+            float dataTraffic = dataTrafficOctet / (1000.0f* 1000.0f*1000.0f);
+            if (dataTraffic >= 1.0f) {
+                strDataTraffic = String.format(Locale.FRANCE, "%.3f Go", dataTraffic);
+            } else {
+                strDataTraffic = String.format(Locale.FRANCE, "%d Mo", (int) (dataTraffic * 1000.f));
+            }
+            dataLevel.post(new Runnable() {
+                @Override
+                public void run() {
+                    dataLevel.setText(strDataTraffic);
+                }
+            });
+        }
     }
 
 

@@ -84,15 +84,14 @@ public class FragmentUsers extends Fragment implements OnFragmentSetListener,  O
 
     @Override
     public void onReachableClients(List<WifiApControl.Client> clients) {
-        onRefreshReachableClients(clients);
         onRefreshSessionClients(clients);
+        onRefreshReachableClients(clients);
     }
 
 
     @Override
     public void onRefreshAll() {
-        onRefreshReachableClients(new ArrayList<WifiApControl.Client>());
-        onRefreshSessionClients(this.mListener.getReachableClients(this));
+        this.mListener.peekListClients();
     }
 
 
@@ -102,7 +101,7 @@ public class FragmentUsers extends Fragment implements OnFragmentSetListener,  O
             totalClientCount.post(new Runnable() {
                 @Override
                 public void run() {
-                    sessionUserView.showClient(client);
+                    sessionUserView.setClient(client);
                     totalClientCount.setText("(" + sessionUserView.getCount() + ")");
                 }
             });
@@ -111,7 +110,7 @@ public class FragmentUsers extends Fragment implements OnFragmentSetListener,  O
             reachableClientCount.post(new Runnable() {
                 @Override
                 public void run() {
-                    reachableUserView.showClient(client);
+                    reachableUserView.setClient(client);
                     reachableClientCount.setText("(" + reachableUserView.getCount() + ")");
                 }
             });
@@ -122,12 +121,19 @@ public class FragmentUsers extends Fragment implements OnFragmentSetListener,  O
     public void onRefreshClientCount(final int newCOunt) {
     }
 
+    @Override
+    public void onRefreshHotpostState(boolean activate) {
+        if(!activate) {
+            onReachableClients(new ArrayList<WifiApControl.Client>());
+        }
+    }
+
     private void onRefreshReachableClients(final List<WifiApControl.Client> clients) {
         if (reachableClientCount != null && reachableUserView != null) {
             reachableClientCount.post(new Runnable() {
                 @Override
                 public void run() {
-                    reachableUserView.showClients(clients);
+                    reachableUserView.changeClients(clients);
                     reachableClientCount.setText("(" + reachableUserView.getCount() + ")");
                 }
             });
@@ -139,7 +145,7 @@ public class FragmentUsers extends Fragment implements OnFragmentSetListener,  O
             totalClientCount.post(new Runnable() {
                 @Override
                 public void run() {
-                    sessionUserView.setClients(clients);
+                    sessionUserView.changeClients(clients);
                     totalClientCount.setText("(" + sessionUserView.getCount() + ")");
                 }
             });

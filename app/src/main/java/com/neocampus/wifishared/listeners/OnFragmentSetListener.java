@@ -13,6 +13,7 @@ public interface OnFragmentSetListener {
     void onRefreshDataTraffic(long dataTrafficOctet);
     void onRefreshClient(WifiApControl.Client client);
     void onRefreshClientCount(int newCount);
+    void onRefreshHotpostState(boolean activate);
 
 
     void onRefreshAllConfig();

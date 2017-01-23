@@ -41,6 +41,8 @@ import com.neocampus.wifishared.listeners.OnReachableClientListener;
 import com.neocampus.wifishared.listeners.OnServiceSetListener;
 import com.neocampus.wifishared.observables.BatterieObservable;
 import com.neocampus.wifishared.observables.ClientObservable;
+import com.neocampus.wifishared.observables.DataObservable;
+import com.neocampus.wifishared.observables.HotspotObservable;
 import com.neocampus.wifishared.services.ServiceNeOCampus;
 import com.neocampus.wifishared.sql.database.TableConfiguration;
 import com.neocampus.wifishared.sql.manage.SQLManager;
@@ -48,7 +50,6 @@ import com.neocampus.wifishared.utils.BatterieUtils;
 import com.neocampus.wifishared.utils.ParcelableUtils;
 import com.neocampus.wifishared.utils.WifiApControl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -265,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
 
     private void disconnectToService() {
         if (isServiceRunning(ServiceNeOCampus.class)) {
-            if(mServiceInterraction != null) {
+            if (mServiceInterraction != null) {
                 mServiceInterraction.forceSave();
             }
             unbindService(this);
@@ -278,6 +279,8 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
                 (ServiceNeOCampus.ServiceNeOCampusBinder) service;
         mServiceInterraction = binder.getOnServiceSetListener();
         mServiceInterraction.addObserver(this);
+
+        peekListClients();
     }
 
     @Override
@@ -289,25 +292,19 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     public void update(Observable o, Object newValue) {
         if (fragment != null
                 && fragment instanceof OnFragmentSetListener) {
-            if (o instanceof BatterieObservable) {
-                ((OnFragmentSetListener) fragment).onRefreshBatterieLevel((Integer) newValue);
+            OnFragmentSetListener listener = (OnFragmentSetListener) fragment;
+            if (o instanceof DataObservable) {
+                ((OnFragmentSetListener) fragment).onRefreshDataTraffic((Long) newValue);
+            } else if (o instanceof BatterieObservable) {
+                listener.onRefreshBatterieLevel((Integer) newValue);
             } else if (o instanceof ClientObservable) {
-                ((OnFragmentSetListener) fragment).onRefreshClient((WifiApControl.Client) newValue);
-                ((OnFragmentSetListener) fragment).onRefreshClientCount(((ClientObservable) o).getCount());
+                listener.onRefreshClient((WifiApControl.Client) newValue);
+                listener.onRefreshClientCount(((ClientObservable) o).getCount());
+            } else if (o instanceof HotspotObservable) {
+                listener.onRefreshHotpostState((Boolean) newValue);
             }
         }
         System.out.println("Activity : I am notified " + newValue);
-    }
-
-    @Override
-    public List<WifiApControl.Client> getReachableClients(
-            OnReachableClientListener listener) {
-        List<WifiApControl.Client>
-                clients = apControl.getReachableClients(5000, listener);
-        if (clients == null) {
-            return new ArrayList<>();
-        }
-        return clients;
     }
 
     @Override
@@ -336,6 +333,17 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     public int getLimiteBatterie() {
         TableConfiguration tableConfiguration = sqlManager.getConfiguration();
         return tableConfiguration.getLimiteBatterie();
+    }
+
+    @Override
+    public void peekListClients() {
+        if(mServiceInterraction != null){
+            if(fragment instanceof FragmentHome){
+                mServiceInterraction.peekAllClients((OnReachableClientListener) fragment, true);
+            } else if(fragment instanceof FragmentUsers){
+                mServiceInterraction.peekAllClients((OnReachableClientListener) fragment, false);
+            }
+        }
     }
 
     @Override

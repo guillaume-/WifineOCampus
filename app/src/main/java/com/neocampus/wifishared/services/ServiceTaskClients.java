@@ -77,7 +77,8 @@ public class ServiceTaskClients implements Runnable , OnReachableClientListener{
     }
 
     public void stopWatchDog() {
-        running = false;
+        this.running = false;
+        this.observable.clear();
     }
 
 

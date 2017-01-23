@@ -2,26 +2,27 @@ package com.neocampus.wifishared.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.neocampus.wifishared.R;
+import com.neocampus.wifishared.listeners.OnAdapterViewListener;
 import com.neocampus.wifishared.utils.WifiApControl;
 
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Hirochi ☠ on 10/01/17.
  */
 
-public class ReachableUserView extends LinearLayout {
+public class ReachableUserView extends LinearLayout implements OnAdapterViewListener {
 
-    private HashMap<WifiApControl.Client, View> clients = new HashMap<>();
+    private ListClientAdapter adapter;
+    private List<WifiApControl.Client> clients = new ArrayList<>();
+
 
     public ReachableUserView(Context context) {
         super(context);
@@ -31,50 +32,55 @@ public class ReachableUserView extends LinearLayout {
         super(context, attrs);
     }
 
-    public void showClients(List<WifiApControl.Client> pclients) {
-
-        for(Iterator<Map.Entry<WifiApControl.Client, View>> it =
-            this.clients.entrySet().iterator(); it.hasNext(); ) {
-            Map.Entry<WifiApControl.Client, View> entry = it.next();
-            if(!pclients.contains(entry.getKey())) {
-                removeView(entry.getValue());
-                it.remove();
-            }
-        }
-
-        for(WifiApControl.Client client : pclients) {
-            showClient(client);
-        }
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        this.onInit();
     }
 
-    public void showClient(WifiApControl.Client client)
+    private void onInit()
     {
-        if(!clients.containsKey(client)) {
-            View view = LayoutInflater.from(getContext())
-                    .inflate(R.layout.app_users_layout, null, false);
+        this.adapter = new ListClientAdapter(getContext(),
+                this, R.layout.app_sessions_layout, clients);
+        ListView lvItems = (ListView) findViewById(R.id.lvClients);
+        lvItems.setAdapter(adapter);
+    }
 
-            TextView textView1 = (TextView) view.findViewById(R.id.addressPhysique);
-            TextView textView2 = (TextView) view.findViewById(R.id.adressIP);
-
-            textView1.setText(client.hwAddr);
-            textView2.setText(client.ipAddr);
-
-
-            int LayoutW = LinearLayout.LayoutParams.MATCH_PARENT;
-            int LayoutH = LinearLayout.LayoutParams.WRAP_CONTENT;
-            LinearLayout.LayoutParams
-                    params = new LinearLayout.LayoutParams(LayoutW, LayoutH);
-            addView(view, params);
-            clients.put(client, view);
+    public void changeClients(List<WifiApControl.Client> newList)
+    {
+        List<WifiApControl.Client> list = new ArrayList<>();
+        for(WifiApControl.Client client : newList){
+            if(client.connected) {
+                list.add(client);
+            }
         }
-        else if(!client.connected)
-        {
-            removeView(clients.get(client));
-            clients.remove(client);
+        adapter.swap(list);
+    }
+
+    @Override
+    public View showView(View view, Object o) {
+        WifiApControl.Client client = (WifiApControl.Client) o;
+        TextView textView1 = (TextView) view.findViewById(R.id.addressPhysique);
+        TextView textView2 = (TextView) view.findViewById(R.id.adressIP);
+
+        textView1.setText(client.hwAddr);
+        textView2.setText(client.ipAddr);
+
+        return view;
+    }
+
+    public void setClient(WifiApControl.Client client) {
+        if(client.connected) {
+            adapter.add(client);
+        }
+        else {
+            adapter.remove(client);
         }
     }
 
     public int getCount() {
         return clients.size();
     }
+
+
 }

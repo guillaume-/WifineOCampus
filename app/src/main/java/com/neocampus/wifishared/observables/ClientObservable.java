@@ -12,9 +12,11 @@ import java.util.Observable;
 
 public class ClientObservable extends Observable {
     List<WifiApControl.Client> clients;
+    List<WifiApControl.Client> historiqueClients;
 
     public ClientObservable() {
         clients = new ArrayList<>();
+        historiqueClients = new ArrayList<>();
     }
 
     /**
@@ -24,19 +26,40 @@ public class ClientObservable extends Observable {
         return clients;
     }
 
+    public List<WifiApControl.Client> getHistoriqueClients() {
+        return historiqueClients;
+    }
+
     public void addClient(WifiApControl.Client client) {
         clients.add(client);
+        logClients(client);
         setChanged();
         notifyObservers(client);
     }
 
     public void removeClient(WifiApControl.Client client) {
         clients.remove(client);
+        logClients(client);
         setChanged();
         notifyObservers(client);
+    }
+
+    private void logClients(WifiApControl.Client client){
+        if(client.connected)
+            historiqueClients.add(client);
+        else {
+            historiqueClients.lastIndexOf(client);
+        }
+    }
+
+    public void clear() {
+        clients.clear();
+        historiqueClients.clear();
     }
 
     public int getCount() {
         return clients.size();
     }
+
+
 }

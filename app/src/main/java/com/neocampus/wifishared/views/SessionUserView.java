@@ -2,16 +2,17 @@ package com.neocampus.wifishared.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.neocampus.wifishared.R;
+import com.neocampus.wifishared.listeners.OnAdapterViewListener;
 import com.neocampus.wifishared.utils.WifiApControl;
 
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -19,10 +20,11 @@ import java.util.Locale;
  * Created by Hirochi ☠ on 10/01/17.
  */
 
-public class SessionUserView extends LinearLayout {
+public class SessionUserView extends LinearLayout implements OnAdapterViewListener {
 
-    private SimpleDateFormat sdfDate = new SimpleDateFormat("HH:mm:ss", Locale.FRANCE);
-    private HashMap<WifiApControl.Client, View> clients = new HashMap<>();
+    private List<WifiApControl.Client> clients = new ArrayList<>();
+    private SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss", Locale.FRANCE);
+    private ListClientAdapter adapter;
 
     public SessionUserView(Context context) {
         super(context);
@@ -32,35 +34,53 @@ public class SessionUserView extends LinearLayout {
         super(context, attrs);
     }
 
-    public void setClients(List<WifiApControl.Client> pclients) {
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        this.onInit();
+    }
 
-        for(WifiApControl.Client client : pclients) {
-            showClient(client);
+    private void onInit() {
+        adapter = new ListClientAdapter(getContext(),
+                this, R.layout.app_sessions_layout, clients);
+        ListView lvItems = (ListView) findViewById(R.id.lvClients);
+        lvItems.setAdapter(adapter);
+    }
+
+    public void changeClients(List<WifiApControl.Client> newList)
+    {
+        adapter.swap(newList);
+    }
+
+    public void setClient(WifiApControl.Client client) {
+        if(client.connected) {
+            adapter.add(client);
+        }
+        else {
+            clients.lastIndexOf(client);
+            adapter.notifyDataSetChanged();
         }
     }
 
-    public void showClient(WifiApControl.Client client) {
-        View view ;
-        if(!clients.containsKey(client)) {
-            view = LayoutInflater.from(getContext())
-                    .inflate(R.layout.app_sessions_layout, null, false);
+    @Override
+    public View showView(View view, Object o) {
+        WifiApControl.Client client = (WifiApControl.Client) o;
+        TextView textView1 = (TextView) view.findViewById(R.id.addressPhysique);
+        TextView textView2 = (TextView) view.findViewById(R.id.adressIP);
 
-            TextView textView1 = (TextView) view.findViewById(R.id.addressPhysique);
-            TextView textView2 = (TextView) view.findViewById(R.id.adressIP);
+//        textView1.setText(client.hwAddr);
+//        textView2.setText(client.ipAddr);
 
-            textView1.setText(client.hwAddr);
-            textView2.setText(client.ipAddr);
-
-            int LayoutW = LayoutParams.MATCH_PARENT;
-            int LayoutH = LayoutParams.WRAP_CONTENT;
-            LayoutParams
-                    params = new LayoutParams(LayoutW, LayoutH);
-            addView(view, params);
-            clients.put(client, view);
+        textView1.setText(format.format(client.date_connected));
+        if(!client.connected) {
+            textView2.setText(format.format(client.date_disconnected));
         }
+        return view;
     }
 
     public int getCount() {
         return clients.size();
     }
+
+
 }

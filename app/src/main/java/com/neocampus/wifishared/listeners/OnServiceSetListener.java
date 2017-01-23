@@ -9,5 +9,6 @@ import java.util.Observer;
 public interface OnServiceSetListener {
     void addObserver(Observer observer);
     void removeObserver(Observer observer);
+    void peekAllClients(OnReachableClientListener listener, boolean reachableOnly);
     void forceSave();
 }

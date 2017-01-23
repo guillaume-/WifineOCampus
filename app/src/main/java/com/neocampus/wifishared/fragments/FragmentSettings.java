@@ -88,6 +88,11 @@ public class FragmentSettings extends Fragment implements OnFragmentSetListener 
     }
 
     @Override
+    public void onRefreshHotpostState(boolean activate) {
+
+    }
+
+    @Override
     public void onRefreshAllConfig() {
         onRefreshDataConfig(this.mListener.getLimiteDataTrafic());
         onRefreshBatterieConfig(this.mListener.getLimiteBatterieLevel());

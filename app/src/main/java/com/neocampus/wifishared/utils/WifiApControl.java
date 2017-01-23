@@ -432,13 +432,13 @@ final public class WifiApControl extends Observable {
         private boolean synchronised(Client client)
         {
             if(client.hwAddr.equals(hwAddr)) {
-//                long date_connected = this.date_connected == 0 ? client.date_connected : this.date_connected;
-//                long date_disconnected = this.date_disconnected < client.date_disconnected ?
-//                        client.date_disconnected : this.date_disconnected;
-//                this.date_connected = date_connected;
-//                client.date_connected = date_connected;
-//                this.date_disconnected = date_disconnected;
-//                client.date_disconnected = date_disconnected;
+                long date_connected = this.date_connected == 0 ? client.date_connected : this.date_connected;
+                long date_disconnected = this.date_disconnected < client.date_disconnected ?
+                        client.date_disconnected : this.date_disconnected;
+                this.date_connected = date_connected;
+                client.date_connected = date_connected;
+                this.date_disconnected = date_disconnected;
+                client.date_disconnected = date_disconnected;
                 return true;
             }
             return false;
