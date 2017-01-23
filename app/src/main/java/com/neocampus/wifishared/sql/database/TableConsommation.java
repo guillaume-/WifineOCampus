@@ -27,6 +27,9 @@ public class TableConsommation extends SqlDataSchema {
     @Column(Type = SqlType.INTEGER, Nullable = true, value = "0")
     public static final String _Consommation = "Column_Consommation";
 
+    @Column(Type = SqlType.TEXT, Nullable = false)
+    public static final String _Position = "Column_Position";
+
 
     public TableConsommation(ContentValues values) {
         super(values);
@@ -67,4 +70,9 @@ public class TableConsommation extends SqlDataSchema {
     public void setConsommation(long consommation){
         this.values.put(_Consommation, consommation);
     }
+
+    public String getPosition(){ return  this.values.getAsString(_Position); }
+
+    public void setPosition(String pos){ this.values.put(_Position, pos); }
+
 }

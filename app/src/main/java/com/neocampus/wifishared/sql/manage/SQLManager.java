@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 /**
- * Created by NALINGA on 23/07/2015.
+ * Created by NALINGA on 23/12/2016.
  */
 public class SQLManager {
 
@@ -125,7 +125,7 @@ public class SQLManager {
     }
 
     public int addConsommation(long date,
-                               int nbre_user, int periode, double consommation) {
+                               int nbre_user, int periode, double consommation, String position) {
 
         ContentValues value = new ContentValues();
 
@@ -133,6 +133,7 @@ public class SQLManager {
         value.put(TableConsommation._NbreUser, nbre_user);
         value.put(TableConsommation._Periode, periode);
         value.put(TableConsommation._Consommation, consommation);
+        value.put(TableConsommation._Position, position);
 
         return (int) database.insert(TableConsommation._NAME, null, value);
     }
