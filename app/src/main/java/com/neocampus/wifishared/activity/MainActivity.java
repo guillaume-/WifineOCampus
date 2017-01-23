@@ -1,6 +1,5 @@
 package com.neocampus.wifishared.activity;
 
-import android.net.TrafficStats;
 import android.net.wifi.WifiConfiguration;
 import android.os.Build;
 import android.os.Bundle;
@@ -44,7 +43,6 @@ public class MainActivity extends AppCompatActivity
     private SQLManager sqlManager;
     private WifiApControl apControl;
     private Fragment fragment = null;
-    private long dataT0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +51,6 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         this.setSupportActionBar(toolbar);
-        dataT0 = TrafficStats.getTotalRxBytes()+TrafficStats.getTotalTxBytes()+TrafficStats.getMobileRxBytes()+TrafficStats.getMobileTxBytes();
 
         /*Check if permission is enabled for wifi configuration*/
         if (WifiApControl.checkPermission(this, true)) {
@@ -212,11 +209,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public int getCurrentBatterieLevel() {
         return (int) BatterieUtils.getBatteryLevel(this);
-    }
-
-    @Override
-    public long getDataTx() {
-        return TrafficStats.getTotalTxBytes()+TrafficStats.getTotalRxBytes()-dataT0-TrafficStats.getMobileRxBytes()-TrafficStats.getMobileTxBytes();
     }
 
 

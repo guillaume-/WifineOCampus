@@ -47,7 +47,9 @@ public class Home extends Fragment implements OnFragmentSetListener, OnReachable
                      batterieLimite,
                      dataLevel,
                      dataLimite;
-    private boolean dataUsable;
+    private long dataT0;
+    private boolean isDataUsable;
+
     private OnActivitySetListener mListener;
 
     public Home() {
@@ -88,10 +90,10 @@ public class Home extends Fragment implements OnFragmentSetListener, OnReachable
 
         this.view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        this.batterieLevel = (TextView) view.findViewById(R.id.batterie_level_result);
-        this.batterieLimite = (TextView) view.findViewById(R.id.batterie_level_limit);
-        this.dataLevel = (TextView) view.findViewById(R.id.data_level_result);
-        this.dataLimite = (TextView) view.findViewById(R.id.data_level_limit);
+        batterieLevel = (TextView) view.findViewById(R.id.batterie_level_result);
+        batterieLimite = (TextView) view.findViewById(R.id.batterie_level_limit);
+        dataLevel = (TextView) view.findViewById(R.id.data_level);
+        dataLimite = (TextView) view.findViewById(R.id.data_limit);
 
         ViewPager viewPager = (ViewPager) this.view.findViewById(R.id.id_view_pager);
         CirclePageIndicator indicator = (CirclePageIndicator) this.view.findViewById(R.id.id_circle_indicator);
@@ -106,13 +108,16 @@ public class Home extends Fragment implements OnFragmentSetListener, OnReachable
 
         int batterie_level = this.mListener.getCurrentBatterieLevel();
         int batterie_limite_level = this.mListener.getLimiteBatterieLevel();
-        batterieLevel.setText(String.format(Locale.FRANCE, "%d %% ", batterie_level - batterie_limite_level));
-        batterieLimite.setText(String.format(Locale.FRANCE, "%d %% ", batterie_limite_level));
-        dataUsable = (TrafficStats.getMobileRxBytes() != TrafficStats.UNSUPPORTED);
-        if(dataUsable) {
-            dataLevel.setText("0 octets");
+        //batterieLimite.setText(String.format(Locale.FRANCE, "%d %% ", batterie_limite_level));
+        //batterieLevel.setText(String.format(Locale.FRANCE, "%d %% ", batterie_level - batterie_limite_level));
+        batterieLimite.setText("?");
+        batterieLevel.setText("?");
+        isDataUsable = (TrafficStats.getMobileRxBytes() != TrafficStats.UNSUPPORTED);
+        if(isDataUsable) {
+            dataT0 = TrafficStats.getTotalRxBytes()+TrafficStats.getTotalTxBytes();
+            dataLevel.setText("0 octet");
             dataLimite.setText("Non défini");
-        }else {
+        } else {
             dataLevel.setText("Non supporté");
             dataLimite.setText("Non supporté");
         }
@@ -161,10 +166,12 @@ public class Home extends Fragment implements OnFragmentSetListener, OnReachable
             }
             int batterie_level = this.mListener.getCurrentBatterieLevel();
             int batterie_limite_level = this.mListener.getLimiteBatterieLevel();
-            batterieLimite.setText(String.format(Locale.FRANCE, "%d %% ", batterie_limite_level));
-            batterieLevel.setText(String.format(Locale.FRANCE, "%d %% ", batterie_level - batterie_limite_level));
-            if(dataUsable)
-                dataLevel.setText(""+this.mListener.getDataTx()+" octets");
+            //batterieLimite.setText(String.format(Locale.FRANCE, "%d %% ", batterie_limite_level));
+            //batterieLevel.setText(String.format(Locale.FRANCE, "%d %% ", batterie_level - batterie_limite_level));
+            if(isDataUsable) {
+                long dataTx = TrafficStats.getTotalRxBytes()+TrafficStats.getTotalTxBytes();
+                dataLevel.setText(dataToStr(dataTx-dataT0));
+            }
         }
     }
 
@@ -191,5 +198,15 @@ public class Home extends Fragment implements OnFragmentSetListener, OnReachable
         mListener = null;
     }
 
-
+    public String dataToStr(long data){
+        if(data > 1000000000)
+            return ""+(data/1000000000)+" Go";
+        else if(data > 1000000)
+            return ""+(data/1000000)+" Mo";
+        else if(data > 1000)
+            return ""+(data/1000)+" Ko";
+        else if(data > 1)
+            return ""+(data)+" octets";
+        return ""+(data)+" octet";
+    }
 }
