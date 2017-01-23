@@ -22,6 +22,10 @@ public class ServiceDataTraffic implements Runnable{
         this.dataT0 += TrafficStats.getMobileTxBytes();
     }
 
+    public void refreshFromDataBase(long newT0){
+        dataT0 = newT0;
+    }
+
     private Void doInBackground() {
         long dataTx;
         if (isUsable) try {

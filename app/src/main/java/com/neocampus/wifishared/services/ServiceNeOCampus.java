@@ -117,10 +117,25 @@ public class ServiceNeOCampus extends Service implements
     }
 
     public void setWatchDogState(boolean enable) {
-        if (enable)
+        if (enable) {
+            refreshFromDataBase();
             startWatchDog();
-        else
+        } else {
+            saveInDataBase();
             stopWatchDog();
+        }
+    }
+
+    public void refreshFromDataBase(){
+        //TODO : if(SQL got last T0) use refreshDataT0
+        long SQL_dataT0 = 0;
+        serviceData.refreshFromDataBase(SQL_dataT0);
+    }
+
+    public void saveInDataBase(){
+        //TODO : store in SQL
+        long dataTx = dataObservable.getValue();
+        //SQL.store(dataTx)
     }
 
     public boolean isOverDataLimit(long dataLevel) {
