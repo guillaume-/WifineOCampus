@@ -108,10 +108,8 @@ public class Home extends Fragment implements OnFragmentSetListener, OnReachable
 
         int batterie_level = this.mListener.getCurrentBatterieLevel();
         int batterie_limite_level = this.mListener.getLimiteBatterieLevel();
-        //batterieLimite.setText(String.format(Locale.FRANCE, "%d %% ", batterie_limite_level));
-        //batterieLevel.setText(String.format(Locale.FRANCE, "%d %% ", batterie_level - batterie_limite_level));
-        batterieLimite.setText("?");
-        batterieLevel.setText("?");
+        batterieLimite.setText(String.format(Locale.FRANCE, "%d %% ", batterie_limite_level));
+        batterieLevel.setText(String.format(Locale.FRANCE, "%d %% ", batterie_level - batterie_limite_level));
         isDataUsable = (TrafficStats.getMobileRxBytes() != TrafficStats.UNSUPPORTED);
         if(isDataUsable) {
             dataT0 = TrafficStats.getTotalRxBytes()+TrafficStats.getTotalTxBytes();
@@ -166,8 +164,8 @@ public class Home extends Fragment implements OnFragmentSetListener, OnReachable
             }
             int batterie_level = this.mListener.getCurrentBatterieLevel();
             int batterie_limite_level = this.mListener.getLimiteBatterieLevel();
-            //batterieLimite.setText(String.format(Locale.FRANCE, "%d %% ", batterie_limite_level));
-            //batterieLevel.setText(String.format(Locale.FRANCE, "%d %% ", batterie_level - batterie_limite_level));
+            batterieLimite.setText(String.format(Locale.FRANCE, "%d %% ", batterie_limite_level));
+            batterieLevel.setText(String.format(Locale.FRANCE, "%d %% ", batterie_level - batterie_limite_level));
             if(isDataUsable) {
                 long dataTx = TrafficStats.getTotalRxBytes()+TrafficStats.getTotalTxBytes();
                 dataLevel.setText(dataToStr(dataTx-dataT0));
