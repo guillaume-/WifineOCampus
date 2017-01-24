@@ -8,7 +8,7 @@ import com.neocampus.wifishared.sql.annotations.Table;
 /**
  * Created by NALINGA on 10/01/2017.
  */
-@Table(TableName = "TableConsommation", Order = 1)
+@Table(TableName = "TableConsommation", Order = 2)
 public class TableConsommation extends SqlDataSchema {
     public static final String _NAME = "TableConsommation" ;
 
@@ -28,7 +28,7 @@ public class TableConsommation extends SqlDataSchema {
     public static final String _Consommation = "Column_Consommation";
 
     @Column(Type = SqlType.TEXT, Nullable = false)
-    public static final String _Position = "Column_Position";
+    public static final String _Localisation = "Column_Localisation";
 
 
     public TableConsommation(ContentValues values) {
@@ -71,8 +71,8 @@ public class TableConsommation extends SqlDataSchema {
         this.values.put(_Consommation, consommation);
     }
 
-    public String getPosition(){ return  this.values.getAsString(_Position); }
+    public String getPosition(){ return  this.values.getAsString(_Localisation); }
 
-    public void setPosition(String pos){ this.values.put(_Position, pos); }
+    public void setPosition(String pos){ this.values.put(_Localisation, pos); }
 
 }

@@ -4,11 +4,13 @@ import android.content.ContentValues;
 
 import com.neocampus.wifishared.sql.annotations.Column;
 import com.neocampus.wifishared.sql.annotations.SqlType;
+import com.neocampus.wifishared.sql.annotations.Table;
 
 /**
  * Created by NALINGA on 23/01/2017.
  */
 
+@Table(TableName = "TableConsommation", Order = 3)
 public class TableUtilisateur extends SqlDataSchema {
     public static final String _NAME = "TableUtilisateur" ;
 
@@ -24,8 +26,8 @@ public class TableUtilisateur extends SqlDataSchema {
     @Column(Type = SqlType.INTEGER, Nullable = false)
     public static final String _ADRESSE_IP =  "Column_ADRESSE_IP";
 
-    @Column(Type = SqlType.TEXT, Nullable = false)
-    public static final String _LOCALISATION =  "Column_LOCALISATION";
+   /* @Column(Type = SqlType.TEXT, Nullable = false)
+    public static final String _LOCALISATION =  "Column_LOCALISATION";*/
 
     @Column(Type = SqlType.INTEGER, Nullable = false)
     public static final String _DATE_DEBUT_CNX =  "Column_DATE_DEBUT_CNX";
@@ -54,9 +56,9 @@ public class TableUtilisateur extends SqlDataSchema {
 
     public void setADRESSE_IP(long adresse_ip){ this.values.put(_ADRESSE_MAC, adresse_ip); }
 
-    public String getLOCALISATION(){ return this.values.getAsString(_LOCALISATION); }
+    /*public String getLOCALISATION(){ return this.values.getAsString(_LOCALISATION); }
 
-    public void setLOCALISATION(String localisation){ this.values.put(_LOCALISATION, localisation); }
+    public void setLOCALISATION(String localisation){ this.values.put(_LOCALISATION, localisation); }*/
 
     public long getDATE_DEBUT_CNX(){ return this.values.getAsLong(_DATE_DEBUT_CNX); }
 

@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.neocampus.wifishared.sql.database.TableConfiguration;
 import com.neocampus.wifishared.sql.database.TableConsommation;
+import com.neocampus.wifishared.sql.database.TableUtilisateur;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -31,19 +32,6 @@ public class SQLManager {
     public synchronized void close() {
         SQLDatabaseManager.getInstance().closeDatabase();
     }
-
-//    CREATE  TRIGGER trigger_name [BEFORE|AFTER] UPDATE OF column_name
-//    ON table_name
-//    BEGIN
-//    -- Trigger logic goes here....
-//    END;
-
-//    CREATE TRIGGER update_customer_address UPDATE OF address ON customers
-//    BEGIN
-//    UPDATE orders SET address = new.address WHERE customer_name = old.TableName;
-//    END;
-
-//    IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE Name = 'Trigger' AND Type = 'TR')
 
     private static ContentValues cursorToContentValues(Cursor c) {
         ContentValues values = new ContentValues();
@@ -70,6 +58,8 @@ public class SQLManager {
         }
         return values;
     }
+
+    /*==================== Débuts des fonctions de manipulations de TableConfiguration ====================*/
 
     public int setConfiguration(byte[] config) {
         int result;
@@ -124,8 +114,13 @@ public class SQLManager {
         }
     }
 
+    /*==================== Fin des fonctions de manipulations de TableConfiguration ====================*/
+
+
+    /*==================== Debut de fonctions de manipulation de TableConsommation ====================*/
+
     public int addConsommation(long date,
-                               int nbre_user, int periode, double consommation, String position) {
+                               int nbre_user, int periode, double consommation, String localisation) {
 
         ContentValues value = new ContentValues();
 
@@ -133,7 +128,7 @@ public class SQLManager {
         value.put(TableConsommation._NbreUser, nbre_user);
         value.put(TableConsommation._Periode, periode);
         value.put(TableConsommation._Consommation, consommation);
-        value.put(TableConsommation._Position, position);
+        value.put(TableConsommation._Localisation, localisation);
 
         return (int) database.insert(TableConsommation._NAME, null, value);
     }
@@ -160,6 +155,71 @@ public class SQLManager {
         }
     }
 
+    public int updateDATE(int id, TableConsommation conso ) {
+        String selection = TableConsommation._ID + " = " + id;
+
+        ContentValues values = new ContentValues();
+        values.put(TableConsommation._Date, conso.getDATE());
+
+        return database.update(TableConsommation._NAME, values, selection, null);
+    }
+
+    public int updateNBREUSER(int id, TableConsommation conso){
+        String selection = TableConsommation._ID + " = " + id;
+
+        ContentValues values = new ContentValues();
+        values.put(TableConsommation._Date, conso.getNBREUSER());
+
+        return database.update(TableConsommation._NAME, values, selection, null);
+    }
+
+    public int updatePeriode(int id, TableConsommation conso ) {
+        String selection = TableConsommation._ID + " = " + id;
+
+        ContentValues values = new ContentValues();
+        values.put(TableConsommation._Date, conso.getPERIODE());
+
+        return database.update(TableConsommation._NAME, values, selection, null);
+    }
+
+    public int updateConsommation(int id, TableConsommation conso){
+        String selection = TableConsommation._ID + " = " + id;
+
+        ContentValues values = new ContentValues();
+        values.put(TableConsommation._Date, conso.getCONSOMMATION());
+
+        return database.update(TableConsommation._NAME, values, selection, null);
+    }
+
+    public int updateLocalisation(int id, TableConsommation conso){
+        String selection = TableConsommation._ID + " = " + id;
+
+        ContentValues values = new ContentValues();
+        values.put(TableConsommation._Date, conso.getPosition());
+
+        return database.update(TableConsommation._NAME, values, selection, null);
+    }
+
+    public TableConsommation getLsatConsommation() {
+        Cursor c = null;
+        TableConsommation tableConsommation = null;
+        try {
+            String DexUtils = String.format(Locale.FRANCE,
+                    "SELECT * FROM %s WHERE %S = MAX("+ TableConsommation._ID + ")",
+                    TableConsommation._NAME, TableConsommation._ID);
+            c = database.rawQuery(DexUtils, null);
+            c.moveToFirst();
+            if (!c.isAfterLast()) {
+                tableConsommation = new TableConsommation(cursorToContentValues(c));
+            }
+            return tableConsommation;
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+    }
+
     public void removeConsommationByID(int iD) {
 
         String delete = String.format(Locale.FRANCE,
@@ -171,145 +231,70 @@ public class SQLManager {
         database.delete(TableConsommation._NAME, null, null);
     }
 
+    /*==================== Fin des fonctions de manipulation de TableConsommation ====================*/
 
-//
-//    public void insertMultiple(Object[] objects) {
-//        TimeLog.begin();
-//        final int part = 100;
-//        int quotient = objects.length / part;
-//        int reste = objects.length % part;
-//        if (quotient > 0) {
-//            //insertArticleMultiplePart(TABLE_NAME, objects, 0, quotient * part, part);
-//        }
-//        TimeLog.mark("Quotient");
-//        if (reste > 0) {
-//            //insertArticleMultiplePart(TABLE_NAME, objects, quotient * part, quotient * part + reste, reste);
-//        }
-//        TimeLog.mark("Reste");
-//        TimeLog.end();
-//    }
-//
-//    private void insertMultiplePart(String tableName, Object[] objects,
-//                                    int indexFrom, int indexTo, int stepInsertion) {
-//        /*
-//        String[] columns = TableName.getColumns();
-//
-//        String column = TextUtils.join(",", columns);
-//
-//        String[] values = new String[columns.length];
-//        Arrays.fill(values, "?");
-//
-//        String replace = ",(" + TextUtils.join(",", values) + ")";
-//        String value = new String(new char[stepInsertion]).replace("\0", replace).substring(1);
-//
-//        String sql = String.format("INSERT INTO %DexUtils (%DexUtils) VALUES %DexUtils", tableName, column, value);
-//        SQLiteStatement statement = database.compileStatement(sql);
-//
-//        TableName table;
-//        int index = 1, step = 1;
-//        for (int i = indexFrom; i < indexTo; i++, step++) {
-//            table = objects[i];
-//            for (int j = 1; j <= columns.length; j++, index++) {
-//                Object object = table.get(Object.class, columns[j - 1]);
-//                if (object == null) {
-//                    statement.bindNull(index);
-//                } else if (object instanceof String) {
-//                    statement.bindString(index, object.toString());
-//                } else if (object instanceof byte[]) {
-//                    statement.bindBlob(index, (byte[]) object);
-//                } else if (object instanceof Integer) {
-//                    statement.bindLong(index, (Integer) object);
-//                } else if (object instanceof Long) {
-//                    statement.bindLong(index, (Long) object);
-//                } else if (object instanceof Boolean) {
-//                    statement.bindLong(index, ((Boolean) object) ? 1 : 0);
-//                }
-//            }
-//            if (step == stepInsertion) {
-//                index = 1;
-//                step = 0;
-//                statement.executeInsert();
-//                statement.clearBindings();
-//            }
-//        }
-//        statement.close();
-//        */
-//    }
+    /*==================== Débuts des fonctions de manipulations de TableUtilisateur ====================*/
 
+    public int addUtilisateur(int idconso, long adresse_mac, long adresse_ip, long date_debut_cnx, long date_fin_cnx) {
 
+        ContentValues value = new ContentValues();
 
-/*
-    public Object get() {
-        Cursor c = null;
-        Object object = null;
-        try {
-            String DexUtils = String.format(Locale.FRANCE,
-                    "SELECT * FROM %DexUtils", _NAME);
-            c = database.rawQuery(DexUtils, null);
-            if (c.moveToFirst()) {
-                object =
-                        new TableName(cursorToContentValues(c));
-            }
-            return object;
-        } finally {
-            if (c != null) {
-                c.close();
-            }
-        }
+        value.put(TableUtilisateur._ID_CONSO, idconso);
+        value.put(TableUtilisateur._ADRESSE_MAC, adresse_mac);
+        value.put(TableUtilisateur._ADRESSE_IP, adresse_ip);
+        value.put(TableUtilisateur._DATE_DEBUT_CNX, date_debut_cnx);
+        value.put(TableUtilisateur._DATE_FIN_CNX, date_fin_cnx);
+
+        return (int) database.insert(TableUtilisateur._NAME, null, value);
     }
-    */
 
-    /*
-    public ArrayList<Object> getAll() {
+    public ArrayList<TableUtilisateur> getAllUtilisateur() {
         Cursor c = null;
-        ArrayList<Object> objects = new ArrayList<>();
+        ArrayList<TableUtilisateur> utilisateurs = new ArrayList<>();
         try {
-            String DexUtils = String.format(Locale.FRANCE,
-                    "SELECT * FROM %DexUtils ORDER BY %DexUtils desc", _NAME, _COLUMN);
-            c = database.rawQuery(DexUtils, null);
+            String s = String.format(Locale.FRANCE, "SELECT * FROM %s", TableUtilisateur._NAME);
+            c = database.rawQuery(s, null);
             c.moveToFirst();
             while (!c.isAfterLast()) {
-                Object object =
-                        new TableName(cursorToContentValues(c));
-                objects.add(object);
+                TableUtilisateur utilisateur  = new TableUtilisateur(cursorToContentValues(c));
+                utilisateurs.add(utilisateur);
                 c.moveToNext();
             }
-            return objects;
+            return utilisateurs;
         } finally {
             if (c != null) {
                 c.close();
             }
         }
     }
-    */
 
-    /*
-    public int update(Object object) {
-        String selection = _ID + " = " + Object.getId();
+    public int updateDEBUTCNX(int id, TableUtilisateur user){
+        String selection = TableUtilisateur._ID + " = " + id;
 
         ContentValues values = new ContentValues();
-        return database.update(_NAME, values, selection, null);
-    }
-    */
+        values.put(TableUtilisateur._DATE_DEBUT_CNX, user.getDATE_DEBUT_CNX());
 
-    /*
-    public void removeByID(int iD) {
-        String selection = String.format(Locale.FRANCE, "%DexUtils = %d",
-                _ID, iD);
-        database.delete(_NAME, selection, null);
+        return database.update(TableUtilisateur._NAME, values, selection, null);
     }
-    */
 
-    /*
-    public void removeMultiple(List<Object> objects) {
-        List<Integer> integers = new ArrayList<>();
-        for (Object o : objects) {
-            integers.add(o.getId());
-        }
-        String ids = TextUtils.join(",", integers);
-        String selection = String.format(Locale.FRANCE, "%DexUtils in (%DexUtils)",
-                _ID, ids);
-        database.delete(_NAME, selection, null);
+    public int updateFINCNX(int id, TableUtilisateur user){
+        String selection = TableUtilisateur._ID + " = " + id;
+
+        ContentValues values = new ContentValues();
+        values.put(TableUtilisateur._DATE_FIN_CNX, user.getDATE_FIN_CNX());
+
+        return database.update(TableUtilisateur._NAME, values, selection, null);
     }
-    */
+
+    public void removeUtilisateurByID(int iduser) {
+        String delete = String.format(Locale.FRANCE,  "%s = %d", TableUtilisateur._ID, iduser);
+        database.delete(TableUtilisateur._NAME, delete, null);
+    }
+
+    public void removeAllUtilisateur() {
+        database.delete(TableUtilisateur._NAME, null, null);
+    }
+
+    /*==================== Fin des fonctions de manipulations de TableUtilisateur ====================*/
+
 }
