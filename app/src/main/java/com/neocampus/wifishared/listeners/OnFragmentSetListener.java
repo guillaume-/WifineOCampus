@@ -10,6 +10,7 @@ public interface OnFragmentSetListener {
 
     void onRefreshAll();
     void onRefreshBatterieLevel(int newLevel);
+    void onRefreshTimeConfig(long newTimeLimit);
     void onRefreshDataTraffic(long dataTrafficOctet);
     void onRefreshClient(WifiApControl.Client client);
     void onRefreshClientCount(int newCount);

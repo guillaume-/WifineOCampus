@@ -10,5 +10,6 @@ public interface OnServiceSetListener {
     void addObserver(Observer observer);
     void removeObserver(Observer observer);
     void peekAllClients(OnReachableClientListener listener, boolean reachableOnly);
+    void peekDataTraffic(OnFragmentSetListener listener);
     void forceSave();
 }

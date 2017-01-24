@@ -79,7 +79,6 @@ public class FragmentUsers extends Fragment implements OnFragmentSetListener,  O
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
     @Override
@@ -91,7 +90,7 @@ public class FragmentUsers extends Fragment implements OnFragmentSetListener,  O
 
     @Override
     public void onRefreshAll() {
-        this.mListener.peekListClients();
+        this.mListener.postRequestListClients();
     }
 
 
@@ -154,6 +153,10 @@ public class FragmentUsers extends Fragment implements OnFragmentSetListener,  O
 
     @Override
     public void onRefreshBatterieLevel(int newLevel) {
+    }
+
+    @Override
+    public void onRefreshTimeConfig(long newTimeLimit) {
     }
 
     @Override

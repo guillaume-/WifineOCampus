@@ -9,6 +9,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
+import com.neocampus.wifishared.listeners.OnFragmentSetListener;
 import com.neocampus.wifishared.listeners.OnReachableClientListener;
 import com.neocampus.wifishared.listeners.OnServiceSetListener;
 import com.neocampus.wifishared.observables.BatterieObservable;
@@ -120,6 +121,11 @@ public class ServiceNeOCampus extends Service implements
         else{
             listener.onReachableClients(clientObservable.getHistoriqueClients());
         }
+    }
+
+    @Override
+    public void peekDataTraffic(OnFragmentSetListener listener) {
+        listener.onRefreshDataTraffic(dataObservable.getValue());
     }
 
     @Override

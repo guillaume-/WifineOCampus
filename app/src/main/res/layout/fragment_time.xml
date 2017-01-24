@@ -1,0 +1,81 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.neocampus.wifishared.fragments.FragmentTime">
+
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:text="Seuil du temps de partage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:typeface="serif"
+                android:background="@drawable/cu_solid_bottom_border"
+                android:padding="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/cu_solid_bottom_border">
+
+                <Switch
+                    android:text="Notification"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/switch1"
+                    android:padding="10dp"
+                    android:layout_marginTop="10dp"
+                    android:textSize="16sp"
+                    android:typeface="serif"
+                    android:switchTextAppearance="@style/SwitchTextAppearance"
+                    android:textColor="?android:attr/textColorTertiary"
+                    android:thumb="@drawable/cu_switch_thumb_selector"
+                    android:track="@drawable/cu_switch_track_bg"
+                    android:showText="true"
+                    android:textOff="Non"
+                    android:textOn="Oui"
+                    android:thumbTextPadding="10dp"
+                    android:layout_marginBottom="10dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="20dp">
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="50dp">
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+</FrameLayout>

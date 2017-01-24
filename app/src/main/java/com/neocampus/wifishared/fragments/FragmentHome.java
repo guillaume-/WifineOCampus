@@ -14,10 +14,12 @@ import com.neocampus.wifishared.R;
 import com.neocampus.wifishared.listeners.OnActivitySetListener;
 import com.neocampus.wifishared.listeners.OnFragmentSetListener;
 import com.neocampus.wifishared.listeners.OnReachableClientListener;
+import com.neocampus.wifishared.utils.BatterieUtils;
 import com.neocampus.wifishared.utils.WifiApControl;
 import com.neocampus.wifishared.views.CirclePageIndicator;
 import com.neocampus.wifishared.views.CirclePagerAdapter;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -32,12 +34,16 @@ public class FragmentHome extends Fragment
     private TextView batterieLimite;
     private TextView dataLevel;
     private TextView dataLimite;
+    private TextView timeLevel;
+    private TextView timeLimite;
     private Button hotSpotButton;
+    private SimpleDateFormat format;
 
     private OnActivitySetListener mListener;
 
     public FragmentHome() {
         // Required empty public constructor
+        format = new SimpleDateFormat("HH 'h' mm 'min'", Locale.FRANCE);
     }
 
     @Override
@@ -53,11 +59,14 @@ public class FragmentHome extends Fragment
         this.mListener.showAppBarRefresh();
 
         this.view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        this.timeLevel = (TextView) view.findViewById(R.id.time_level);
+        this.timeLimite = (TextView) view.findViewById(R.id.time_limit);
         this.dataLevel = (TextView) view.findViewById(R.id.data_traffic);
-        this.clientCount = (TextView) view.findViewById(R.id.reachable_client_count);
+        this.dataLimite = (TextView) view.findViewById(R.id.data_limit);
         this.batterieLevel = (TextView) view.findViewById(R.id.batterie_level_result);
         this.batterieLimite = (TextView) view.findViewById(R.id.batterie_level_limit);
-        this.dataLimite = (TextView) view.findViewById(R.id.data_limit);
+        this.clientCount = (TextView) view.findViewById(R.id.reachable_client_count);
         this.hotSpotButton = (Button) view.findViewById(R.id.button);
 
         ViewPager viewPager = (ViewPager) this.view.findViewById(R.id.id_view_pager);
@@ -90,8 +99,9 @@ public class FragmentHome extends Fragment
     @Override
     public void onRefreshAll() {
         onRefreshClientCount(0);
-        this.mListener.peekListClients();
-        onRefreshBatterieLevel(this.mListener.getCurrentBatterieLevel());
+        this.mListener.postRequestListClients();
+        this.mListener.postRequestDataTraffic();
+        onRefreshBatterieLevel((int) BatterieUtils.getBatteryLevel(getContext()));
     }
 
     @Override
@@ -111,15 +121,21 @@ public class FragmentHome extends Fragment
     }
 
     @Override
-    public void onRefreshHotpostState(boolean activate) {
+    public void onRefreshHotpostState(final boolean activate) {
         if(hotSpotButton != null)
         {
-            if(activate) {
-                hotSpotButton.setText(getString(R.string.desactiver_le_partage));
-            }else{
-                onReachableClients(new ArrayList<WifiApControl.Client>());
-                hotSpotButton.setText(getString(R.string.activer_le_partage));
-            }
+            hotSpotButton.post(new Runnable() {
+                @Override
+                public void run() {
+                    if(activate) {
+                        hotSpotButton.setText(getString(R.string.desactiver_le_partage));
+                    }else{
+                        onReachableClients(new ArrayList<WifiApControl.Client>());
+                        hotSpotButton.setText(getString(R.string.activer_le_partage));
+                    }
+                }
+            });
+
         }
     }
 
@@ -131,7 +147,7 @@ public class FragmentHome extends Fragment
             if (dataTraffic >= 1.0f) {
                 strDataTraffic = String.format(Locale.FRANCE, "%.3f Go", dataTraffic);
             } else {
-                strDataTraffic = String.format(Locale.FRANCE, "%d Mo", (int) (dataTraffic * 1000.f));
+                strDataTraffic = String.format(Locale.FRANCE, "%.2f Mo", (dataTraffic * 1000.f));
             }
             dataLevel.post(new Runnable() {
                 @Override
@@ -142,26 +158,32 @@ public class FragmentHome extends Fragment
         }
     }
 
-
-
     @Override
     public void onRefreshBatterieLevel(int newBatterieLevel) {
         if (batterieLevel != null) {
-            int batterieLimit = this.mListener.getLimiteBatterieLevel();
+            int batterieLimit = this.mListener.getLimiteBatterie();
             batterieLevel.setText(String.format(Locale.FRANCE, "%d %% ", newBatterieLevel - batterieLimit));
         }
     }
 
     @Override
     public void onRefreshAllConfig() {
+        onRefreshTimeConfig(this.mListener.getLimiteTemps());
         onRefreshDataConfig(this.mListener.getLimiteDataTrafic());
-        onRefreshBatterieConfig(this.mListener.getLimiteBatterieLevel());
+        onRefreshBatterieConfig(this.mListener.getLimiteBatterie());
     }
 
     @Override
     public void onRefreshBatterieConfig(int newBatterieLimit) {
         if (batterieLimite != null) {
             batterieLimite.setText(String.format(Locale.FRANCE, "%d %% ", newBatterieLimit));
+        }
+    }
+
+    @Override
+    public void onRefreshTimeConfig(long newTimeLimit) {
+        if (timeLimite != null) {
+            timeLimite.setText(format.format(newTimeLimit));
         }
     }
 
@@ -192,7 +214,6 @@ public class FragmentHome extends Fragment
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
 

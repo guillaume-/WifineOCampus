@@ -5,15 +5,18 @@ package com.neocampus.wifishared.listeners;
  */
 
 public interface OnActivitySetListener {
-    int getLimiteBatterieLevel();
-    int getCurrentBatterieLevel();
-    float getLimiteDataTrafic();
-    int getLimiteBatterie();
-    void peekListClients();
+
+    float       getLimiteDataTrafic();
+    int         getLimiteBatterie();
+    long        getLimiteTemps();
 
     /**/
-    void hideAppBarRefresh();
-    void showAppBarRefresh();
-    void hideAppBarSaveConfig();
-    void showAppBarSaveConfig();
+    void        postRequestListClients();
+    void        postRequestDataTraffic();
+
+    /**/
+    void        hideAppBarRefresh();
+    void        showAppBarRefresh();
+    void        hideAppBarSaveConfig();
+    void        showAppBarSaveConfig();
 }

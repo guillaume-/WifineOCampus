@@ -9,7 +9,7 @@ import java.util.Observable;
  * and notify the Observer, which can stop the sharing
  */
 public class DataObservable extends Observable {
-    private long lastValue = -1;
+    private long lastValue = 0;
 
     /**
      *@return the value

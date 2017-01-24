@@ -239,7 +239,8 @@
                             android:fontFamily="serif"
                             android:layout_gravity="center_horizontal"
                             android:layout_weight="0.35"
-                            android:layout_width="0dp" />
+                            android:layout_width="0dp"
+                            android:id="@+id/time_level" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -434,7 +435,8 @@
                             android:fontFamily="serif"
                             android:layout_gravity="center_horizontal"
                             android:layout_weight="@integer/scale_c"
-                            android:layout_width="0dp" />
+                            android:layout_width="0dp"
+                            android:id="@+id/time_limit" />
 
                         <ImageView
                             app:srcCompat="@drawable/ic_edit"

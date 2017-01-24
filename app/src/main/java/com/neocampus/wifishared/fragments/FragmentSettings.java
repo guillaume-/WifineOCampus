@@ -13,6 +13,7 @@ import com.neocampus.wifishared.listeners.OnActivitySetListener;
 import com.neocampus.wifishared.listeners.OnFragmentSetListener;
 import com.neocampus.wifishared.utils.WifiApControl;
 
+import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 
@@ -21,11 +22,13 @@ public class FragmentSettings extends Fragment implements OnFragmentSetListener 
     private View view;
     private TextView settingBatterie;
     private TextView settingData;
-
+    private TextView settingTime;
+    private SimpleDateFormat format;
     private OnActivitySetListener mListener;
 
     public FragmentSettings() {
         // Required empty public constructor
+        format = new SimpleDateFormat("HH 'h' mm 'min'", Locale.FRANCE);
     }
 
     @Override
@@ -44,6 +47,7 @@ public class FragmentSettings extends Fragment implements OnFragmentSetListener 
 
         this.settingBatterie = (TextView) view.findViewById(R.id.setting_batterie);
         this.settingData = (TextView) view.findViewById(R.id.setting_data);
+        this.settingTime = (TextView) view.findViewById(R.id.setting_time);
 
         onRefreshAllConfig();
 
@@ -89,13 +93,13 @@ public class FragmentSettings extends Fragment implements OnFragmentSetListener 
 
     @Override
     public void onRefreshHotpostState(boolean activate) {
-
     }
 
     @Override
     public void onRefreshAllConfig() {
+        onRefreshBatterieConfig(this.mListener.getLimiteBatterie());
         onRefreshDataConfig(this.mListener.getLimiteDataTrafic());
-        onRefreshBatterieConfig(this.mListener.getLimiteBatterieLevel());
+        onRefreshTimeConfig(this.mListener.getLimiteTemps());
     }
 
     @Override
@@ -117,5 +121,14 @@ public class FragmentSettings extends Fragment implements OnFragmentSetListener 
             settingData.setText(limiteData);
         }
     }
+
+    @Override
+    public void onRefreshTimeConfig(long newTimeLimit) {
+        if (settingTime != null) {
+
+            settingTime.setText(format.format(newTimeLimit));
+        }
+    }
+
 
 }

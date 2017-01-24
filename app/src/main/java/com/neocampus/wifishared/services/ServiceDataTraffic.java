@@ -25,7 +25,7 @@ public class ServiceDataTraffic implements Runnable{
     }
 
     public void refreshFromDataBase(long newT0){
-        dataT0 = newT0;
+        dataT0 += newT0;
     }
 
     private Void doInBackground() {

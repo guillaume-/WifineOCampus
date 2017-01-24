@@ -26,12 +26,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.neocampus.wifishared.R;
 import com.neocampus.wifishared.fragments.FragmentBatterie;
 import com.neocampus.wifishared.fragments.FragmentHome;
 import com.neocampus.wifishared.fragments.FragmentSettings;
+import com.neocampus.wifishared.fragments.FragmentTime;
 import com.neocampus.wifishared.fragments.FragmentTraffic;
 import com.neocampus.wifishared.fragments.FragmentUsers;
 import com.neocampus.wifishared.listeners.OnActivitySetListener;
@@ -49,6 +49,7 @@ import com.neocampus.wifishared.sql.manage.SQLManager;
 import com.neocampus.wifishared.utils.BatterieUtils;
 import com.neocampus.wifishared.utils.ParcelableUtils;
 import com.neocampus.wifishared.utils.WifiApControl;
+import com.neocampus.wifishared.utils.test;
 
 import java.util.List;
 import java.util.Observable;
@@ -102,6 +103,8 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
             serviceintent = new Intent(this, ServiceNeOCampus.class);
             connectToService();
 
+            test.test(this);
+
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             finishAndRemoveTask();
         } else {
@@ -121,8 +124,6 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -232,20 +233,16 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     public void onClickToDataConfig(final View v) {
         v.startAnimation(AnimationUtils.
                 loadAnimation(v.getContext(), R.anim.pressed_anim));
-        TableConfiguration tableConfiguration = sqlManager.getConfiguration();
-        long limite_data = tableConfiguration.getLimiteConsommation();
-        float limite_conso = limite_data / (1000.0f * 1000.0f * 1000.0f);
+        float limite_conso = getLimiteDataTrafic();
         Fragment fragment = FragmentTraffic.newInstance(limite_conso);
         this.fragment = showInstance(fragment,
                 R.anim.circle_zoom, R.anim.circle_inverse_zoom);
-
     }
 
     public void onClickToBatterieConfig(final View v) {
         v.startAnimation(AnimationUtils.
                 loadAnimation(v.getContext(), R.anim.pressed_anim));
-        TableConfiguration tableConfiguration = sqlManager.getConfiguration();
-        int limite_batterie = tableConfiguration.getLimiteBatterie();
+        int limite_batterie = getLimiteBatterie();
         Fragment fragment = FragmentBatterie.newInstance(limite_batterie);
         this.fragment = showInstance(fragment,
                 R.anim.circle_zoom, R.anim.circle_inverse_zoom);
@@ -254,7 +251,10 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     public void onClickToTimeConfig(final View v) {
         v.startAnimation(AnimationUtils.
                 loadAnimation(v.getContext(), R.anim.pressed_anim));
-        Toast.makeText(this, "En maintenance", Toast.LENGTH_LONG).show();
+        long limite_temps = getLimiteTemps();
+        Fragment fragment = FragmentTime.newInstance(limite_temps);
+        this.fragment = showInstance(fragment,
+                R.anim.circle_zoom, R.anim.circle_inverse_zoom);
     }
 
     private void connectToService() {
@@ -280,7 +280,8 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         mServiceInterraction = binder.getOnServiceSetListener();
         mServiceInterraction.addObserver(this);
 
-        peekListClients();
+        postRequestListClients();
+        postRequestDataTraffic();
     }
 
     @Override
@@ -308,20 +309,6 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     }
 
     @Override
-    public int getLimiteBatterieLevel() {
-        TableConfiguration tableConfiguration = sqlManager.getConfiguration();
-        if (tableConfiguration != null) {
-            return tableConfiguration.getLimiteBatterie();
-        }
-        return BatterieUtils.BATTERIE_DEFAULT_LIMIT;
-    }
-
-    @Override
-    public int getCurrentBatterieLevel() {
-        return (int) BatterieUtils.getBatteryLevel(this);
-    }
-
-    @Override
     public float getLimiteDataTrafic() {
         TableConfiguration tableConfiguration = sqlManager.getConfiguration();
         long consommation = tableConfiguration.getLimiteConsommation();
@@ -332,16 +319,35 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     @Override
     public int getLimiteBatterie() {
         TableConfiguration tableConfiguration = sqlManager.getConfiguration();
-        return tableConfiguration.getLimiteBatterie();
+        if (tableConfiguration != null) {
+            return tableConfiguration.getLimiteBatterie();
+        }
+        return BatterieUtils.BATTERIE_DEFAULT_LIMIT;
     }
 
     @Override
-    public void peekListClients() {
+    public long getLimiteTemps() {
+        TableConfiguration tableConfiguration = sqlManager.getConfiguration();
+        return tableConfiguration.getLimiteTemps();
+    }
+
+    @Override
+    public void postRequestListClients() {
         if(mServiceInterraction != null){
             if(fragment instanceof FragmentHome){
                 mServiceInterraction.peekAllClients((OnReachableClientListener) fragment, true);
             } else if(fragment instanceof FragmentUsers){
                 mServiceInterraction.peekAllClients((OnReachableClientListener) fragment, false);
+            }
+        }
+    }
+
+    @Override
+    public void postRequestDataTraffic()
+    {
+        if(mServiceInterraction != null){
+            if(fragment instanceof FragmentHome){
+                mServiceInterraction.peekDataTraffic((OnFragmentSetListener) fragment);
             }
         }
     }
