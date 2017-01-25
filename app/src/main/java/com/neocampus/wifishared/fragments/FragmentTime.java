@@ -9,13 +9,18 @@ import android.view.ViewGroup;
 
 import com.neocampus.wifishared.R;
 import com.neocampus.wifishared.listeners.OnActivitySetListener;
+import com.neocampus.wifishared.listeners.OnFragmentConfigListener;
+import com.neocampus.wifishared.views.ChronoTimeView;
+
+import java.util.Date;
 
 
-public class FragmentTime extends Fragment {
+public class FragmentTime extends Fragment implements OnFragmentConfigListener{
     private static final String ARG_PARAM1 = "param1";
 
     // TODO: Rename and change types of parameters
     private long mParam1;
+    private ChronoTimeView timeView;
 
     private OnActivitySetListener mListener;
 
@@ -50,8 +55,16 @@ public class FragmentTime extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        this.mListener.hideAppBarRefresh();
+        this.mListener.showAppBarSaveConfig();
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_time, container, false);
+
+        this.timeView = (ChronoTimeView) view.findViewById(R.id.timeView);
+
+        this.timeView.setHours((int) (mParam1 / (3600*1000)));
+        this.timeView.setMinute(new Date(mParam1).getMinutes());
         return view;
     }
 
@@ -72,4 +85,19 @@ public class FragmentTime extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public float getLimiteDataTraffic() {
+        return 0;
+    }
+
+    @Override
+    public int getLimiteBatterie() {
+        return 0;
+    }
+
+    @Override
+    public long getLimiteTemps() {
+        return ((timeView.getHours() * 3600)
+                + (timeView.getMinute() * 60))*1000;
+    }
 }

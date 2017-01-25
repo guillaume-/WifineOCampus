@@ -11,8 +11,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -43,13 +41,14 @@ import com.neocampus.wifishared.observables.BatterieObservable;
 import com.neocampus.wifishared.observables.ClientObservable;
 import com.neocampus.wifishared.observables.DataObservable;
 import com.neocampus.wifishared.observables.HotspotObservable;
+import com.neocampus.wifishared.observables.TimeObservable;
 import com.neocampus.wifishared.services.ServiceNeOCampus;
 import com.neocampus.wifishared.sql.database.TableConfiguration;
 import com.neocampus.wifishared.sql.manage.SQLManager;
 import com.neocampus.wifishared.utils.BatterieUtils;
+import com.neocampus.wifishared.utils.FragmentUtils;
 import com.neocampus.wifishared.utils.ParcelableUtils;
 import com.neocampus.wifishared.utils.WifiApControl;
-import com.neocampus.wifishared.utils.test;
 
 import java.util.List;
 import java.util.Observable;
@@ -98,12 +97,10 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
             NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
             navigationView.setNavigationItemSelectedListener(this);
 
-            this.fragment = showInstance(FragmentHome.class);
+            this.fragment = FragmentUtils.showFragment(this, FragmentHome.class);
 
             serviceintent = new Intent(this, ServiceNeOCampus.class);
             connectToService();
-
-            test.test(this);
 
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             finishAndRemoveTask();
@@ -139,15 +136,15 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
 
         if (id == R.id.nav_home) {
             if (fragment.getClass() != FragmentHome.class) {
-                fragment = showInstance(FragmentHome.class);
+                fragment = FragmentUtils.showFragment(this, FragmentHome.class);
             }
         } else if (id == R.id.nav_users) {
             if (fragment.getClass() != FragmentUsers.class) {
-                fragment = showInstance(FragmentUsers.class);
+                fragment = FragmentUtils.showFragment(this, FragmentUsers.class);
             }
         } else if (id == R.id.nav_setting) {
             if (fragment.getClass() != FragmentSettings.class) {
-                fragment = showInstance(FragmentSettings.class);
+                fragment = FragmentUtils.showFragment(this, FragmentSettings.class);
             }
         } else {
             return true;
@@ -194,10 +191,13 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
             } else if (fragment instanceof FragmentBatterie) {
                 int limite_batterie = ((OnFragmentConfigListener) fragment).getLimiteBatterie();
                 this.sqlManager.setConfigurationB(limite_batterie);
+            } else if (fragment instanceof FragmentTime) {
+                long limite_temps = ((OnFragmentConfigListener) fragment).getLimiteTemps();
+                this.sqlManager.setConfigurationT(limite_temps);
             }
         }
         super.onBackPressed();
-        fragment = getVisibleFragment();
+        fragment = FragmentUtils.getForegroundFragment(this);
         if (fragment != null && fragment instanceof OnFragmentSetListener) {
             ((OnFragmentSetListener) fragment).onRefreshAllConfig();
         }
@@ -215,46 +215,53 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         if (isUPSWifiConfiguration(configuration)) {
             if (apControl.isWifiApEnabled()) {
                 apControl.disable();
-                button.setText("Lancer le Partage");
-
+                button.setText(getString(R.string.activer_le_partage));
             } else {
                 apControl.setEnabled(configuration, true);
-                button.setText("Arrêter le Partage");
+                button.setText(getString(R.string.desactiver_le_partage));
             }
+        } else if (apControl.isEnabled()) {
+            apControl.disable();
         } else {
             WifiConfiguration userConfiguration = apControl.getConfiguration();
             byte[] bytes = ParcelableUtils.marshall(userConfiguration);
             sqlManager.setConfiguration(bytes);
             apControl.setEnabled(configuration, true);
-            button.setText("Arrêter le Partage");
+            button.setText(getString(R.string.desactiver_le_partage));
         }
     }
 
     public void onClickToDataConfig(final View v) {
         v.startAnimation(AnimationUtils.
                 loadAnimation(v.getContext(), R.anim.pressed_anim));
-        float limite_conso = getLimiteDataTrafic();
-        Fragment fragment = FragmentTraffic.newInstance(limite_conso);
-        this.fragment = showInstance(fragment,
-                R.anim.circle_zoom, R.anim.circle_inverse_zoom);
+        if (!apControl.isEnabled() || !apControl.isUPSWifiConfiguration()) {
+            float limite_conso = getLimiteDataTrafic();
+            Fragment fragment = FragmentTraffic.newInstance(limite_conso);
+            this.fragment = FragmentUtils.showFragment(this, fragment,
+                    R.anim.circle_zoom, R.anim.circle_inverse_zoom);
+        }
     }
 
     public void onClickToBatterieConfig(final View v) {
         v.startAnimation(AnimationUtils.
                 loadAnimation(v.getContext(), R.anim.pressed_anim));
-        int limite_batterie = getLimiteBatterie();
-        Fragment fragment = FragmentBatterie.newInstance(limite_batterie);
-        this.fragment = showInstance(fragment,
-                R.anim.circle_zoom, R.anim.circle_inverse_zoom);
+        if (!apControl.isEnabled() || !apControl.isUPSWifiConfiguration()) {
+            int limite_batterie = getLimiteBatterie();
+            Fragment fragment = FragmentBatterie.newInstance(limite_batterie);
+            this.fragment = FragmentUtils.showFragment(this, fragment,
+                    R.anim.circle_zoom, R.anim.circle_inverse_zoom);
+        }
     }
 
     public void onClickToTimeConfig(final View v) {
         v.startAnimation(AnimationUtils.
                 loadAnimation(v.getContext(), R.anim.pressed_anim));
-        long limite_temps = getLimiteTemps();
-        Fragment fragment = FragmentTime.newInstance(limite_temps);
-        this.fragment = showInstance(fragment,
-                R.anim.circle_zoom, R.anim.circle_inverse_zoom);
+        if (!apControl.isEnabled() || !apControl.isUPSWifiConfiguration()) {
+            long limite_temps = getLimiteTemps();
+            Fragment fragment = FragmentTime.newInstance(limite_temps);
+            this.fragment = FragmentUtils.showFragment(this, fragment,
+                    R.anim.circle_zoom, R.anim.circle_inverse_zoom);
+        }
     }
 
     private void connectToService() {
@@ -280,6 +287,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         mServiceInterraction = binder.getOnServiceSetListener();
         mServiceInterraction.addObserver(this);
 
+        postRequestTimeValue();
         postRequestListClients();
         postRequestDataTraffic();
     }
@@ -303,6 +311,8 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
                 listener.onRefreshClientCount(((ClientObservable) o).getCount());
             } else if (o instanceof HotspotObservable) {
                 listener.onRefreshHotpostState((Boolean) newValue);
+            } else if (o instanceof TimeObservable) {
+                listener.onRefreshTimeValue((Long) newValue);
             }
         }
         System.out.println("Activity : I am notified " + newValue);
@@ -333,21 +343,29 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
 
     @Override
     public void postRequestListClients() {
-        if(mServiceInterraction != null){
-            if(fragment instanceof FragmentHome){
-                mServiceInterraction.peekAllClients((OnReachableClientListener) fragment, true);
-            } else if(fragment instanceof FragmentUsers){
-                mServiceInterraction.peekAllClients((OnReachableClientListener) fragment, false);
+        if (mServiceInterraction != null) {
+            if (fragment instanceof FragmentHome) {
+                mServiceInterraction.peekReachableClients((OnReachableClientListener) fragment);
+            } else if (fragment instanceof FragmentUsers) {
+                mServiceInterraction.peekAllClients((OnReachableClientListener) fragment);
             }
         }
     }
 
     @Override
-    public void postRequestDataTraffic()
-    {
-        if(mServiceInterraction != null){
-            if(fragment instanceof FragmentHome){
+    public void postRequestDataTraffic() {
+        if (mServiceInterraction != null) {
+            if (fragment instanceof FragmentHome) {
                 mServiceInterraction.peekDataTraffic((OnFragmentSetListener) fragment);
+            }
+        }
+    }
+
+    @Override
+    public void postRequestTimeValue() {
+        if (mServiceInterraction != null) {
+            if (fragment instanceof FragmentHome) {
+                mServiceInterraction.peekTimeValue((OnFragmentSetListener) fragment);
             }
         }
     }
@@ -388,89 +406,6 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         WifiConfiguration
                 configuration = apControl.getWifiApConfiguration();
         return WifiApControl.equals(configuration, upsConfig);
-    }
-
-    private Fragment showInstance(Class<?> aClass, Integer... animations) {
-        /*Check if already create*/
-        List<Fragment> fragments =
-                getSupportFragmentManager().getFragments();
-        Fragment fragment = null;
-        if (fragments != null) {
-            for (Fragment fragmentStored : fragments) {
-                if (fragmentStored != null && fragmentStored.getClass() == aClass) {
-                    fragment = fragmentStored;
-                    break;
-                }
-            }
-        }
-        if (fragment == null) {
-            try {
-                fragment = (Fragment) aClass.newInstance();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        }
-        final FragmentManager fm = getSupportFragmentManager();
-        final FragmentTransaction ft = fm.beginTransaction();
-        // We can also animate the changing of fragment.
-        if (animations.length == 0) {
-            ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-        } else if (animations.length == 1) {
-            ft.setCustomAnimations(animations[0], animations[0]);
-        } else {
-            ft.setCustomAnimations(animations[0], animations[1]);
-        }
-        // Replace current fragment by the new one.
-        ft.replace(R.id.iDFragmentShowing, fragment);
-        // Null on the back stack to return on the previous fragment when user
-        // press on back button.
-        ft.addToBackStack(null);
-        // Commit changes.
-        ft.commit();
-        return fragment;
-    }
-
-    private Fragment showInstance(Fragment fragment, Integer... animations) {
-        /*Check if already create*/
-        if (fragment == null) {
-            try {
-                throw new Exception();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        final FragmentManager fm = getSupportFragmentManager();
-        final FragmentTransaction ft = fm.beginTransaction();
-        // We can also animate the changing of fragment.
-        if (animations.length == 0) {
-            ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-        } else if (animations.length == 1) {
-            ft.setCustomAnimations(animations[0], animations[0]);
-        } else {
-            ft.setCustomAnimations(animations[0], animations[1]);
-        }
-        // Replace current fragment by the new one.
-        ft.replace(R.id.iDFragmentShowing, fragment);
-        // Null on the back stack to return on the previous fragment when user
-        // press on back button.
-        ft.addToBackStack(null);
-        // Commit changes.
-        ft.commit();
-        return fragment;
-    }
-
-    public Fragment getVisibleFragment() {
-        FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
-        List<Fragment> fragments = fragmentManager.getFragments();
-        if (fragments != null) {
-            for (Fragment fragment : fragments) {
-                if (fragment != null && fragment.isVisible())
-                    return fragment;
-            }
-        }
-        return null;
     }
 
 

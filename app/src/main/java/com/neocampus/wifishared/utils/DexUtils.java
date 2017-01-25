@@ -9,12 +9,7 @@ import android.os.Build;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
-import dalvik.system.DexFile;
 
 /**
  * Created by Hirochi ☠ on 09/01/17.
@@ -53,7 +48,7 @@ public class DexUtils {
         List<String> sourcePaths = new ArrayList<>();
         sourcePaths.add(applicationInfo.sourceDir); //add the default apk path
 
-        //the prefix of extracted file, ie: test.classes
+        //the prefix of extracted file, ie: TrafficUtils.classes
         String extractedFilePrefix = sourceApk.getName() + EXTRACTED_NAME_EXT;
         //the total dex numbers
         int totalDexNumber = getMultiDexPreferences(context).getInt(KEY_DEX_NUMBER, 1);

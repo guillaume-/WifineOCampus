@@ -33,6 +33,10 @@ public class TableConfiguration extends SqlDataSchema {
     public static final String _LimiteTemps = "Column_Temps";
 
 
+    @Column(Type = SqlType.INTEGER, Nullable = true, value = "0")
+    public static final String _DateAlarm = "Column_Date_Alarm";
+
+
     public TableConfiguration(ContentValues values) {
         super(values);
     }
@@ -69,7 +73,16 @@ public class TableConfiguration extends SqlDataSchema {
     public long getLimiteTemps() {
         return this.values.getAsLong(_LimiteTemps);
     }
+
     public void setLimiteTemps(long value) {
         this.values.put(_LimiteTemps, value);
+    }
+
+    public long getDateAlarm() {
+        return this.values.getAsLong(_DateAlarm);
+    }
+
+    public void setDateAlarm(long value) {
+        this.values.put(_DateAlarm, value);
     }
 }

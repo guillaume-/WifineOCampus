@@ -15,6 +15,7 @@ import com.neocampus.wifishared.utils.WifiApControl;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.TimeZone;
 
 
 public class FragmentSettings extends Fragment implements OnFragmentSetListener {
@@ -23,12 +24,10 @@ public class FragmentSettings extends Fragment implements OnFragmentSetListener 
     private TextView settingBatterie;
     private TextView settingData;
     private TextView settingTime;
-    private SimpleDateFormat format;
     private OnActivitySetListener mListener;
 
     public FragmentSettings() {
         // Required empty public constructor
-        format = new SimpleDateFormat("HH 'h' mm 'min'", Locale.FRANCE);
     }
 
     @Override
@@ -92,6 +91,11 @@ public class FragmentSettings extends Fragment implements OnFragmentSetListener 
     }
 
     @Override
+    public void onRefreshTimeValue(long newDateValue) {
+
+    }
+
+    @Override
     public void onRefreshHotpostState(boolean activate) {
     }
 
@@ -125,7 +129,11 @@ public class FragmentSettings extends Fragment implements OnFragmentSetListener 
     @Override
     public void onRefreshTimeConfig(long newTimeLimit) {
         if (settingTime != null) {
-
+            SimpleDateFormat format;
+            String s = 60*60*1000 < newTimeLimit ?
+                    "HH'h'mm": "mm 'min'";
+            format = new SimpleDateFormat(s, Locale.FRANCE);
+            format.setTimeZone(TimeZone.getTimeZone("GMT"));
             settingTime.setText(format.format(newTimeLimit));
         }
     }

@@ -73,6 +73,7 @@ public class OnHotspotReceiver extends BroadcastReceiver {
                         = ParcelableUtils.unmarshall(bytes, WifiConfiguration.class);
                 apControl.setWifiApConfiguration(userConfiguration);
                 sqlManager.setConfiguration(null);
+                sqlManager.setConfigurationE(0);
             }
 
         } catch (NoSuchFieldException e) {
@@ -92,9 +93,9 @@ public class OnHotspotReceiver extends BroadcastReceiver {
         if (observable != null
                 && WifiApControl.checkPermission(context)) {
             WifiApControl apControl = WifiApControl.getInstance(context);
-            if(apControl.isUPSWifiConfiguration()) {
+//            if(apControl.isUPSWifiConfiguration()) {
                 observable.setRunning(apControl.isEnabled());
-            }
+//            }
         }
     }
 }

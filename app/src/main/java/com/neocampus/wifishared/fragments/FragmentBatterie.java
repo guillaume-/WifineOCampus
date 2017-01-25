@@ -95,4 +95,9 @@ public class FragmentBatterie extends Fragment implements OnFragmentConfigListen
     public int getLimiteBatterie() {
         return this.surfaceView.getLimiteBatterie();
     }
+
+    @Override
+    public long getLimiteTemps() {
+        return 0;
+    }
 }

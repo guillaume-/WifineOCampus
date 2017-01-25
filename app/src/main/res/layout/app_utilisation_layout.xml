@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/utilisations"
+            android:typeface="serif"
+            android:textAppearance="@style/AppTheme.TextSmallStyle"
+            android:textStyle="normal|bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:text="@string/total_transmission"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextContent"
+            android:typeface="monospace"
+            android:fontFamily="serif"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="@integer/scale_a"
+            android:layout_width="0dp" />
+
+        <TextView
+            android:text="@string/deux_points"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextContent"
+            android:typeface="monospace"
+            android:fontFamily="serif"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.05"
+            android:layout_width="0dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp" />
+
+        <TextView
+            android:text="@string/wait_info"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextContent"
+            android:typeface="monospace"
+            android:fontFamily="serif"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.35"
+            android:layout_width="0dp"
+            android:id="@+id/data_traffic" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:text="@string/taux_batterie_restant"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextContent"
+            android:typeface="monospace"
+            android:fontFamily="serif"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="@integer/scale_a"
+            android:layout_width="0dp" />
+
+        <TextView
+            android:text="@string/deux_points"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextContent"
+            android:typeface="monospace"
+            android:fontFamily="serif"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.05"
+            android:layout_width="0dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp" />
+
+        <TextView
+            android:text="@string/wait_info"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextContent"
+            android:typeface="monospace"
+            android:fontFamily="serif"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.35"
+            android:layout_width="0dp"
+            android:id="@+id/batterie_level_result" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:text="@string/temps_d_utilisation_restant"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextContent"
+            android:typeface="monospace"
+            android:fontFamily="serif"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="@integer/scale_a"
+            android:layout_width="0dp" />
+
+        <TextView
+            android:text="@string/deux_points"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextContent"
+            android:typeface="monospace"
+            android:fontFamily="serif"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.05"
+            android:layout_width="0dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp" />
+
+        <Chronometer
+            android:text="@string/wait_info"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextContent"
+            android:typeface="monospace"
+            android:fontFamily="serif"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.35"
+            android:layout_width="0dp"
+            android:id="@+id/time_level" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:text="@string/notification"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextContent"
+            android:typeface="monospace"
+            android:fontFamily="serif"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="@integer/scale_a"
+            android:layout_width="0dp" />
+
+        <TextView
+            android:text="@string/deux_points"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextContent"
+            android:typeface="monospace"
+            android:fontFamily="serif"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.05"
+            android:layout_width="0dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp" />
+
+        <TextView
+            android:text="@string/wait_info"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextContent"
+            android:typeface="monospace"
+            android:fontFamily="serif"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.35"
+            android:layout_width="0dp" />
+    </LinearLayout>
+
+</LinearLayout>

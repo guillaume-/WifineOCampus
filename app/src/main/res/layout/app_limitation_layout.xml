@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/limite_d_utilisations"
+            android:typeface="serif"
+            android:textAppearance="@style/AppTheme.TextSmallStyle"
+            android:textStyle="normal|bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:text="@string/seuil_de_transmission"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextContent"
+            android:typeface="monospace"
+            android:fontFamily="serif"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="@integer/scale_a"
+            android:layout_width="0dp" />
+
+        <TextView
+            android:text="@string/deux_points"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextContent"
+            android:typeface="monospace"
+            android:fontFamily="serif"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="@integer/scale_b"
+            android:layout_width="0dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp" />
+
+        <TextView
+            android:text="@string/wait_info"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextContent"
+            android:typeface="monospace"
+            android:fontFamily="serif"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="@integer/scale_c"
+            android:layout_width="0dp"
+            android:id="@+id/data_limit" />
+
+        <ImageView
+            app:srcCompat="@drawable/ic_edit"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:visibility="gone"
+            android:onClick="onClickToDataConfig" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:text="@string/seuil_de_la_batterie"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextContent"
+            android:typeface="monospace"
+            android:fontFamily="serif"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="@integer/scale_a"
+            android:layout_width="0dp" />
+
+        <TextView
+            android:text=":"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextContent"
+            android:typeface="monospace"
+            android:fontFamily="serif"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="@integer/scale_b"
+            android:layout_width="0dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp" />
+
+        <TextView
+            android:text="@string/wait_info"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextContent"
+            android:typeface="monospace"
+            android:fontFamily="serif"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="@integer/scale_c"
+            android:layout_width="0dp"
+            android:id="@+id/batterie_level_limit" />
+
+        <ImageView
+            app:srcCompat="@drawable/ic_edit"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:visibility="gone"
+            android:onClick="onClickToBatterieConfig" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:text="@string/seuil_de_temps"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextContent"
+            android:typeface="monospace"
+            android:fontFamily="serif"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="@integer/scale_a"
+            android:layout_width="0dp" />
+
+        <TextView
+            android:text="@string/deux_points"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextContent"
+            android:typeface="monospace"
+            android:fontFamily="serif"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="@integer/scale_b"
+            android:layout_width="0dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp" />
+
+        <TextView
+            android:text="@string/wait_info"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextContent"
+            android:typeface="monospace"
+            android:fontFamily="serif"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="@integer/scale_c"
+            android:layout_width="0dp"
+            android:id="@+id/time_limit" />
+
+        <ImageView
+            app:srcCompat="@drawable/ic_edit"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:visibility="gone"
+            android:onClick="onClickToTimeConfig" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:text="@string/notification"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextContent"
+            android:typeface="monospace"
+            android:fontFamily="serif"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="@integer/scale_a"
+            android:layout_width="0dp" />
+
+        <TextView
+            android:text="@string/deux_points"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextContent"
+            android:typeface="monospace"
+            android:fontFamily="serif"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="@integer/scale_b"
+            android:layout_width="0dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp" />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextContent"
+            android:typeface="monospace"
+            android:fontFamily="serif"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="@integer/scale_c"
+            android:layout_width="0dp"
+            android:text="@string/wait_info" />
+
+        <ImageView
+            app:srcCompat="@drawable/ic_edit"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:visibility="gone" />
+    </LinearLayout>
+
+</LinearLayout>

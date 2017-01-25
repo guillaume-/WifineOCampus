@@ -9,15 +9,18 @@ import com.neocampus.wifishared.utils.WifiApControl;
 public interface OnFragmentSetListener {
 
     void onRefreshAll();
+    void onRefreshClientCount(int newCount);
+    void onRefreshTimeValue(long newDateValue);
     void onRefreshBatterieLevel(int newLevel);
-    void onRefreshTimeConfig(long newTimeLimit);
+    void onRefreshHotpostState(boolean activate);
     void onRefreshDataTraffic(long dataTrafficOctet);
     void onRefreshClient(WifiApControl.Client client);
-    void onRefreshClientCount(int newCount);
-    void onRefreshHotpostState(boolean activate);
+
+
 
 
     void onRefreshAllConfig();
+    void onRefreshTimeConfig(long newTimeLimit);
     void onRefreshDataConfig(float newDataLimite);
     void onRefreshBatterieConfig(int newBatterieLimit);
 }

@@ -1,12 +1,12 @@
 /**
  * Copyright 2015 Daniel Martí
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -89,23 +89,22 @@ final public class WifiApControl extends Observable {
     }
 
 
-
-    public static int CODE_WRITE_SETTINGS_PERMISSION = 1555;
+    private static int CODE_WRITE_SETTINGS_PERMISSION = 1555;
 
     public static final String ACTION_WIFI_AP_CHANGED = "android.net.wifi.WIFI_AP_STATE_CHANGED";
     public static final String EXTRA_WIFI_AP_STATE = "wifi_state";
 
-    public static final int WIFI_AP_STATE_DISABLING = 10;
-    public static final int WIFI_AP_STATE_DISABLED  = 11;
-    public static final int WIFI_AP_STATE_ENABLING  = 12;
-    public static final int WIFI_AP_STATE_ENABLED   = 13;
-    public static final int WIFI_AP_STATE_FAILED    = 14;
+    private static final int WIFI_AP_STATE_DISABLING = 10;
+    public static final int WIFI_AP_STATE_DISABLED = 11;
+    private static final int WIFI_AP_STATE_ENABLING = 12;
+    public static final int WIFI_AP_STATE_ENABLED = 13;
+    private static final int WIFI_AP_STATE_FAILED = 14;
 
     public static final int STATE_DISABLING = WIFI_AP_STATE_DISABLING;
-    public static final int STATE_DISABLED  = WIFI_AP_STATE_DISABLED;
-    public static final int STATE_ENABLING  = WIFI_AP_STATE_ENABLING;
-    public static final int STATE_ENABLED   = WIFI_AP_STATE_ENABLED;
-    public static final int STATE_FAILED    = WIFI_AP_STATE_FAILED;
+    public static final int STATE_DISABLED = WIFI_AP_STATE_DISABLED;
+    public static final int STATE_ENABLING = WIFI_AP_STATE_ENABLING;
+    public static final int STATE_ENABLED = WIFI_AP_STATE_ENABLED;
+    public static final int STATE_FAILED = WIFI_AP_STATE_FAILED;
 
     private static boolean isSoftwareSupported() {
         return (getWifiApStateMethod != null
@@ -146,8 +145,7 @@ final public class WifiApControl extends Observable {
         return instance;
     }
 
-    public static boolean checkPermission(Context context, boolean... request)
-    {
+    public static boolean checkPermission(Context context, boolean... request) {
         boolean permission;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             permission = Settings.System.canWrite(context);
@@ -261,7 +259,7 @@ final public class WifiApControl extends Observable {
 
     // newStateNumber adapts the state constants to the current values in
     // the SDK. They were changed on 4.0 to have higher integer values.
-    public static int newStateNumber(int state) {
+    private static int newStateNumber(int state) {
         if (state < 10) {
             return state + 10;
         }
@@ -271,7 +269,7 @@ final public class WifiApControl extends Observable {
     // getWifiApState returns the current Wi-Fi AP state.
     // If an error occured invoking the method via reflection, -1 is
     // returned.
-    public int getWifiApState() {
+    private int getWifiApState() {
         Object result = invokeQuietly(getWifiApStateMethod, wm);
         if (result == null) {
             return -1;
@@ -381,15 +379,22 @@ final public class WifiApControl extends Observable {
     }
 
     public static boolean equals(WifiConfiguration configuration1,
-                                 WifiConfiguration configuration2)
-    {
+                                 WifiConfiguration configuration2) {
         byte[] bytes1 = ParcelableUtils.marshall(configuration1);
         byte[] bytes2 = ParcelableUtils.marshall(configuration2);
         return Arrays.equals(bytes1, bytes2);
     }
 
-    public boolean isUPSWifiConfiguration()
-    {
+    public static boolean isUPSWifiConfiguration(Context context) {
+        if (WifiApControl.checkPermission(context)) {
+            WifiApControl apControl
+                    = WifiApControl.getInstance(context);
+            return apControl.isUPSWifiConfiguration();
+        }
+        return false;
+    }
+
+    public boolean isUPSWifiConfiguration() {
         WifiConfiguration
                 configuration = getWifiApConfiguration();
         WifiConfiguration upsConfig = WifiApControl.getUPSWifiConfiguration();
@@ -429,9 +434,8 @@ final public class WifiApControl extends Observable {
             return super.equals(obj);
         }
 
-        private boolean synchronised(Client client)
-        {
-            if(client.hwAddr.equals(hwAddr)) {
+        private boolean synchronised(Client client) {
+            if (client.hwAddr.equals(hwAddr)) {
                 long date_connected = this.date_connected == 0 ? client.date_connected : this.date_connected;
                 long date_disconnected = this.date_disconnected < client.date_disconnected ?
                         client.date_disconnected : this.date_disconnected;
@@ -523,8 +527,7 @@ final public class WifiApControl extends Observable {
                         InetAddress ip = InetAddress.getByName(c.ipAddr);
                         if (ip.isReachable(timeout)) {
 //                            listener.onReachableClient(c);
-                        }
-                        else {
+                        } else {
                             clients.remove(c);
                         }
                     } catch (IOException e) {

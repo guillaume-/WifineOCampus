@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
@@ -61,6 +62,29 @@ public class ClassUtils {
             e.printStackTrace();
         }
         return classes;
+    }
+
+    public static Object newInstance(Class aClass)
+    {
+        try {
+            return aClass.newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Method getMethod(Class aClass, String methodeName)
+    {
+        for(Method method : aClass.getDeclaredMethods()) {
+            if(methodeName.equals(method.getName())) {
+                method.setAccessible(true);
+                return method;
+            }
+        }
+        return null;
     }
 
 }

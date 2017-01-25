@@ -5,6 +5,7 @@ package com.neocampus.wifishared.listeners;
  */
 
 public interface OnFragmentConfigListener {
-    float getLimiteDataTraffic();
-    int getLimiteBatterie();
+    float   getLimiteDataTraffic();
+    int     getLimiteBatterie();
+    long    getLimiteTemps();
 }

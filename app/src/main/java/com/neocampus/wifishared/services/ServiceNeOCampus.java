@@ -16,18 +16,20 @@ import com.neocampus.wifishared.observables.BatterieObservable;
 import com.neocampus.wifishared.observables.ClientObservable;
 import com.neocampus.wifishared.observables.DataObservable;
 import com.neocampus.wifishared.observables.HotspotObservable;
+import com.neocampus.wifishared.observables.TimeObservable;
+import com.neocampus.wifishared.receivers.OnAlarmReceiver;
 import com.neocampus.wifishared.receivers.OnBatterieReceiver;
 import com.neocampus.wifishared.receivers.OnHotspotReceiver;
 import com.neocampus.wifishared.sql.database.TableConfiguration;
 import com.neocampus.wifishared.sql.manage.SQLManager;
 import com.neocampus.wifishared.utils.BatterieUtils;
+import com.neocampus.wifishared.utils.NotificationUtils;
 import com.neocampus.wifishared.utils.WifiApControl;
 
 import java.util.Observable;
 import java.util.Observer;
 
-public class ServiceNeOCampus extends Service implements
-        OnServiceSetListener, Observer {
+public class ServiceNeOCampus extends Service implements OnServiceSetListener, Observer {
 
     private ServiceNeOCampusBinder oCampusBinder;
     private SQLManager sqlManager;
@@ -36,11 +38,13 @@ public class ServiceNeOCampus extends Service implements
     private HotspotObservable hotspotObservable;
     private BatterieObservable batterieObservable;
     private DataObservable dataObservable;
+    private TimeObservable timeObservable;
 
     private ServiceDataTraffic serviceData;
     private ServiceTaskClients serviceTaskClients;
     private OnHotspotReceiver onHotspotReceiver;
     private OnBatterieReceiver onBatterieReceiver;
+    private OnAlarmReceiver onAlarmReceiver;
 
     public ServiceNeOCampus() {
         this.oCampusBinder = new ServiceNeOCampusBinder();
@@ -48,6 +52,7 @@ public class ServiceNeOCampus extends Service implements
         this.clientObservable = new ClientObservable();
         this.batterieObservable = new BatterieObservable();
         this.dataObservable = new DataObservable();
+        this.timeObservable = new TimeObservable();
     }
 
     @Override
@@ -61,10 +66,11 @@ public class ServiceNeOCampus extends Service implements
         this.serviceTaskClients = new ServiceTaskClients(this, this.clientObservable);
         this.onHotspotReceiver = new OnHotspotReceiver(this.hotspotObservable);
         this.onBatterieReceiver = new OnBatterieReceiver(this.batterieObservable);
-
+        this.onAlarmReceiver = new OnAlarmReceiver(this.timeObservable);
 
         this.addObserver(this);
         this.registerReceiver(this.onBatterieReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        this.registerReceiver(this.onAlarmReceiver, new IntentFilter(OnAlarmReceiver.ACTION_ALARM_ACTIVATED));
         this.registerReceiver(this.onHotspotReceiver, new IntentFilter(WifiApControl.ACTION_WIFI_AP_CHANGED));
 
         Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
@@ -79,6 +85,7 @@ public class ServiceNeOCampus extends Service implements
         this.serviceData.stopWatchDog();
         this.serviceTaskClients.stopWatchDog();
         this.batterieObservable.deleteObservers();
+        this.unregisterReceiver(onAlarmReceiver);
         this.unregisterReceiver(onHotspotReceiver);
         this.unregisterReceiver(onBatterieReceiver);
         this.sqlManager.close();
@@ -103,6 +110,7 @@ public class ServiceNeOCampus extends Service implements
         hotspotObservable.addObserver(observer);
         clientObservable.addObserver(observer);
         dataObservable.addObserver(observer);
+        timeObservable.addObserver(observer);
     }
 
     @Override
@@ -111,16 +119,7 @@ public class ServiceNeOCampus extends Service implements
         hotspotObservable.deleteObserver(observer);
         clientObservable.deleteObserver(observer);
         dataObservable.deleteObserver(observer);
-    }
-
-    @Override
-    public void peekAllClients(OnReachableClientListener listener, boolean reachableOnly) {
-        if(reachableOnly) {
-            listener.onReachableClients(clientObservable.getClients());
-        }
-        else{
-            listener.onReachableClients(clientObservable.getHistoriqueClients());
-        }
+        timeObservable.deleteObserver(observer);
     }
 
     @Override
@@ -129,18 +128,34 @@ public class ServiceNeOCampus extends Service implements
     }
 
     @Override
-    public void forceSave() {
+    public void peekAllClients(OnReachableClientListener listener) {
+        listener.onReachableClients(clientObservable.getHistoriqueClients());
+    }
 
+    @Override
+    public void peekReachableClients(OnReachableClientListener listener) {
+        listener.onReachableClients(clientObservable.getClients());
+    }
+
+    @Override
+    public void peekTimeValue(OnFragmentSetListener listener) {
+        listener.onRefreshTimeValue(timeObservable.getDate());
+    }
+
+    @Override
+    public void forceSave() {
     }
 
     private void startWatchDog() {
         this.serviceData.startWatchDog(1000);
         this.serviceTaskClients.startWatchDog(10000);
+        this.onAlarmReceiver.startAlarm(this, sqlManager);
     }
 
     private void stopWatchDog() {
         this.serviceData.stopWatchDog();
         this.serviceTaskClients.stopWatchDog();
+        this.onAlarmReceiver.stopAlarm(this, sqlManager);
     }
 
     public void setWatchDogState(boolean enable) {
@@ -165,6 +180,11 @@ public class ServiceNeOCampus extends Service implements
         //SQL.store(dataTx)
     }
 
+    public boolean isOverTimeLimit(long timeValue) {
+        TableConfiguration tableConfiguration = sqlManager.getConfiguration();
+        return tableConfiguration.getDateAlarm() > 0
+                && tableConfiguration.getDateAlarm() < timeValue;
+    }
 
     public boolean isOverDataLimit(long dataLevel) {
         TableConfiguration tableConfiguration = sqlManager.getConfiguration();
@@ -189,14 +209,24 @@ public class ServiceNeOCampus extends Service implements
     @Override
     public void update(Observable o, Object arg) {
         if (o instanceof HotspotObservable) {
-            setWatchDogState((boolean) arg);
+            if (WifiApControl.isUPSWifiConfiguration(this)) {
+                setWatchDogState((boolean) arg);
+            }
         } else if (o instanceof BatterieObservable) {
             if(isOverBatterieLimit((Integer) arg)) {
                 stopHotpost();
+                NotificationUtils.showBatterieNotify(this, batterieObservable);
             }
         } else if (o instanceof  DataObservable) {
-            if(isOverDataLimit((long) arg))
+            if(isOverDataLimit((long) arg)) {
                 stopHotpost();
+                NotificationUtils.showDataNotify(this, dataObservable);
+            }
+        } else if (o instanceof  TimeObservable) {
+            if(isOverTimeLimit((long) arg)) {
+                stopHotpost();
+                NotificationUtils.showTimeNotify(this);
+            }
         }
     }
 

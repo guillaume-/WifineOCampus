@@ -127,6 +127,20 @@ public class SQLManager {
         return result;
     }
 
+    public int setConfigurationE(long date_alarm) {
+        int result;
+        String selection = TableConfiguration._ID + " = 1";
+
+        ContentValues value = new ContentValues();
+
+        value.put(TableConfiguration._DateAlarm, date_alarm);
+
+        if ((result = database.update(TableConfiguration._NAME, value, selection, null)) == 0) {
+            return (int) database.insert(TableConfiguration._NAME, null, value);
+        }
+        return result;
+    }
+
     public int setConfiguration(byte[] config, int limite_batterie,
                                 long limite_conso, long limite_temps) {
         int result;
@@ -157,6 +171,10 @@ public class SQLManager {
             if (!c.isAfterLast()) {
                 tableConfiguration =
                         new TableConfiguration(cursorToContentValues(c));
+            }
+            else {
+                setConfiguration(null);
+                return getConfiguration();
             }
             return tableConfiguration;
         } finally {
@@ -218,6 +236,8 @@ public class SQLManager {
     public void removeAllConsommations() {
         database.delete(TableConsommation._NAME, null, null);
     }
+
+
 
 
 //

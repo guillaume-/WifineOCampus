@@ -11,6 +11,7 @@ public interface OnActivitySetListener {
     long        getLimiteTemps();
 
     /**/
+    void        postRequestTimeValue();
     void        postRequestListClients();
     void        postRequestDataTraffic();
 

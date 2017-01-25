@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.TextView;
 
 import com.neocampus.wifishared.R;
@@ -21,12 +22,14 @@ import com.neocampus.wifishared.views.CirclePagerAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 
-public class FragmentHome extends Fragment
-        implements OnFragmentSetListener, OnReachableClientListener {
+public class FragmentHome extends Fragment implements OnFragmentSetListener,
+        OnReachableClientListener, Chronometer.OnChronometerTickListener {
 
     private View view;
     private TextView clientCount;
@@ -34,16 +37,14 @@ public class FragmentHome extends Fragment
     private TextView batterieLimite;
     private TextView dataLevel;
     private TextView dataLimite;
-    private TextView timeLevel;
+    private Chronometer chronometer;
     private TextView timeLimite;
     private Button hotSpotButton;
-    private SimpleDateFormat format;
 
     private OnActivitySetListener mListener;
 
     public FragmentHome() {
         // Required empty public constructor
-        format = new SimpleDateFormat("HH 'h' mm 'min'", Locale.FRANCE);
     }
 
     @Override
@@ -60,7 +61,7 @@ public class FragmentHome extends Fragment
 
         this.view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        this.timeLevel = (TextView) view.findViewById(R.id.time_level);
+        this.chronometer = (Chronometer) view.findViewById(R.id.time_level);
         this.timeLimite = (TextView) view.findViewById(R.id.time_limit);
         this.dataLevel = (TextView) view.findViewById(R.id.data_traffic);
         this.dataLimite = (TextView) view.findViewById(R.id.data_limit);
@@ -68,6 +69,8 @@ public class FragmentHome extends Fragment
         this.batterieLimite = (TextView) view.findViewById(R.id.batterie_level_limit);
         this.clientCount = (TextView) view.findViewById(R.id.reachable_client_count);
         this.hotSpotButton = (Button) view.findViewById(R.id.button);
+
+        this.chronometer.setOnChronometerTickListener(this);
 
         ViewPager viewPager = (ViewPager) this.view.findViewById(R.id.id_view_pager);
         CirclePageIndicator indicator = (CirclePageIndicator) this.view.findViewById(R.id.id_circle_indicator);
@@ -77,14 +80,17 @@ public class FragmentHome extends Fragment
         onRefreshAll();
         onRefreshAllConfig();
 
-        if(WifiApControl.checkPermission(getContext())) {
+        if (WifiApControl.checkPermission(getContext())) {
             WifiApControl apControl = WifiApControl.getInstance(getContext());
-            if (apControl.isEnabled()
-                    && apControl.isUPSWifiConfiguration()) {
-                hotSpotButton.setText(getString(R.string.desactiver_le_partage));
+            if (apControl.isEnabled()) {
+                if (apControl.isUPSWifiConfiguration()) {
+                    hotSpotButton.setText(getString(R.string.desactiver_le_partage));
+                } else {
+                    hotSpotButton.setText(getString(R.string.desactiver_native_partage));
+                }
             }
-        }
-        else {
+
+        } else {
             hotSpotButton.setText(getString(R.string.no_permission));
         }
         return view;
@@ -99,6 +105,7 @@ public class FragmentHome extends Fragment
     @Override
     public void onRefreshAll() {
         onRefreshClientCount(0);
+        this.mListener.postRequestTimeValue();
         this.mListener.postRequestListClients();
         this.mListener.postRequestDataTraffic();
         onRefreshBatterieLevel((int) BatterieUtils.getBatteryLevel(getContext()));
@@ -121,29 +128,43 @@ public class FragmentHome extends Fragment
     }
 
     @Override
-    public void onRefreshHotpostState(final boolean activate) {
-        if(hotSpotButton != null)
-        {
-            hotSpotButton.post(new Runnable() {
-                @Override
-                public void run() {
-                    if(activate) {
-                        hotSpotButton.setText(getString(R.string.desactiver_le_partage));
-                    }else{
-                        onReachableClients(new ArrayList<WifiApControl.Client>());
-                        hotSpotButton.setText(getString(R.string.activer_le_partage));
-                    }
-                }
-            });
-
+    public void onRefreshTimeValue(long newDateValue) {
+        if (chronometer != null) {
+            if (newDateValue == 0) {
+                chronometer.setBase(0L);
+                chronometer.setText("00 sec");
+                chronometer.stop();
+            } else {
+                chronometer.start();
+                chronometer.setBase(newDateValue);
+                chronometer.setText("00 sec");
+            }
         }
+        System.out.println(newDateValue);
+    }
+
+    @Override
+    public void onRefreshHotpostState(final boolean activate) {
+        if (hotSpotButton != null) {
+            if (activate) {
+                if (WifiApControl.isUPSWifiConfiguration(getContext())) {
+                    hotSpotButton.setText(getString(R.string.desactiver_le_partage));
+                } else {
+                    hotSpotButton.setText(getString(R.string.desactiver_native_partage));
+                }
+            } else {
+                onReachableClients(new ArrayList<WifiApControl.Client>());
+                hotSpotButton.setText(getString(R.string.activer_le_partage));
+            }
+        }
+        onRefreshAll();
     }
 
     @Override
     public void onRefreshDataTraffic(long dataTrafficOctet) {
         if (dataLevel != null) {
             final String strDataTraffic;
-            float dataTraffic = dataTrafficOctet / (1000.0f* 1000.0f*1000.0f);
+            float dataTraffic = dataTrafficOctet / (1000.0f * 1000.0f * 1000.0f);
             if (dataTraffic >= 1.0f) {
                 strDataTraffic = String.format(Locale.FRANCE, "%.3f Go", dataTraffic);
             } else {
@@ -183,6 +204,11 @@ public class FragmentHome extends Fragment
     @Override
     public void onRefreshTimeConfig(long newTimeLimit) {
         if (timeLimite != null) {
+            SimpleDateFormat format;
+            String s = 60 * 60 * 1000 < newTimeLimit ?
+                    "HH'h'mm" : "mm 'min'";
+            format = new SimpleDateFormat(s, Locale.FRANCE);
+            format.setTimeZone(TimeZone.getTimeZone("GMT"));
             timeLimite.setText(format.format(newTimeLimit));
         }
     }
@@ -194,10 +220,30 @@ public class FragmentHome extends Fragment
             if (newDataLimit >= 1.0f) {
                 limiteData = String.format(Locale.FRANCE, "%.3f Go", newDataLimit);
             } else {
-                limiteData = String.format(Locale.FRANCE, "%d Mo", (int) (newDataLimit * 1000.f));
+                limiteData = String.format(Locale.FRANCE, "%.2f Mo", newDataLimit * 1000.f);
             }
             dataLimite.setText(limiteData);
         }
+    }
+
+
+    @Override
+    public void onChronometerTick(Chronometer chronometer) {
+        long time = chronometer.getBase() - new Date().getTime();
+        String timeText = "00 sec";
+        if (time > 0) {
+            int minute = (int) ((time / 60000L) % 60L);
+            int heure = (int) (time / (60000L * 60L));
+            if (heure > 1) {
+                timeText = String.format(Locale.FRANCE, "%02dh%02d", heure, minute);
+            } else if(minute > 1){
+                timeText = String.format(Locale.FRANCE, "%02d min", minute);
+            } else {
+                int seconde = (int) ((time / 1000L)  % 60L);
+                timeText = String.format(Locale.FRANCE, "%02d sec", seconde);
+            }
+        }
+        chronometer.setText(timeText);
     }
 
     @Override

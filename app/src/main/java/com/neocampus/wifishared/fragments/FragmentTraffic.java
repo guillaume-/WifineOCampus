@@ -139,5 +139,10 @@ public class FragmentTraffic extends Fragment implements View.OnTouchListener,
         return 0;
     }
 
+    @Override
+    public long getLimiteTemps() {
+        return 0;
+    }
+
 
 }

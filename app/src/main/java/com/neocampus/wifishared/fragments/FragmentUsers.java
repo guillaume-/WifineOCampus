@@ -121,6 +121,11 @@ public class FragmentUsers extends Fragment implements OnFragmentSetListener,  O
     }
 
     @Override
+    public void onRefreshTimeValue(long newDateValue) {
+
+    }
+
+    @Override
     public void onRefreshHotpostState(boolean activate) {
         if(!activate) {
             onReachableClients(new ArrayList<WifiApControl.Client>());

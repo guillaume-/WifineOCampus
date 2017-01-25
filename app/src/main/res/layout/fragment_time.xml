@@ -15,11 +15,10 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:layout_marginBottom="10dp">
+            android:padding="10dp">
 
             <TextView
-                android:text="Seuil du temps de partage"
+                android:text="@string/seuil_du_temps_de_partage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
@@ -36,7 +35,7 @@
                 android:background="@drawable/cu_solid_bottom_border">
 
                 <Switch
-                    android:text="Notification"
+                    android:text="@string/notification"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/switch1"
@@ -49,8 +48,8 @@
                     android:thumb="@drawable/cu_switch_thumb_selector"
                     android:track="@drawable/cu_switch_track_bg"
                     android:showText="true"
-                    android:textOff="Non"
-                    android:textOn="Oui"
+                    android:textOff="@string/non"
+                    android:textOn="@string/oui"
                     android:thumbTextPadding="10dp"
                     android:layout_marginBottom="10dp" />
 
@@ -62,17 +61,68 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:padding="20dp">
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="20dp">
+
+            <com.neocampus.wifishared.views.ChronoTimeView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/timeView"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:gravity="center_horizontal"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/cu_solid_bottom_border">
+
+
+                    <TextView
+                        android:text="00"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/hours"
+                        android:textSize="70sp"
+                        android:textColor="@drawable/cu_time_selector"
+                        android:typeface="monospace" />
+
+                    <TextView
+                        android:text="h:"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="70sp"
+                        android:typeface="serif" />
+
+                    <TextView
+                        android:text="00"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/minute"
+                        android:textSize="70sp"
+                        android:textColor="@drawable/cu_time_selector"
+                        android:typeface="monospace" />
+                </LinearLayout>
+
+                <com.neocampus.wifishared.views.KeyboardViews
+                    android:id="@+id/keyboardview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:background="@android:color/transparent" />
+
+            </com.neocampus.wifishared.views.ChronoTimeView>
+
+
 
         </FrameLayout>
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="50dp">
-
-        </LinearLayout>
 
     </LinearLayout>
 

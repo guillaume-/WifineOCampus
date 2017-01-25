@@ -7,9 +7,13 @@ import java.util.Observer;
  */
 
 public interface OnServiceSetListener {
-    void addObserver(Observer observer);
-    void removeObserver(Observer observer);
-    void peekAllClients(OnReachableClientListener listener, boolean reachableOnly);
-    void peekDataTraffic(OnFragmentSetListener listener);
-    void forceSave();
+
+    void    forceSave();
+    void    addObserver(Observer observer);
+    void    removeObserver(Observer observer);
+
+    void    peekTimeValue(OnFragmentSetListener listener);
+    void    peekDataTraffic(OnFragmentSetListener listener);
+    void    peekAllClients(OnReachableClientListener listener);
+    void    peekReachableClients(OnReachableClientListener listener);
 }
