@@ -51,7 +51,7 @@
             android:onClick="onClickToSaveConfig">
 
             <ImageView
-                android:src="@drawable/ic_save_config"
+                android:src="@drawable/ic_update"
                 android:id="@+id/update_config"
                 android:layout_width="50dp"
                 android:layout_height="50dp" />

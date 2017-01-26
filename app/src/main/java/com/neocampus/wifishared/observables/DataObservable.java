@@ -22,7 +22,7 @@ public class DataObservable extends Observable {
      *@param dataTx
      * the value to set
      */
-    public long setValue(long dataTx) {
+    public void setValue(long dataTx) {
         if(dataTx != lastValue) {
             lastValue = dataTx;
             notifyObservers(dataTx);
