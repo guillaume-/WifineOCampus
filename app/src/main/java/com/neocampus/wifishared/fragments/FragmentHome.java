@@ -18,6 +18,8 @@ import com.neocampus.wifishared.utils.WifiApControl;
 import com.neocampus.wifishared.views.CirclePageIndicator;
 import com.neocampus.wifishared.views.CirclePagerAdapter;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 import java.util.Locale;
 
@@ -55,7 +57,8 @@ public class FragmentHome extends Fragment
         this.batterieLevel = (TextView) view.findViewById(R.id.batterie_level_result);
         this.batterieLimite = (TextView) view.findViewById(R.id.batterie_level_limit);
         this.dataLimite = (TextView) view.findViewById(R.id.data_limit);
-
+        this.dataLevel = (TextView) view.findViewById(R.id.data_level);
+        this.dataLevel.setText("0 octet");
         ViewPager viewPager = (ViewPager) this.view.findViewById(R.id.id_view_pager);
         CirclePageIndicator indicator = (CirclePageIndicator) this.view.findViewById(R.id.id_circle_indicator);
         viewPager.setAdapter(new CirclePagerAdapter(viewPager));
@@ -112,8 +115,6 @@ public class FragmentHome extends Fragment
     public void onRefreshDataTraffic(long dataTrafficOctet) {
 
     }
-
-
 
     @Override
     public void onRefreshBatterieLevel(int newBatterieLevel) {
