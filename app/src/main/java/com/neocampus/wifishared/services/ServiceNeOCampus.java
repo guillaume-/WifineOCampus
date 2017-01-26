@@ -60,15 +60,14 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
         this.sqlManager = new SQLManager(this);
         this.sqlManager.open();
 
-
         this.serviceData = new ServiceDataTraffic(this, this.dataObservable);
-        this.batterieObservable.setValue((int) BatterieUtils.getBatteryLevel(this));
         this.serviceTaskClients = new ServiceTaskClients(this, this.clientObservable);
         this.onHotspotReceiver = new OnHotspotReceiver(this.hotspotObservable);
         this.onBatterieReceiver = new OnBatterieReceiver(this.batterieObservable);
         this.onAlarmReceiver = new OnAlarmReceiver(this.timeObservable);
 
         this.addObserver(this);
+        this.batterieObservable.setValue((int) BatterieUtils.getBatteryLevel(this));
         this.registerReceiver(this.onBatterieReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         this.registerReceiver(this.onAlarmReceiver, new IntentFilter(OnAlarmReceiver.ACTION_ALARM_ACTIVATED));
         this.registerReceiver(this.onHotspotReceiver, new IntentFilter(WifiApControl.ACTION_WIFI_AP_CHANGED));
@@ -192,8 +191,7 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
     }
 
     public boolean isOverBatterieLimit(int level) {
-        TableConfiguration tableConfiguration
-                = sqlManager.getConfiguration();
+        TableConfiguration tableConfiguration = sqlManager.getConfiguration();
         return tableConfiguration.getLimiteBatterie() >= level;
     }
 
@@ -213,7 +211,9 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
                 setWatchDogState((boolean) arg);
             }
         } else if (o instanceof BatterieObservable) {
-            if(isOverBatterieLimit((Integer) arg)) {
+            if(hotspotObservable.isRunning()
+                    && hotspotObservable.isUPS()
+                    && isOverBatterieLimit((Integer) arg)) {
                 stopHotpost();
                 NotificationUtils.showBatterieNotify(this, batterieObservable);
             }

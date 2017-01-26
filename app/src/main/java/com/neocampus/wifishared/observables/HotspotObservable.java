@@ -8,6 +8,7 @@ import java.util.Observable;
 
 public class HotspotObservable extends Observable {
     private boolean running;
+    private boolean UPS;
 
     public HotspotObservable()
     {
@@ -33,4 +34,11 @@ public class HotspotObservable extends Observable {
         }
     }
 
+    public void setUPS(boolean UPS) {
+        this.UPS = UPS;
+    }
+
+    public boolean isUPS() {
+        return UPS;
+    }
 }

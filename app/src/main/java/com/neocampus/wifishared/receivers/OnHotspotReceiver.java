@@ -94,6 +94,7 @@ public class OnHotspotReceiver extends BroadcastReceiver {
                 && WifiApControl.checkPermission(context)) {
             WifiApControl apControl = WifiApControl.getInstance(context);
 //            if(apControl.isUPSWifiConfiguration()) {
+                observable.setUPS(apControl.isUPSWifiConfiguration());
                 observable.setRunning(apControl.isEnabled());
 //            }
         }
