@@ -60,7 +60,7 @@ public class FragmentTraffic extends Fragment implements OnFragmentConfigListene
         this.gigaSurfaceView.setDataValue(1.0f * (float) Math.floor(mLimiteData) );
 
         this.megaSurfaceView.setDateType(DataSurfaceView.DATA_TYPE.DATA_MEGA);
-        this.megaSurfaceView.setDataValue((float) (mLimiteData - Math.floor(mLimiteData))* 1000.0f);
+        this.megaSurfaceView.setDataValue((float) (mLimiteData - Math.floor(mLimiteData))* 999.9f);
 
         return view;
     }
@@ -85,8 +85,8 @@ public class FragmentTraffic extends Fragment implements OnFragmentConfigListene
 
     @Override
     public float getLimiteDataTraffic() {
-        float giga = (float) Math.floor(this.gigaSurfaceView.getDataValue());
-        float mega = this.megaSurfaceView.getDataValue();
+        float giga = (float) Math.round(this.gigaSurfaceView.getDataValue());
+        float mega = (float) Math.round(this.megaSurfaceView.getDataValue());
         return giga + (mega / 1000.f);
     }
 

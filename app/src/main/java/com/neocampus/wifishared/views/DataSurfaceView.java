@@ -41,7 +41,7 @@ public class DataSurfaceView extends SurfaceView implements
     private float MinDataHeight = 0;
     private float MaxDataHeight = 0;
 
-    private final float GIGA = 50.0f, MEGA = 1000.0f;
+    private final float GIGA = 49.0f, MEGA = 999.0f;
 
     public DataSurfaceView(Context context) {
         super(context);
