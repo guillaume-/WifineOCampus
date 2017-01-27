@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.neocampus.wifishared.R;
 import com.neocampus.wifishared.fragments.FragmentBatterie;
@@ -216,13 +217,13 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
             if (apControl.isWifiApEnabled()) {
                 apControl.disable();
                 button.setText(getString(R.string.activer_le_partage));
-            } else {
+            } else if(verifyConditions()){
                 apControl.setEnabled(configuration, true);
                 button.setText(getString(R.string.desactiver_le_partage));
             }
         } else if (apControl.isEnabled()) {
             apControl.disable();
-        } else {
+        } else if(verifyConditions()){
             WifiConfiguration userConfiguration = apControl.getConfiguration();
             byte[] bytes = ParcelableUtils.marshall(userConfiguration);
             sqlManager.setConfiguration(bytes);
@@ -230,6 +231,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
             button.setText(getString(R.string.desactiver_le_partage));
         }
     }
+
 
     public void onClickToDataConfig(final View v) {
         v.startAnimation(AnimationUtils.
@@ -388,6 +390,28 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     @Override
     public void showAppBarSaveConfig() {
         mAppBarContent.findViewById(R.id.app_bar_save_config).setVisibility(View.VISIBLE);
+    }
+
+    private boolean verifyConditions() {
+        TableConfiguration configuration
+                = sqlManager.getConfiguration();
+        if(configuration.getLimiteBatterie()
+                > BatterieUtils.getBatteryLevel(this))
+        {
+            Toast.makeText(this, R.string.condition_batterie, Toast.LENGTH_LONG).show();
+            return false;
+        }
+        else if(configuration.getLimiteTemps() == 0)
+        {
+            Toast.makeText(this, R.string.condition_temps, Toast.LENGTH_LONG).show();
+            return false;
+        }
+        else if(configuration.getLimiteConsommation() == 0)
+        {
+            Toast.makeText(this, R.string.condition_date, Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
     }
 
     private boolean isServiceRunning(Class<?> serviceClass) {

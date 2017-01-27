@@ -33,8 +33,11 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="service_name">Service Wifi neOCampus</string>
-    <string name="seuil_du_temps_de_partage">Seuil du temps de partage</string>
+    <string name="seuil_du_temps_de_partage">Seuil de la durée de partage</string>
     <string name="non">Non</string>
     <string name="oui">Oui</string>
+    <string name="condition_batterie">Le seuil de la batterie doit être inférieur au niveau de la batterie</string>
+    <string name="condition_temps">Le delai d\'utilisation doit être supérieur 0</string>
+    <string name="condition_date">Le seuil de transmission doit être supérieur à 0</string>
 
 </resources>
