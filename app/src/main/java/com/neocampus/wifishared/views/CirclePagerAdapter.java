@@ -34,6 +34,12 @@ public class CirclePagerAdapter extends PagerAdapter {
     }
 
     @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        View view = views.get(position);
+        container.removeView(view);
+    }
+
+    @Override
     public int getCount() {
         return views.size();
     }

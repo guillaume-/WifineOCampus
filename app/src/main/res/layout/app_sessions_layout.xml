@@ -18,7 +18,7 @@
         android:layout_weight="0.40" />
 
     <TextView
-        android:text="@string/adresse_ip"
+        android:text="-"
         android:layout_height="wrap_content"
         android:textColor="@color/colorTextContent"
         android:typeface="monospace"

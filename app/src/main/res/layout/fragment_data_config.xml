@@ -4,99 +4,83 @@
     android:layout_height="match_parent"
     tools:context="com.neocampus.wifishared.fragments.FragmentTraffic">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:layout_marginBottom="10dp">
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <TextView
-                android:text="Consommation des données "
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:typeface="serif"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/cu_solid_bottom_border"
                 android:padding="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp" />
+                android:text="Consommation des données "
+                android:textSize="18sp"
+                android:typeface="serif" />
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/cu_solid_bottom_border">
+                android:background="@drawable/cu_solid_bottom_border"
+                android:orientation="vertical">
 
                 <Switch
-                    android:text="Notification"
+                    android:id="@+id/switch1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/switch1"
-                    android:padding="10dp"
+                    android:layout_marginBottom="10dp"
                     android:layout_marginTop="10dp"
-                    android:textSize="16sp"
-                    android:typeface="serif"
-                    android:switchTextAppearance="@style/SwitchTextAppearance"
-                    android:textColor="?android:attr/textColorTertiary"
-                    android:thumb="@drawable/cu_switch_thumb_selector"
-                    android:track="@drawable/cu_switch_track_bg"
+                    android:padding="10dp"
                     android:showText="true"
+                    android:switchTextAppearance="@style/SwitchTextAppearance"
+                    android:text="Notification"
+                    android:textColor="?android:attr/textColorTertiary"
                     android:textOff="Non"
                     android:textOn="Oui"
+                    android:textSize="16sp"
+                    android:thumb="@drawable/cu_switch_thumb_selector"
                     android:thumbTextPadding="10dp"
-                    android:layout_marginBottom="10dp" />
+                    android:track="@drawable/cu_switch_track_bg"
+                    android:typeface="serif" />
 
             </LinearLayout>
 
         </LinearLayout>
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:orientation="horizontal"
             android:padding="20dp">
 
             <com.neocampus.wifishared.views.DataSurfaceView
-                android:layout_width="match_parent"
                 android:id="@+id/data_configuration"
-                android:layout_height="match_parent" />
-
-            <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fillViewport="true"
-                android:id="@+id/data_scroll"
-                android:scrollbars="none"
-                android:fadeScrollbars="false">
+                android:layout_weight="0.35"/>
 
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <com.neocampus.wifishared.views.EchelleSurfaceView
-                        android:layout_width="match_parent"
-                        android:layout_height="2500dp"
-                        android:id="@+id/echelle_surface" />
-                </LinearLayout>
-
-
-            </ScrollView>
-        </FrameLayout>
+            <com.neocampus.wifishared.views.DataSurfaceView
+                android:id="@+id/echelle_surface"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.65" />
+        </LinearLayout>
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="50dp">
+            android:layout_marginBottom="50dp"
+            android:orientation="vertical"
+            android:visibility="gone">
 
         </LinearLayout>
 

@@ -68,13 +68,9 @@ public class SessionUserView extends LinearLayout implements OnAdapterViewListen
         TextView textView1 = (TextView) view.findViewById(R.id.addressPhysique);
         TextView textView2 = (TextView) view.findViewById(R.id.adressIP);
 
-//        textView1.setText(client.hwAddr);
-//        textView2.setText(client.ipAddr);
+        textView1.setText(client.hwAddr);
+        textView2.setText(client.ipAddr);
 
-        textView1.setText(format.format(client.date_connected));
-        if(!client.connected) {
-            textView2.setText(format.format(client.date_disconnected));
-        }
         return view;
     }
 

@@ -25,7 +25,7 @@ public class TableConfiguration extends SqlDataSchema {
     public static final String _LimiteBatterie = "Column_Batterie";
 
 
-    @Column(Type = SqlType.INTEGER, Nullable = true, value = "500000000")
+    @Column(Type = SqlType.INTEGER, Nullable = true, value = "1500000000")
     public static final String _LimiteConsommation = "Column_Consommation";
 
 

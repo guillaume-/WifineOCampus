@@ -5,12 +5,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
-import android.graphics.PorterDuff;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
 import com.neocampus.wifishared.R;
 
@@ -20,13 +22,26 @@ import java.util.Locale;
  * Created by Hirochi ☠ on 19/01/17.
  */
 
-public class DataSurfaceView extends SurfaceView implements SurfaceHolder.Callback, Runnable {
+public class DataSurfaceView extends SurfaceView implements
+        SurfaceHolder.Callback, Runnable, View.OnTouchListener {
+
+    public enum DATA_TYPE
+    {
+        DATA_GIGA,
+        DATA_MEGA
+    }
 
     private SurfaceHolder holder;
     private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
     private Paint paintText = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
     private Rect textBounds = new Rect();
-    private float limiteData = 0.0f;
+    private DATA_TYPE dateType = DATA_TYPE.DATA_GIGA;
+    private float dataValue = 0.300f;
+    private int colorContent, colorEmpty;
+    private float MinDataHeight = 0;
+    private float MaxDataHeight = 0;
+
+    private final float GIGA = 50.0f, MEGA = 1000.0f;
 
     public DataSurfaceView(Context context) {
         super(context);
@@ -47,22 +62,23 @@ public class DataSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         holder = getHolder();
         holder.setFormat(PixelFormat.TRANSPARENT);
         holder.addCallback(this);
-        setZOrderOnTop(true);
+        setOnTouchListener(this);
 
         paintText.setTextAlign(Paint.Align.LEFT);
         paintText.setTextSize(80);
         paintText.setStyle(Paint.Style.FILL);
-        int colorText = ContextCompat.
+        colorContent = ContextCompat.
                 getColor(getContext(), R.color.colorSurfaceText);
-        paintText.setColor(colorText);
-        paint.setColor(colorText);
-        setLayerType(LAYER_TYPE_SOFTWARE, paintText);
-        paintText.setShadowLayer(2.0f, 0.0f, 2.0f, Color.BLACK);
+        colorEmpty = ContextCompat.
+                getColor(getContext(), R.color.colorBatterieBackgroundOn);
+
+        paintText.setShadowLayer(4.0f, 0.0f, 2.0f, Color.BLACK);
+        paint.setShadowLayer(15.0f, 0.0f, 2.0f, Color.parseColor("#c5cee7"));
         paint.setStrokeWidth(5);
     }
 
     private void drawToCanvas(Canvas canvas) {
-        canvas.drawColor(Color.WHITE, PorterDuff.Mode.CLEAR);
+        canvas.drawColor(Color.WHITE);
 
         int SizeW = canvas.getWidth();
         int SizeH = canvas.getHeight();
@@ -70,22 +86,84 @@ public class DataSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         int HalfSizeW = SizeW / 2;
         int HalfSizeH = SizeH / 2;
 
-        int QuartSizeH = HalfSizeH / 2;
+        float ScaleStart = HalfSizeW - (SizeW / 2.5f);
+        float ScaleEnd = HalfSizeW + (SizeW / 2.5f);
+        float ScaleTop = HalfSizeH / 6.0f ;
+        float ScaleBottom = SizeH - ScaleTop;
+        float OvalSizeH = SizeH * 0.10f;
 
-        int startX = 150;
-        int startY = 200;
-        canvas.drawLine(startX, SizeH - startY, SizeW - startX, SizeH - startY, paint);
-        canvas.drawCircle(SizeW - startX - 5, SizeH - startY + 15, 20, paint);
+        RectF ovalTop = new RectF(ScaleStart , ScaleTop,
+                ScaleEnd, ScaleTop + OvalSizeH);
+
+        RectF ovalBottom = new RectF(ScaleStart , ScaleBottom,
+                ScaleEnd, ScaleBottom - OvalSizeH);
+
+        RectF rectCenter = new RectF(ScaleStart , ovalTop.centerY(),
+                ScaleEnd, ovalBottom.centerY());
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        paint.setColor(colorEmpty);
+        canvas.drawRect(rectCenter, paint);
+
+        paint.setColor(colorContent);
+
+        float MinPosX = ScaleStart - 10;
+        float MaxPosX = ScaleEnd - 10;
+        MinDataHeight = ovalTop.centerY();
+        MaxDataHeight = ovalBottom.centerY();
+
         String level;
-        if(limiteData >= 1.0f) {
-            level = String.format(Locale.FRANCE, "%.3f Go", limiteData);
+        float Step, ScalePosY, Value;
+        switch (dateType)
+        {
+            case DATA_GIGA:
+                Step = (MaxDataHeight - MinDataHeight) / GIGA;
+                Value = (float) Math.round(dataValue);
+                ScalePosY = Step * Value;
+                level = String.format(Locale.FRANCE, "%d Go", (int)Value);
+                break;
+            default:
+                Step = (MaxDataHeight - MinDataHeight) / MEGA;
+                Value = (float)  Math.round(dataValue);
+                ScalePosY = Step * dataValue;
+                level = String.format(Locale.FRANCE, "%d Mo", (int)(Value));
+                break;
         }
-        else {
-            level = String.format(Locale.FRANCE, "%d,0 Mo", (int)(limiteData * 1000.f));
+
+        RectF ovalValue = new RectF(ScaleStart , MaxDataHeight - (ScalePosY - (OvalSizeH / 2.0f)),
+                ScaleEnd, MaxDataHeight - (ScalePosY + (OvalSizeH / 2.0f)));
+
+        RectF rectValue = new RectF(ScaleStart , ovalValue.centerY(),
+                ScaleEnd, ovalBottom.centerY());
+
+        canvas.drawRect(rectValue, paint);
+
+        paint.setColor(colorContent);
+        canvas.drawOval(ovalBottom, paint);
+
+        paint.setColor(Color.WHITE);
+        canvas.drawOval(ovalValue, paint);
+
+        paint.setColor(Color.GRAY);
+        canvas.drawOval(ovalTop, paint);
+
+        paint.setColor(colorContent);
+        switch (dateType) {
+            case DATA_GIGA:
+                canvas.drawLine(MaxPosX + 40, MaxDataHeight - ScalePosY, MaxPosX + 10, MaxDataHeight - ScalePosY, paint);
+                canvas.drawLine(MaxPosX + 40, MaxDataHeight - ScalePosY, MaxPosX + 40, MaxDataHeight - ScalePosY + 20, paint);
+                break;
+            default:
+                canvas.drawLine(MinPosX - 20, MaxDataHeight - ScalePosY, MinPosX + 10, MaxDataHeight - ScalePosY, paint);
+                canvas.drawLine(MinPosX - 20, MaxDataHeight - ScalePosY, MinPosX - 20, MaxDataHeight - ScalePosY + 20, paint);
+                break;
         }
+
+        paintText.setColor(colorEmpty);
+
+
         paintText.getTextBounds(level, 0, level.length(), textBounds);
-        float x = HalfSizeW - textBounds.width() / 2f - textBounds.left;
-        float y = (QuartSizeH * 2.5f) + textBounds.height() / 2f - textBounds.bottom;
+        float x = (HalfSizeW - (textBounds.width() / 2f)) - textBounds.left;
+        float y = (HalfSizeH + (textBounds.height() / 2f)) - textBounds.bottom;
         canvas.drawText(level, x, y, paintText);
 
     }
@@ -114,12 +192,47 @@ public class DataSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         }
     }
 
-    public void setLimiteData(float limiteData) {
-        this.limiteData = limiteData;
+    public void setDateType(DATA_TYPE dateType) {
+        this.dateType = dateType;
+    }
+
+    public DATA_TYPE getDateType() {
+        return dateType;
+    }
+
+    public void setDataValue(float dataValue) {
+        this.dataValue = dataValue;
         post(this);
     }
 
-    public float getLimiteData() {
-        return limiteData;
+    public float getDataValue() {
+        return dataValue;
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (event.getAction())
+        {
+            case MotionEvent.ACTION_MOVE:
+                if(event.getY() > MinDataHeight
+                        && event.getY() < MaxDataHeight) {
+                    float ReplaceY = event.getY() - MinDataHeight;
+                    float data = ReplaceY / (MaxDataHeight - MinDataHeight);
+                    switch (dateType)
+                    {
+                        case DATA_GIGA:
+                            dataValue = GIGA - (GIGA * data);
+                            break;
+                        default:
+                            dataValue = MEGA - (MEGA * data);
+                            break;
+                    }
+
+                    post(this);
+                }
+
+                break;
+        }
+        return true;
     }
 }

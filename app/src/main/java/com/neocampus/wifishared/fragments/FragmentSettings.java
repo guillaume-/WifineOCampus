@@ -120,7 +120,7 @@ public class FragmentSettings extends Fragment implements OnFragmentSetListener 
             if (newDataLimit >= 1.0f) {
                 limiteData = String.format(Locale.FRANCE, "%.3f Go", newDataLimit);
             } else {
-                limiteData = String.format(Locale.FRANCE, "%d Mo", (int) (newDataLimit * 1000.f));
+                limiteData = String.format(Locale.FRANCE, "%.3f Mo", newDataLimit * 1000.f);
             }
             settingData.setText(limiteData);
         }
