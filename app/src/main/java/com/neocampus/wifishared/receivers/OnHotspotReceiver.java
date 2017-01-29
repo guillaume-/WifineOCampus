@@ -14,6 +14,7 @@ import com.neocampus.wifishared.utils.WifiApControl;
 import static com.neocampus.wifishared.utils.WifiApControl.EXTRA_WIFI_AP_STATE;
 import static com.neocampus.wifishared.utils.WifiApControl.WIFI_AP_STATE_DISABLED;
 import static com.neocampus.wifishared.utils.WifiApControl.WIFI_AP_STATE_ENABLED;
+import static com.neocampus.wifishared.utils.WifiApControl.WIFI_AP_STATE_FAILED;
 
 /**
  * Created by Hirochi ☠ on 10/01/17.
@@ -38,6 +39,7 @@ public class OnHotspotReceiver extends BroadcastReceiver {
                     getIntExtra(EXTRA_WIFI_AP_STATE, -1);
 
             switch (wifi_state) {
+                case WIFI_AP_STATE_FAILED:
                 case WIFI_AP_STATE_ENABLED:
                     updateHotspotState(context);
                     break;
@@ -58,7 +60,7 @@ public class OnHotspotReceiver extends BroadcastReceiver {
     private boolean replaceUserWifiConfiguration(Context context) {
 
         WifiApControl apControl = WifiApControl.getInstance(context);
-        if(!apControl.isUPSWifiConfiguration())
+        if (!apControl.isUPSWifiConfiguration())
             return false;
 
         TableConfiguration tableConfiguration;
@@ -68,35 +70,31 @@ public class OnHotspotReceiver extends BroadcastReceiver {
         try {
             tableConfiguration = sqlManager.getConfiguration();
             byte[] bytes = tableConfiguration.getWifiConfiguration();
-            if(bytes != null) {
+            if (bytes != null) {
                 WifiConfiguration userConfiguration
                         = ParcelableUtils.unmarshall(bytes, WifiConfiguration.class);
                 apControl.setWifiApConfiguration(userConfiguration);
                 sqlManager.setConfiguration(null);
-                sqlManager.setConfigurationE(0);
+                sqlManager.setConfigurationA(0);
             }
 
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             sqlManager.close();
         }
 
         return true;
     }
 
-    public void updateHotspotState(Context context)
-    {
+    public void updateHotspotState(Context context) {
         if (observable != null
                 && WifiApControl.checkPermission(context)) {
             WifiApControl apControl = WifiApControl.getInstance(context);
-//            if(apControl.isUPSWifiConfiguration()) {
-                observable.setUPS(apControl.isUPSWifiConfiguration());
-                observable.setRunning(apControl.isEnabled());
-//            }
+            observable.setUPS(apControl.isUPSWifiConfiguration());
+            observable.setState(apControl.getState());
         }
     }
 }

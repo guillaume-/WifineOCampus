@@ -25,7 +25,7 @@ import java.util.Set;
 public class SQLiteHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "database.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 11;
     private Context context;
 
     public SQLiteHelper(Context context) {

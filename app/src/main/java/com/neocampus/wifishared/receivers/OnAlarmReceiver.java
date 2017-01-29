@@ -75,7 +75,7 @@ public class OnAlarmReceiver extends BroadcastReceiver {
         if (configuration.getDateAlarm() == 0) {
             configuration.setDateAlarm(configuration.getLimiteTemps()
                     + System.currentTimeMillis());
-            manager.setConfigurationE(configuration.getDateAlarm());
+            manager.setConfigurationA(configuration.getDateAlarm());
         }
         updateAlarm(context, configuration.getDateAlarm());
     }
@@ -84,6 +84,6 @@ public class OnAlarmReceiver extends BroadcastReceiver {
         if (existAlarm(context)) {
             removeAlarm(context);
         }
-        manager.setConfigurationE(0);
+        manager.setConfigurationA(0);
     }
 }

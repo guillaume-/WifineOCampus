@@ -2,36 +2,43 @@ package com.neocampus.wifishared.observables;
 
 import java.util.Observable;
 
+import static com.neocampus.wifishared.utils.WifiApControl.STATE_ENABLED;
+
 /**
  * Created by Hirochi ☠ on 22/01/17.
  */
 
 public class HotspotObservable extends Observable {
-    private boolean running;
     private boolean UPS;
+    private int state;
+    private int sessionId = -1;
 
     public HotspotObservable()
     {
-        running = false;
+        state = -1;
     }
 
     /**
      *@return the value
      */
     public boolean isRunning() {
-        return running;
+        return state == STATE_ENABLED;
     }
 
     /**
-     *@param value
+     *@param state
      * the value to set
      */
-    public void setRunning(boolean value) {
-        if(this.running != value) {
-            this.running = value;
+    public void setState(int state) {
+        if(this.state != state) {
+            this.state = state;
             setChanged();
-            notifyObservers(value);
+            notifyObservers(state);
         }
+    }
+
+    public int getState() {
+        return state;
     }
 
     public void setUPS(boolean UPS) {
@@ -40,5 +47,14 @@ public class HotspotObservable extends Observable {
 
     public boolean isUPS() {
         return UPS;
+    }
+
+
+    public void setSessionId(int sessionId) {
+        this.sessionId = sessionId;
+    }
+
+    public int getSessionId() {
+        return sessionId;
     }
 }

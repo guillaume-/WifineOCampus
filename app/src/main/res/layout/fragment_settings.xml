@@ -105,25 +105,28 @@
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="@drawable/cu_solid_bottom_border"
+                android:layout_marginBottom="20dp"
+                android:onClick="onClickToResetDataBase">
 
                 <TextView
-                    android:text="@string/notification"
+                    android:text="Effacer les traces"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:typeface="serif"
-                    android:layout_marginBottom="2dp"
                     android:textColor="@android:color/black"
                     android:textSize="15sp"
-                    android:layout_marginTop="10dp" />
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="2dp"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:typeface="serif"
                     android:layout_marginBottom="10dp"
-                    android:id="@+id/setting_notification"
-                    android:text="En maintenance" />
+                    android:text="Réinitialiser les données" />
+
             </LinearLayout>
 
             <TextView

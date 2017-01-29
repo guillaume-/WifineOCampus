@@ -23,7 +23,7 @@ import java.util.Locale;
 public class SessionUserView extends LinearLayout implements OnAdapterViewListener {
 
     private List<WifiApControl.Client> clients = new ArrayList<>();
-    private SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss", Locale.FRANCE);
+    private SimpleDateFormat format = new SimpleDateFormat("HH':'mm':'ss", Locale.FRANCE);
     private ListClientAdapter adapter;
 
     public SessionUserView(Context context) {
@@ -67,10 +67,19 @@ public class SessionUserView extends LinearLayout implements OnAdapterViewListen
         WifiApControl.Client client = (WifiApControl.Client) o;
         TextView textView1 = (TextView) view.findViewById(R.id.addressPhysique);
         TextView textView2 = (TextView) view.findViewById(R.id.adressIP);
+        TextView textView3 = (TextView) view.findViewById(R.id.heure_cx);
 
         textView1.setText(client.hwAddr);
         textView2.setText(client.ipAddr);
 
+        if(client.connected) {
+            textView3.setText(String.format("Toujours connecté : %s", format.format(client.date.connected)));
+        }
+        else {
+            textView3.setText(String.format("De %s à %s",
+                    format.format(client.date.connected),
+                    format.format(client.date.disconnected)));
+        }
         return view;
     }
 

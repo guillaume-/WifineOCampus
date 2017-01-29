@@ -34,8 +34,12 @@ public class ServiceDataTraffic implements Runnable{
         baseT0 += newT0;
     }
 
+    public long getBaseT0() {
+        return baseT0;
+    }
+
     private Void doInBackground() {
-        long dataTx;
+        long dataTx = 0;
         if (isUsable) try {
             while (running) {
                 dataTx = baseT0 + ((TrafficUtils.getRxBytes()+TrafficUtils.getTxBytes()) - dataT0);
@@ -43,6 +47,7 @@ public class ServiceDataTraffic implements Runnable{
                 observable.setValue(dataTx);
                 Thread.sleep(lookUpPeriode);
             }
+            baseT0 += dataTx;
         } catch (InterruptedException e) {
         }
         return null;

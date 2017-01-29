@@ -8,7 +8,7 @@ import java.util.Observer;
 
 public interface OnServiceSetListener {
 
-    void    forceSave();
+    void storeInDataBase();
     void    addObserver(Observer observer);
     void    removeObserver(Observer observer);
 
@@ -16,4 +16,6 @@ public interface OnServiceSetListener {
     void    peekDataTraffic(OnFragmentSetListener listener);
     void    peekAllClients(OnReachableClientListener listener);
     void    peekReachableClients(OnReachableClientListener listener);
+
+    void    resetBaseT0();
 }

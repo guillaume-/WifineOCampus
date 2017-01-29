@@ -1,10 +1,12 @@
 package com.neocampus.wifishared.activity;
 
 import android.app.ActivityManager;
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.drawable.ColorDrawable;
 import android.net.wifi.WifiConfiguration;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,8 +24,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.neocampus.wifishared.R;
@@ -157,10 +159,10 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
 
     @Override
     protected void onDestroy() {
+        disconnectToService();
         if (sqlManager != null) {
             sqlManager.close();
         }
-        disconnectToService();
         super.onDestroy();
     }
 
@@ -208,18 +210,14 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
 
         v.startAnimation(AnimationUtils.
                 loadAnimation(v.getContext(), R.anim.pressed_anim));
-        Button button = ((Button) v);
-
         WifiConfiguration configuration
                 = WifiApControl.getUPSWifiConfiguration();
 
         if (isUPSWifiConfiguration(configuration)) {
             if (apControl.isWifiApEnabled()) {
                 apControl.disable();
-                button.setText(getString(R.string.activer_le_partage));
             } else if(verifyConditions()){
-                apControl.setEnabled(configuration, true);
-                button.setText(getString(R.string.desactiver_le_partage));
+                apControl.enable();
             }
         } else if (apControl.isEnabled()) {
             apControl.disable();
@@ -227,16 +225,15 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
             WifiConfiguration userConfiguration = apControl.getConfiguration();
             byte[] bytes = ParcelableUtils.marshall(userConfiguration);
             sqlManager.setConfiguration(bytes);
-            apControl.setEnabled(configuration, true);
-            button.setText(getString(R.string.desactiver_le_partage));
+            apControl.setWifiApConfiguration(configuration);
+            apControl.enable();
         }
     }
-
 
     public void onClickToDataConfig(final View v) {
         v.startAnimation(AnimationUtils.
                 loadAnimation(v.getContext(), R.anim.pressed_anim));
-        if (!apControl.isEnabled() || !apControl.isUPSWifiConfiguration()) {
+        if (verifyWifiDisabled()) {
             float limite_conso = getLimiteDataTrafic();
             Fragment fragment = FragmentTraffic.newInstance(limite_conso);
             this.fragment = FragmentUtils.showFragment(this, fragment,
@@ -247,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     public void onClickToBatterieConfig(final View v) {
         v.startAnimation(AnimationUtils.
                 loadAnimation(v.getContext(), R.anim.pressed_anim));
-        if (!apControl.isEnabled() || !apControl.isUPSWifiConfiguration()) {
+        if (verifyWifiDisabled()) {
             int limite_batterie = getLimiteBatterie();
             Fragment fragment = FragmentBatterie.newInstance(limite_batterie);
             this.fragment = FragmentUtils.showFragment(this, fragment,
@@ -258,11 +255,40 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     public void onClickToTimeConfig(final View v) {
         v.startAnimation(AnimationUtils.
                 loadAnimation(v.getContext(), R.anim.pressed_anim));
-        if (!apControl.isEnabled() || !apControl.isUPSWifiConfiguration()) {
+        if (verifyWifiDisabled()) {
             long limite_temps = getLimiteTemps();
             Fragment fragment = FragmentTime.newInstance(limite_temps);
             this.fragment = FragmentUtils.showFragment(this, fragment,
                     R.anim.circle_zoom, R.anim.circle_inverse_zoom);
+        }
+    }
+
+    public void onClickToResetDataBase(final View v) {
+        v.startAnimation(AnimationUtils.
+                loadAnimation(v.getContext(), R.anim.pressed_anim));
+        if (verifyWifiDisabled()) {
+            View view = LayoutInflater.from(this).
+                    inflate(R.layout.app_progress_layout, null, false);
+            View surfaceView = view.findViewById(R.id.progress);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setView(view);
+            builder.setCancelable(false);
+            AlertDialog alert = builder.create();
+            WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+            lp.copyFrom(alert.getWindow().getAttributes());
+            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+            lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+            surfaceView.setTag(alert);
+            alert.show();
+            alert.getWindow().setAttributes(lp);
+            alert.getWindow().setBackgroundDrawable(new
+                    ColorDrawable(android.graphics.Color.TRANSPARENT));
+            sqlManager.removeAllUtilisateur();
+            sqlManager.removeAllConsommations();
+            sqlManager.setConfigurationD(0);
+            if(mServiceInterraction != null) {
+                mServiceInterraction.resetBaseT0();
+            }
         }
     }
 
@@ -276,7 +302,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     private void disconnectToService() {
         if (isServiceRunning(ServiceNeOCampus.class)) {
             if (mServiceInterraction != null) {
-                mServiceInterraction.forceSave();
+                mServiceInterraction.storeInDataBase();
             }
             unbindService(this);
         }
@@ -312,7 +338,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
                 listener.onRefreshClient((WifiApControl.Client) newValue);
                 listener.onRefreshClientCount(((ClientObservable) o).getCount());
             } else if (o instanceof HotspotObservable) {
-                listener.onRefreshHotpostState((Boolean) newValue);
+                listener.onRefreshHotpostState((HotspotObservable) o);
             } else if (o instanceof TimeObservable) {
                 listener.onRefreshTimeValue((Long) newValue);
             }
@@ -406,12 +432,29 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
             Toast.makeText(this, R.string.condition_temps, Toast.LENGTH_LONG).show();
             return false;
         }
-        else if(configuration.getLimiteConsommation() == 0)
+        else if(configuration.getLimiteConsommation() == 0
+                || configuration.getLimiteConsommation() < configuration.getDataT0())
         {
-            Toast.makeText(this, R.string.condition_date, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.condition_data, Toast.LENGTH_LONG).show();
+            return false;
+        }
+        else if(!WifiApControl.isSupported())
+        {
+            Toast.makeText(this, R.string.condition_supported, Toast.LENGTH_LONG).show();
             return false;
         }
         return true;
+    }
+
+    private boolean verifyWifiDisabled()
+    {
+        if (apControl.isEnabled()
+                && apControl.isUPSWifiConfiguration()) {
+            Toast.makeText(this, R.string.condition_shared, Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
+
     }
 
     private boolean isServiceRunning(Class<?> serviceClass) {

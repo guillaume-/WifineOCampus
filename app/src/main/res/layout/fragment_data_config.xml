@@ -63,16 +63,18 @@
             android:padding="20dp">
 
             <com.neocampus.wifishared.views.DataSurfaceView
-                android:id="@+id/data_configuration"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.35"/>
-
-            <com.neocampus.wifishared.views.DataSurfaceView
                 android:id="@+id/echelle_surface"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="0.65" />
+                android:layout_weight="1" />
+
+            <com.neocampus.wifishared.views.DataSurfaceView
+                android:id="@+id/data_configuration"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+
         </LinearLayout>
 
         <LinearLayout

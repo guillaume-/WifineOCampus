@@ -21,11 +21,15 @@ import com.neocampus.wifishared.receivers.OnAlarmReceiver;
 import com.neocampus.wifishared.receivers.OnBatterieReceiver;
 import com.neocampus.wifishared.receivers.OnHotspotReceiver;
 import com.neocampus.wifishared.sql.database.TableConfiguration;
+import com.neocampus.wifishared.sql.database.TableConsommation;
+import com.neocampus.wifishared.sql.database.TableUtilisateur;
 import com.neocampus.wifishared.sql.manage.SQLManager;
 import com.neocampus.wifishared.utils.BatterieUtils;
 import com.neocampus.wifishared.utils.NotificationUtils;
 import com.neocampus.wifishared.utils.WifiApControl;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -55,6 +59,7 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
         this.timeObservable = new TimeObservable();
     }
 
+
     @Override
     public void onCreate() {
         this.sqlManager = new SQLManager(this);
@@ -65,6 +70,8 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
         this.onHotspotReceiver = new OnHotspotReceiver(this.hotspotObservable);
         this.onBatterieReceiver = new OnBatterieReceiver(this.batterieObservable);
         this.onAlarmReceiver = new OnAlarmReceiver(this.timeObservable);
+
+        this.restoreFromDataBase();
 
         this.addObserver(this);
         this.batterieObservable.setValue((int) BatterieUtils.getBatteryLevel(this));
@@ -77,6 +84,11 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
             onHotspotReceiver.updateHotspotState(this);
         }
         super.onCreate();
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return Service.START_STICKY;
     }
 
     @Override
@@ -101,7 +113,6 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
     public void unbindService(ServiceConnection conn) {
         super.unbindService(conn);
     }
-
 
     @Override
     public void addObserver(Observer observer) {
@@ -137,12 +148,39 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
     }
 
     @Override
+    public void resetBaseT0() {
+        dataObservable.setValue(0);
+        serviceData.refreshFromDataBase(0);
+    }
+
+    @Override
     public void peekTimeValue(OnFragmentSetListener listener) {
         listener.onRefreshTimeValue(timeObservable.getDate());
     }
 
     @Override
-    public void forceSave() {
+    public void storeInDataBase() {
+        sqlManager.setConfigurationS(true);
+        long dataT0 = dataObservable.getValue();
+        sqlManager.setConfigurationD(dataT0);
+    }
+
+    public void restoreFromDataBase() {
+        TableConfiguration configuration = sqlManager.getConfiguration();
+        if(configuration.isStored()) {
+            TableConsommation consommation
+                    = sqlManager.getLastConsommation();
+            if(consommation != null && consommation.getDateEnd() == 0) {
+                hotspotObservable.setSessionId(consommation.getID());
+                List<TableUtilisateur> utilisateurs =
+                        sqlManager.getUtilisateurs(consommation.getID());
+                for(TableUtilisateur utilisateur : utilisateurs)
+                    clientObservable.restoreClient(utilisateur);
+            }
+            sqlManager.setConfigurationS(false);
+        }
+        dataObservable.setValue(configuration.getDataT0());
+        serviceData.refreshFromDataBase(configuration.getDataT0());
     }
 
     private void startWatchDog() {
@@ -157,9 +195,19 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
         this.onAlarmReceiver.stopAlarm(this, sqlManager);
     }
 
+    private void createSession()
+    {
+        if(hotspotObservable.getSessionId() == -1) {
+            long date = new Date().getTime();
+            long dataT0 = serviceData.getBaseT0();
+            int idConso = sqlManager.newConsommation(date, dataT0);
+            hotspotObservable.setSessionId(idConso);
+        }
+    }
+
     public void setWatchDogState(boolean enable) {
         if (enable) {
-            refreshFromDataBase();
+            createSession();
             startWatchDog();
         } else {
             saveInDataBase();
@@ -167,16 +215,17 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
         }
     }
 
-    public void refreshFromDataBase(){
-        //TODO : if(SQL got last T0) use refreshDataT0
-        long SQL_dataT0 = 0;
-        serviceData.refreshFromDataBase(SQL_dataT0);
-    }
-
     public void saveInDataBase(){
-        //TODO : store in SQL
-        long dataTx = dataObservable.getValue();
-        //SQL.store(dataTx)
+        int idConso =
+                hotspotObservable.getSessionId();
+        if (idConso > 0) {
+            long dataTx = dataObservable.getValue();
+
+            sqlManager.setConfigurationD(dataTx);
+            sqlManager.updateConsommationDataTx(idConso, dataTx);
+            sqlManager.updateConsommationDateEnd(idConso, new Date().getTime());
+            hotspotObservable.setSessionId(-1);
+        }
     }
 
     public boolean isOverTimeLimit(long timeValue) {
@@ -207,8 +256,9 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
     @Override
     public void update(Observable o, Object arg) {
         if (o instanceof HotspotObservable) {
-            if (WifiApControl.isUPSWifiConfiguration(this)) {
-                setWatchDogState((boolean) arg);
+            HotspotObservable observable = (HotspotObservable) o;
+            if (observable.isUPS()) {
+                setWatchDogState(observable.isRunning());
             }
         } else if (o instanceof BatterieObservable) {
             if(hotspotObservable.isRunning()
@@ -227,6 +277,17 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
                 stopHotpost();
                 NotificationUtils.showTimeNotify(this);
             }
+        }else if (o instanceof  ClientObservable) {
+            WifiApControl.Client client = (WifiApControl.Client) arg;
+            if(client.connected) {
+                int id = sqlManager.addUtilisateur(hotspotObservable.getSessionId(),
+                        client.hwAddr, client.ipAddr, client.date.connected, client.date.disconnected);
+                client.date.id = id;
+            }
+            else if(client.date != null){
+                sqlManager.updateDisconnectedTime(client.date.id, client.date.disconnected);
+            }
+            System.out.println(""+arg);
         }
     }
 

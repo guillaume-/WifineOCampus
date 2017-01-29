@@ -22,6 +22,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.DhcpInfo;
 import android.net.Uri;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
@@ -44,6 +45,7 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Observable;
@@ -65,6 +67,7 @@ final public class WifiApControl extends Observable {
     private static Method isWifiApEnabledMethod;
     private static Method setWifiApEnabledMethod;
     private static Method setWifiApConfiguration;
+    private static Method getDhcpInfo;
 
     static {
         for (Method method : WifiManager.class.getDeclaredMethods()) {
@@ -84,6 +87,9 @@ final public class WifiApControl extends Observable {
                 case "setWifiApEnabled":
                     setWifiApEnabledMethod = method;
                     break;
+                case "getDhcpInfo":
+                    getDhcpInfo = method;
+                    break;
             }
         }
     }
@@ -98,7 +104,7 @@ final public class WifiApControl extends Observable {
     public static final int WIFI_AP_STATE_DISABLED = 11;
     private static final int WIFI_AP_STATE_ENABLING = 12;
     public static final int WIFI_AP_STATE_ENABLED = 13;
-    private static final int WIFI_AP_STATE_FAILED = 14;
+    public static final int WIFI_AP_STATE_FAILED = 14;
 
     public static final int STATE_DISABLING = WIFI_AP_STATE_DISABLING;
     public static final int STATE_DISABLED = WIFI_AP_STATE_DISABLED;
@@ -269,7 +275,7 @@ final public class WifiApControl extends Observable {
     // getWifiApState returns the current Wi-Fi AP state.
     // If an error occured invoking the method via reflection, -1 is
     // returned.
-    private int getWifiApState() {
+    public int getWifiApState() {
         Object result = invokeQuietly(getWifiApStateMethod, wm);
         if (result == null) {
             return -1;
@@ -330,6 +336,13 @@ final public class WifiApControl extends Observable {
     // disable stops any currently running Wi-Fi AP.
     public boolean disable() {
         return setEnabled(null, false);
+    }
+
+    public DhcpInfo getDhcpInfo() {
+        Object result = invokeQuietly(getDhcpInfo, wm);
+        if (result == null)
+            return null;
+        return (DhcpInfo) result;
     }
 
     // getInet6Address returns the IPv6 address that the device has in its
@@ -404,6 +417,15 @@ final public class WifiApControl extends Observable {
         return false;
     }
 
+    public static class DataSync {
+        public int id = -1;
+
+        public long connected = new Date().getTime();
+
+        public long disconnected;
+    }
+
+
     // Client describes a Wi-Fi AP device connected to the network.
     public static class Client {
 
@@ -414,35 +436,85 @@ final public class WifiApControl extends Observable {
         // hwAddr is the raw string of the MAC of the client
         public String hwAddr;
 
-        public long date_connected;
 
-        public long date_disconnected;
+        public DataSync date;
 
         public Client(String ipAddr, String hwAddr) {
+            this.date = null;
+            this.connected = true;
             this.ipAddr = ipAddr;
             this.hwAddr = hwAddr;
-            this.connected = true;
-            this.date_connected = 0;
-            this.date_disconnected = 0;
         }
 
         @Override
         public boolean equals(Object obj) {
             if (obj instanceof Client) {
-                return synchronised((Client) obj);
+                if (((Client) obj).hwAddr.equals(hwAddr))
+                    synchro((Client) obj);
+                return true;
             }
             return super.equals(obj);
         }
 
-        private boolean synchronised(Client client) {
+        private void synchro(Client client) {
+            if (this.date == null)
+                this.date = client.date;
+            else
+                client.date = this.date;
+        }
+
+        @Override
+        public int hashCode() {
+            return 1;
+        }
+    }
+
+    /*// Client describes a Wi-Fi AP device connected to the network.
+    public static class Client {
+
+        public int[] id;
+
+        public boolean connected;
+        // ipAddr is the raw string of the IP Address client
+        public String ipAddr;
+
+        // hwAddr is the raw string of the MAC of the client
+        public String hwAddr;
+
+        public long connected;
+
+        public long disconnected;
+
+        public Client(String ipAddr, String hwAddr) {
+            this.ipAddr = ipAddr;
+            this.hwAddr = hwAddr;
+            this.connected = true;
+            this.connected = 0;
+            this.disconnected = 0;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof Client) {
+                return synchro((Client) obj);
+            }
+            return super.equals(obj);
+        }
+
+        private boolean synchro(Client client) {
             if (client.hwAddr.equals(hwAddr)) {
-                long date_connected = this.date_connected == 0 ? client.date_connected : this.date_connected;
-                long date_disconnected = this.date_disconnected < client.date_disconnected ?
-                        client.date_disconnected : this.date_disconnected;
-                this.date_connected = date_connected;
-                client.date_connected = date_connected;
-                this.date_disconnected = date_disconnected;
-                client.date_disconnected = date_disconnected;
+                long connected = this.connected == 0 ? client.connected : this.connected;
+                long disconnected = this.disconnected < client.disconnected ?
+                        client.disconnected : this.disconnected;
+                this.connected = connected;
+                client.connected = connected;
+                this.disconnected = disconnected;
+                client.disconnected = disconnected;
+                if(id == null) {
+                    id = client.id;
+                } else {
+                    client.id = id;
+                }
                 return true;
             }
             return false;
@@ -452,7 +524,7 @@ final public class WifiApControl extends Observable {
         public int hashCode() {
             return 1;
         }
-    }
+    }*/
 
     // getReachableClients returns a list of all clients connected to the network.
     // Since the information is pulled from ARP, which is cached for up to

@@ -13,6 +13,7 @@ import com.neocampus.wifishared.R;
 import com.neocampus.wifishared.listeners.OnActivitySetListener;
 import com.neocampus.wifishared.listeners.OnFragmentSetListener;
 import com.neocampus.wifishared.listeners.OnReachableClientListener;
+import com.neocampus.wifishared.observables.HotspotObservable;
 import com.neocampus.wifishared.utils.WifiApControl;
 import com.neocampus.wifishared.views.CirclePageIndicator;
 import com.neocampus.wifishared.views.CirclePagerAdapter;
@@ -126,8 +127,8 @@ public class FragmentUsers extends Fragment implements OnFragmentSetListener,  O
     }
 
     @Override
-    public void onRefreshHotpostState(boolean activate) {
-        if(!activate) {
+    public void onRefreshHotpostState(HotspotObservable observable) {
+        if(!observable.isRunning() && observable.isUPS()) {
             onReachableClients(new ArrayList<WifiApControl.Client>());
         }
     }

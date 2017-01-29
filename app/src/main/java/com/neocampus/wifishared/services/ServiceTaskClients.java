@@ -7,7 +7,6 @@ import com.neocampus.wifishared.observables.ClientObservable;
 import com.neocampus.wifishared.utils.WifiApControl;
 
 import java.nio.channels.AlreadyConnectedException;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -46,16 +45,12 @@ public class ServiceTaskClients implements Runnable , OnReachableClientListener{
         {
             WifiApControl.Client client = iterator.next();
             if(!pclients.contains(client)) {
-                client.connected = false;
-                client.date_disconnected = new Date().getTime();
                 observable.removeClient(client);
             }
         }
 
         for (WifiApControl.Client client: pclients) {
             if(!clients.contains(client)){
-                client.connected = true;
-                client.date_connected = new Date().getTime();
                 observable.addClient(client);
             }
         }

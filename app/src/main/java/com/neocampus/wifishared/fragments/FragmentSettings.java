@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.neocampus.wifishared.R;
 import com.neocampus.wifishared.listeners.OnActivitySetListener;
 import com.neocampus.wifishared.listeners.OnFragmentSetListener;
+import com.neocampus.wifishared.observables.HotspotObservable;
 import com.neocampus.wifishared.utils.WifiApControl;
 
 import java.text.SimpleDateFormat;
@@ -96,7 +97,7 @@ public class FragmentSettings extends Fragment implements OnFragmentSetListener 
     }
 
     @Override
-    public void onRefreshHotpostState(boolean activate) {
+    public void onRefreshHotpostState(HotspotObservable observable) {
     }
 
     @Override
@@ -130,7 +131,7 @@ public class FragmentSettings extends Fragment implements OnFragmentSetListener 
     public void onRefreshTimeConfig(long newTimeLimit) {
         if (settingTime != null) {
             SimpleDateFormat format;
-            String s = 60*60*1000 < newTimeLimit ?
+            String s = 60*60*1000 <= newTimeLimit ?
                     "HH'h'mm": "mm 'min'";
             format = new SimpleDateFormat(s, Locale.FRANCE);
             format.setTimeZone(TimeZone.getTimeZone("GMT"));

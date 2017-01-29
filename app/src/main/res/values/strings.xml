@@ -21,7 +21,12 @@
     <string name="seuil_de_transmission">Seuil de transmission</string>
     <string name="seuil_de_la_batterie">Seuil de la batterie</string>
     <string name="seuil_de_temps">Seuil de temps</string>
+    <string name="activation_en_cours">Activation en cours ...</string>
+    <string name="activation_native_en_cours">⚠ Activation en cours ...</string>
     <string name="activer_le_partage">Lancer le Partage</string>
+    <string name="activation_echec">"⚠ Echec : réessayer"</string>
+    <string name="desactivation_en_cours">Désactivation en cours ...</string>
+    <string name="desactivation_native_en_cours">⚠ Désactivation en cours ...</string>
     <string name="desactiver_le_partage">Arrêter le Partage</string>
     <string name="desactiver_native_partage">⚠ Arrêter le Partage</string>
     <string name="no_permission">"⚠ Permission"</string>
@@ -36,8 +41,10 @@
     <string name="seuil_du_temps_de_partage">Seuil de la durée de partage</string>
     <string name="non">Non</string>
     <string name="oui">Oui</string>
-    <string name="condition_batterie">Le seuil de la batterie doit être inférieur au niveau de la batterie</string>
-    <string name="condition_temps">Le delai d\'utilisation doit être supérieur 0</string>
-    <string name="condition_date">Le seuil de transmission doit être supérieur à 0</string>
+    <string name="condition_batterie">⚠ Le seuil de la batterie doit être inférieur au niveau de la batterie</string>
+    <string name="condition_temps">⚠ Le delai d\'utilisation doit être supérieur 0</string>
+    <string name="condition_data">⚠ Le seuil de transmission doit être supérieur à (Total transmission)</string>
+    <string name="condition_supported">Le partage wifi n\'est pas supporté</string>
+    <string name="condition_shared">⚠ Arrêtez le partage en cours</string>
 
 </resources>

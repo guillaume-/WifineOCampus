@@ -15,13 +15,13 @@ import com.neocampus.wifishared.R;
 import com.neocampus.wifishared.listeners.OnActivitySetListener;
 import com.neocampus.wifishared.listeners.OnFragmentSetListener;
 import com.neocampus.wifishared.listeners.OnReachableClientListener;
+import com.neocampus.wifishared.observables.HotspotObservable;
 import com.neocampus.wifishared.utils.BatterieUtils;
 import com.neocampus.wifishared.utils.WifiApControl;
 import com.neocampus.wifishared.views.CirclePageIndicator;
 import com.neocampus.wifishared.views.CirclePagerAdapter;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -140,21 +140,36 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
                 chronometer.setText("00 sec");
             }
         }
-        System.out.println(newDateValue);
     }
 
     @Override
-    public void onRefreshHotpostState(final boolean activate) {
+    public void onRefreshHotpostState(HotspotObservable observable) {
         if (hotSpotButton != null) {
-            if (activate) {
-                if (WifiApControl.isUPSWifiConfiguration(getContext())) {
-                    hotSpotButton.setText(getString(R.string.desactiver_le_partage));
-                } else {
-                    hotSpotButton.setText(getString(R.string.desactiver_native_partage));
-                }
-            } else {
-                onReachableClients(new ArrayList<WifiApControl.Client>());
-                hotSpotButton.setText(getString(R.string.activer_le_partage));
+            switch (observable.getState()) {
+                case WifiApControl.STATE_ENABLING:
+                    hotSpotButton.setText(observable.isUPS() ?
+                            getString(R.string.activation_en_cours) :
+                            getString(R.string.activation_native_en_cours));
+                    break;
+                case WifiApControl.STATE_ENABLED:
+                    hotSpotButton.setText(observable.isUPS() ?
+                            getString(R.string.desactiver_le_partage) :
+                            getString(R.string.desactiver_native_partage));
+                    break;
+                case WifiApControl.STATE_DISABLING:
+                    hotSpotButton.setText(observable.isUPS() ?
+                            getString(R.string.desactivation_en_cours) :
+                            getString(R.string.desactivation_native_en_cours));
+                    break;
+                case WifiApControl.STATE_DISABLED:
+                    hotSpotButton.setText(getString(R.string.activer_le_partage));
+                    onRefreshClientCount(0);
+                    break;
+                case WifiApControl.STATE_FAILED:
+                    hotSpotButton.setText(getString(R.string.activation_echec));
+                    onRefreshClientCount(0);
+                    break;
+
             }
         }
         onRefreshAll();
@@ -205,7 +220,7 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
     public void onRefreshTimeConfig(long newTimeLimit) {
         if (timeLimite != null) {
             SimpleDateFormat format;
-            String s = 60 * 60 * 1000 < newTimeLimit ?
+            String s = 60 * 60 * 1000 <= newTimeLimit ?
                     "HH'h'mm" : "mm 'min'";
             format = new SimpleDateFormat(s, Locale.FRANCE);
             format.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -236,10 +251,10 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
             int heure = (int) (time / (60000L * 60L));
             if (heure > 1) {
                 timeText = String.format(Locale.FRANCE, "%02dh%02d", heure, minute);
-            } else if(minute > 1){
+            } else if (minute > 1) {
                 timeText = String.format(Locale.FRANCE, "%02d min", minute);
             } else {
-                int seconde = (int) ((time / 1000L)  % 60L);
+                int seconde = (int) ((time / 1000L) % 60L);
                 timeText = String.format(Locale.FRANCE, "%02d sec", seconde);
             }
         }

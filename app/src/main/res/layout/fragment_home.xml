@@ -91,6 +91,11 @@
 
             </LinearLayout>
 
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fillViewport="true">
+
             <android.support.v4.view.ViewPager
                 android:id="@+id/id_view_pager"
                 android:layout_width="fill_parent"
@@ -113,6 +118,8 @@
 
 
             </android.support.v4.view.ViewPager>
+
+            </ScrollView>
 
             <com.neocampus.wifishared.views.CirclePageIndicator
                 android:layout_width="wrap_content"

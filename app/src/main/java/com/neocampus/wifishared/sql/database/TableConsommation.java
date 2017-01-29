@@ -16,7 +16,10 @@ public class TableConsommation extends SqlDataSchema {
     public static final String _ID =  "Column_ID";
 
     @Column(Type = SqlType.INTEGER, Nullable = false)
-    public static final String _Date = "Column_Date";
+    public static final String _Date_Start = "Column_Date";
+
+    @Column(Type = SqlType.INTEGER, Nullable = true, value = "0")
+    public static final String _Date_End = "Column_Date_End";
 
     @Column(Type = SqlType.INTEGER, Nullable = true, value = "0")
     public static final String _NbreUser = "Column_NombreUser";
@@ -25,10 +28,13 @@ public class TableConsommation extends SqlDataSchema {
     public static final String _Periode = "Column_Periode";
 
     @Column(Type = SqlType.INTEGER, Nullable = true, value = "0")
-    public static final String _PeriodeUtilisation = "Column_PeriodeUtilisation";
+    public static final String _Consommation_T0 = "Column_Consommation_T0";
 
     @Column(Type = SqlType.INTEGER, Nullable = true, value = "0")
-    public static final String _Consommation = "Column_Consommation";
+    public static final String _Consommation_Tx = "Column_Consommation_Tx";
+
+    @Column(Type = SqlType.TEXT, Nullable = true)
+    public static final String _Localisation = "Column_Localisation";
 
 
     public TableConsommation(ContentValues values) {
@@ -39,15 +45,15 @@ public class TableConsommation extends SqlDataSchema {
         return this.values.getAsInteger(_ID);
     }
 
-    public long getDATE(){
-        return  this.values.getAsLong(_Date);
+    public long getDate(){
+        return  this.values.getAsLong(_Date_Start);
     }
 
     public void setDate(long date){
-        this.values.put(_Date, date);
+        this.values.put(_Date_Start, date);
     }
 
-    public int getNBREUSER(){
+    public int getNbreUser(){
         return this.values.getAsInteger(_NbreUser);
     }
 
@@ -55,7 +61,7 @@ public class TableConsommation extends SqlDataSchema {
         this.values.put(_NbreUser,nbre_user);
     }
 
-    public int getPERIODE(){
+    public int getPeriode(){
         return this.values.getAsInteger(_Periode);
     }
 
@@ -63,11 +69,31 @@ public class TableConsommation extends SqlDataSchema {
         this.values.put(_Periode,period);
     }
 
-    public long getCONSOMMATION(){
-        return this.values.getAsLong(_Consommation);
+    public int getDateEnd(){
+        return this.values.getAsInteger(_Date_End);
     }
 
-    public void setConsommation(long consommation){
-        this.values.put(_Consommation, consommation);
+    public void setRunningPeriode(int period){
+        this.values.put(_Date_End, period);
     }
+
+    public long getConsommationT0(){
+        return this.values.getAsLong(_Consommation_T0);
+    }
+
+    public void setConsommationT0(long consommation){
+        this.values.put(_Consommation_T0, consommation);
+    }
+
+    public long getConsommationTx(){
+        return this.values.getAsLong(_Consommation_Tx);
+    }
+
+    public void setConsommationTx(long consommation){
+        this.values.put(_Consommation_Tx, consommation);
+    }
+
+    public String getPosition(){ return  this.values.getAsString(_Localisation); }
+
+    public void setPosition(String pos){ this.values.put(_Localisation, pos); }
 }

@@ -34,7 +34,13 @@ public class TableConfiguration extends SqlDataSchema {
 
 
     @Column(Type = SqlType.INTEGER, Nullable = true, value = "0")
+    public static final String _DataT0 = "Column_Data_T0";
+
+    @Column(Type = SqlType.INTEGER, Nullable = true, value = "0")
     public static final String _DateAlarm = "Column_Date_Alarm";
+
+    @Column(Type = SqlType.INTEGER, Nullable = true, value = "0")
+    public static final String _Stored = "Column_Stored";
 
 
     public TableConfiguration(ContentValues values) {
@@ -78,11 +84,27 @@ public class TableConfiguration extends SqlDataSchema {
         this.values.put(_LimiteTemps, value);
     }
 
+    public long getDataT0() {
+        return this.values.getAsLong(_DataT0);
+    }
+
+    public void setDataT0(long value) {
+        this.values.put(_DataT0, value);
+    }
+
     public long getDateAlarm() {
         return this.values.getAsLong(_DateAlarm);
     }
 
     public void setDateAlarm(long value) {
         this.values.put(_DateAlarm, value);
+    }
+
+    public boolean isStored() {
+        return this.values.getAsBoolean(_Stored);
+    }
+
+    public void setStored(boolean value) {
+        this.values.put(_Stored, value);
     }
 }

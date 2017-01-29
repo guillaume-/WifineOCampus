@@ -41,7 +41,7 @@ public class ReachableUserView extends LinearLayout implements OnAdapterViewList
     private void onInit()
     {
         this.adapter = new ListClientAdapter(getContext(),
-                this, R.layout.app_sessions_layout, clients);
+                this, R.layout.app_users_layout, clients);
         ListView lvItems = (ListView) findViewById(R.id.lvClients);
         lvItems.setAdapter(adapter);
     }
@@ -73,7 +73,8 @@ public class ReachableUserView extends LinearLayout implements OnAdapterViewList
         if(client.connected) {
             adapter.add(client);
         }
-        else {
+
+        else if(client.date != null) {
             adapter.remove(client);
         }
     }

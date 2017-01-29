@@ -127,7 +127,8 @@
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/lvClients" />
+            android:id="@+id/lvClients"
+            android:dividerHeight="-2dp" />
 
     </com.neocampus.wifishared.views.ReachableUserView>
 

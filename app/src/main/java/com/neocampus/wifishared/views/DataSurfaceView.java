@@ -143,12 +143,12 @@ public class DataSurfaceView extends SurfaceView implements
         paint.setColor(Color.WHITE);
         canvas.drawOval(ovalValue, paint);
 
-        paint.setColor(Color.GRAY);
+        paint.setColor(colorEmpty);
         canvas.drawOval(ovalTop, paint);
 
         paint.setColor(colorContent);
         switch (dateType) {
-            case DATA_GIGA:
+            case DATA_MEGA:
                 canvas.drawLine(MaxPosX + 40, MaxDataHeight - ScalePosY, MaxPosX + 10, MaxDataHeight - ScalePosY, paint);
                 canvas.drawLine(MaxPosX + 40, MaxDataHeight - ScalePosY, MaxPosX + 40, MaxDataHeight - ScalePosY + 20, paint);
                 break;
