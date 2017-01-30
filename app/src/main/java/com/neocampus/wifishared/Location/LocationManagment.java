@@ -1,22 +1,30 @@
 package com.neocampus.wifishared.Location;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
+import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
-import android.support.v4.app.ActivityCompat;
 
 /**
  * Created by Guillaume RIPOLL on 26/01/2017.
  */
 public class LocationManagment {
-    private boolean isAtUniversity;
+    private Location lastKnownLocation;
+    private LocationManager locationManager;
 
-    public LocationManagment() {
+    public LocationManagment(Context c) {
         try {
-            isAtUniversity = LocationManager.getLastKnownLocation().distanceTo(new Location("118 Route de Narbonne, Toulouse")) <= 2000.f; //in meters
-        }catch (SecurityException e){
-            isAtUniversity = false;
+            locationManager = (LocationManager) c.getSystemService(Context.LOCATION_SERVICE);
+            lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        } catch (SecurityException e) {
         }
     }
+
+    private boolean isAtUniversity(){
+        try{
+            return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER).distanceTo(new Location("118 Route de Narbonne, Toulouse")) <= 2000.f; //in meters
+        } catch (SecurityException e) {
+            return false;
+        }
+    }
+
 }
