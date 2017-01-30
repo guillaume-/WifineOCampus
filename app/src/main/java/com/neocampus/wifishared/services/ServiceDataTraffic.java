@@ -26,7 +26,6 @@ public class ServiceDataTraffic implements Runnable{
 //        this.isUsable = TrafficStats.getMobileRxBytes() != TrafficStats.UNSUPPORTED;
 //        this.dataT0 += TrafficStats.getMobileTxBytes();
 
-        this.dataT0 = TrafficUtils.getRxBytes()+TrafficUtils.getTxBytes();
         this.isUsable = TrafficStats.getMobileRxBytes() != TrafficStats.UNSUPPORTED;
     }
 
@@ -41,13 +40,14 @@ public class ServiceDataTraffic implements Runnable{
     private Void doInBackground() {
         long dataTx = 0;
         if (isUsable) try {
+            this.dataT0 = TrafficUtils.getRxBytes()+TrafficUtils.getTxBytes();
             while (running) {
                 dataTx = baseT0 + ((TrafficUtils.getRxBytes()+TrafficUtils.getTxBytes()) - dataT0);
 //                dataTx = baseT0 + ((TrafficStats.getMobileRxBytes()+TrafficStats.getMobileTxBytes())-dataT0);
                 observable.setValue(dataTx);
                 Thread.sleep(lookUpPeriode);
             }
-            baseT0 += dataTx;
+            baseT0 = dataTx;
         } catch (InterruptedException e) {
         }
         return null;

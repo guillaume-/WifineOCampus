@@ -13,7 +13,9 @@ import com.neocampus.wifishared.utils.WifiApControl;
 
 import static com.neocampus.wifishared.utils.WifiApControl.EXTRA_WIFI_AP_STATE;
 import static com.neocampus.wifishared.utils.WifiApControl.WIFI_AP_STATE_DISABLED;
+import static com.neocampus.wifishared.utils.WifiApControl.WIFI_AP_STATE_DISABLING;
 import static com.neocampus.wifishared.utils.WifiApControl.WIFI_AP_STATE_ENABLED;
+import static com.neocampus.wifishared.utils.WifiApControl.WIFI_AP_STATE_ENABLING;
 import static com.neocampus.wifishared.utils.WifiApControl.WIFI_AP_STATE_FAILED;
 
 /**
@@ -39,6 +41,8 @@ public class OnHotspotReceiver extends BroadcastReceiver {
                     getIntExtra(EXTRA_WIFI_AP_STATE, -1);
 
             switch (wifi_state) {
+                case WIFI_AP_STATE_DISABLING:
+                case WIFI_AP_STATE_ENABLING:
                 case WIFI_AP_STATE_FAILED:
                 case WIFI_AP_STATE_ENABLED:
                     updateHotspotState(context);

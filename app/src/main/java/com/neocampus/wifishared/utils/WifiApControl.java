@@ -100,9 +100,9 @@ final public class WifiApControl extends Observable {
     public static final String ACTION_WIFI_AP_CHANGED = "android.net.wifi.WIFI_AP_STATE_CHANGED";
     public static final String EXTRA_WIFI_AP_STATE = "wifi_state";
 
-    private static final int WIFI_AP_STATE_DISABLING = 10;
+    public static final int WIFI_AP_STATE_DISABLING = 10;
     public static final int WIFI_AP_STATE_DISABLED = 11;
-    private static final int WIFI_AP_STATE_ENABLING = 12;
+    public static final int WIFI_AP_STATE_ENABLING = 12;
     public static final int WIFI_AP_STATE_ENABLED = 13;
     public static final int WIFI_AP_STATE_FAILED = 14;
 
@@ -185,9 +185,13 @@ final public class WifiApControl extends Observable {
         wifiConfiguration.wepKeys[0] = "Wifi neOCampus   ıllıllı";
         wifiConfiguration.hiddenSSID = false;
 
+        wifiConfiguration.allowedAuthAlgorithms.clear();
         wifiConfiguration.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
+        wifiConfiguration.allowedProtocols.clear();
         wifiConfiguration.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
+        wifiConfiguration.allowedKeyManagement.clear();
         wifiConfiguration.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+        wifiConfiguration.allowedGroupCiphers.clear();
         wifiConfiguration.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
 
         return wifiConfiguration;
@@ -391,11 +395,24 @@ final public class WifiApControl extends Observable {
         return null;
     }
 
+    private static boolean isNotEquals(byte[] bytes1, byte[] bytes2)
+    {
+        if(bytes1.length != bytes2.length)
+            return true;
+        float count = 0.0f;
+        for(int i = 0; i < bytes1.length; i++) {
+            if (bytes1[i] != bytes2[i]) {
+                count++;
+            }
+        }
+        return  (count / bytes1.length) > 0.1f;
+    }
+
     public static boolean equals(WifiConfiguration configuration1,
                                  WifiConfiguration configuration2) {
         byte[] bytes1 = ParcelableUtils.marshall(configuration1);
         byte[] bytes2 = ParcelableUtils.marshall(configuration2);
-        return Arrays.equals(bytes1, bytes2);
+        return Arrays.equals(bytes1, bytes2) || !isNotEquals(bytes1, bytes2);
     }
 
     public static boolean isUPSWifiConfiguration(Context context) {

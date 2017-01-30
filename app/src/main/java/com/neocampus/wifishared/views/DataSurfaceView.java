@@ -160,7 +160,6 @@ public class DataSurfaceView extends SurfaceView implements
 
         paintText.setColor(colorEmpty);
 
-
         paintText.getTextBounds(level, 0, level.length(), textBounds);
         float x = (HalfSizeW - (textBounds.width() / 2f)) - textBounds.left;
         float y = (HalfSizeH + (textBounds.height() / 2f)) - textBounds.bottom;
