@@ -9,12 +9,16 @@ import android.location.LocationManager;
  */
 public class LocationManagment {
     private Location lastKnownLocation;
+    private Location UPS;
     private LocationManager locationManager;
 
     public LocationManagment(Context c) {
         try {
             locationManager = (LocationManager) c.getSystemService(Context.LOCATION_SERVICE);
             lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            UPS = new Location(LocationManager.GPS_PROVIDER);
+            UPS.setLatitude(43.5609901);
+            UPS.setLongitude(1.4630574000000252);
         } catch (SecurityException e) {
         }
     }
