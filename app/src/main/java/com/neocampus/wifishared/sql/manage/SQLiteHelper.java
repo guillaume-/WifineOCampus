@@ -10,10 +10,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.neocampus.wifishared.sql.annotations.Column;
 import com.neocampus.wifishared.sql.annotations.SqlType;
 import com.neocampus.wifishared.sql.annotations.Table;
+import com.neocampus.wifishared.sql.annotations.Trigger;
 import com.neocampus.wifishared.utils.AnnotationUtils;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,16 +49,14 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 }
             }
             Collections.sort(listClasses, new Table.IComparator());
-            for (Class<?> aClass : listClasses) {
-                String createTable = buildSQL(aClass);
-                database.execSQL(createTable);
-                System.out.println(createTable);
-            }
-        } catch (ClassNotFoundException | PackageManager.NameNotFoundException |
-                IOException | NoSuchFieldException | IllegalAccessException e) {
+
+            createAllTables(database, listClasses);
+            createAllTriggers(database, listClasses);
+
+        } catch (ClassNotFoundException | PackageManager.NameNotFoundException | IOException |
+                NoSuchFieldException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -90,17 +91,13 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 }
             }
 
-            /*Drop all tables*/
+            /*Drop all tables without duplicate*/
             for (Class<?> aClass : listClasses) {
                 Table table = aClass.getAnnotation(Table.class);
                 database.execSQL("DROP TABLE IF EXISTS " + table.TableName());
             }
 
-            /*Create all tables*/
-            for (Class<?> aClass : listClasses) {
-                String createTable = buildSQL(aClass);
-                database.execSQL(createTable);
-            }
+            createAllTables(database, listClasses);
 
             /*Restore all tables*/
             if (c.moveToFirst()) {
@@ -113,10 +110,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                     c.moveToNext();
                 }
             }
-            for (Class<?> aClass : listClasses) {
-                Table table = aClass.getAnnotation(Table.class);
 
-            }
+            createAllTriggers(database, listClasses);
 
             /*Drop all duplicate tables*/
             for (Class<?> aClass : listClasses) {
@@ -124,12 +119,38 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 database.execSQL("DROP TABLE IF EXISTS _" + table.TableName()+"_");
             }
 
-        } catch (ClassNotFoundException | PackageManager.NameNotFoundException
-                | IOException | NoSuchFieldException | IllegalAccessException e) {
+        } catch (ClassNotFoundException | PackageManager.NameNotFoundException | IOException |
+                NoSuchFieldException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
     }
 
+    @Override
+    public void onDowngrade(SQLiteDatabase database, int oldVersion, int newVersion) {
+        try {
+            Set<Class<?>> classes = AnnotationUtils.
+                    getAnnotationClasses(context, Table.class);
+            List<Class<?>> listClasses = new ArrayList<>();
+            for (Class<?> aClass : classes) {
+                Table table = aClass.getAnnotation(Table.class);
+                if (table.enabled()) {
+                    listClasses.add(aClass);
+                }
+            }
+
+            Collections.sort(listClasses, new Table.IComparator());
+
+            dropAllTriggers(database);
+            dropAllTables(database);
+
+            createAllTables(database, listClasses);
+            createAllTriggers(database, listClasses);
+
+        } catch (ClassNotFoundException | PackageManager.NameNotFoundException |
+                IOException | NoSuchFieldException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    }
 
     private static String buildSQL(Class<?> aClass)
             throws NoSuchFieldException, IllegalAccessException {
@@ -207,42 +228,55 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         c.close();
     }
 
-    @Override
-    public void onDowngrade(SQLiteDatabase database, int oldVersion, int newVersion) {
-        try {
-            Set<Class<?>> classes = AnnotationUtils.
-                    getAnnotationClasses(context, Table.class);
-            List<Class<?>> listClasses = new ArrayList<>();
-            for (Class<?> aClass : classes) {
-                Table table = aClass.getAnnotation(Table.class);
-                if (table.enabled()) {
-                    listClasses.add(aClass);
-                }
-            }
-            Collections.sort(listClasses, new Table.IComparator());
-
-            Cursor c = database.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
-            if (c.moveToFirst()) {
-                while ( !c.isAfterLast() ) {
-                    String tableName = c.getString(0);
-                    if(!"android_metadata".equals(tableName)
-                            && !"sqlite_sequence".equals(tableName)) {
-                        database.execSQL("DROP TABLE IF EXISTS " + tableName);
-                        System.out.println("DROP TABLE IF EXISTS " + tableName);
-                    }
-                    c.moveToNext();
-                }
-            }
-
-            /*Create all tables*/
-            for (Class<?> aClass : listClasses) {
-                String createTable = buildSQL(aClass);
-                database.execSQL(createTable);
-            }
-
-        } catch (ClassNotFoundException | PackageManager.NameNotFoundException
-                | IOException | NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
+    private static void createAllTables(SQLiteDatabase database, List<Class<?>> listClasses)
+            throws NoSuchFieldException, IllegalAccessException {
+        /*Create all tables*/
+        for (Class<?> aClass : listClasses) {
+            String createTable = buildSQL(aClass);
+            database.execSQL(createTable);
         }
     }
+
+    private static void createAllTriggers(SQLiteDatabase database, List<Class<?>> listClasses)
+            throws InvocationTargetException, IllegalAccessException {
+        for (Class<?> aClass : listClasses) {
+            Set<Method> methods = AnnotationUtils
+                    .getAnnotationsMethods(aClass, Trigger.class);
+            for(Method method : methods) {
+                Trigger trigger = method.getAnnotation(Trigger.class);
+                method.invoke(null, database, trigger.name());
+            }
+        }
+    }
+
+    private static void dropAllTriggers(SQLiteDatabase database)
+    {
+        Cursor cursor = database.rawQuery("SELECT name FROM sqlite_master WHERE type='trigger'", null);
+        if (cursor.moveToFirst()) {
+            while ( !cursor.isAfterLast() ) {
+                String triggerName = cursor.getString(0);
+                database.execSQL("DROP TRIGGER IF EXISTS " + triggerName);
+                System.out.println("DROP TRIGGER IF EXISTS " + triggerName);
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+    }
+
+    private static void dropAllTables(SQLiteDatabase database)
+    {
+        Cursor cursor = database.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
+        if (cursor.moveToFirst()) {
+            while ( !cursor.isAfterLast() ) {
+                String tableName = cursor.getString(0);
+                if(!"android_metadata".equals(tableName) && !"sqlite_sequence".equals(tableName)) {
+                    database.execSQL("DROP TABLE IF EXISTS " + tableName);
+                    System.out.println("DROP TABLE IF EXISTS " + tableName);
+                }
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+    }
+
 }

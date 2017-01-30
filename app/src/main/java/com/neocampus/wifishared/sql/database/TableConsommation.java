@@ -1,9 +1,12 @@
 package com.neocampus.wifishared.sql.database;
 
 import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
+
 import com.neocampus.wifishared.sql.annotations.Column;
 import com.neocampus.wifishared.sql.annotations.SqlType;
 import com.neocampus.wifishared.sql.annotations.Table;
+import com.neocampus.wifishared.sql.annotations.Trigger;
 
 /**
  * Created by NALINGA on 10/01/2017.
@@ -96,4 +99,32 @@ public class TableConsommation extends SqlDataSchema {
     public String getPosition(){ return  this.values.getAsString(_Localisation); }
 
     public void setPosition(String pos){ this.values.put(_Localisation, pos); }
+
+    @Trigger(name = "TRIGGER_NB_USER")
+    public static void triggerNbreUser(SQLiteDatabase database, String trigger_name)
+    {
+        String s = String.format("CREATE TRIGGER %s BEFORE INSERT ON %s FOR EACH ROW " +
+                "\nBEGIN\n" +
+                "UPDATE %s SET %s = %s + 1 WHERE %s = new.%s;" +
+                "\nEND;\n",
+                trigger_name, TableUtilisateur._NAME, _NAME,
+                _NbreUser, _NbreUser, _ID, TableUtilisateur._ID_CONSO);
+        database.execSQL(s);
+    }
+
+    @Trigger(name = "TRIGGER_PERIODE_USER")
+    public static void triggerPeriodeUser(SQLiteDatabase database, String trigger_name)
+    {
+        String s = String.format("CREATE TRIGGER %s BEFORE UPDATE OF %s ON %s " +
+                "\nBEGIN\n" +
+                "UPDATE %s SET %s = %s + (new.%s - old.%s) WHERE %s = old.%s;" +
+                "\nEND;\n",
+                trigger_name, TableUtilisateur._DATE_FIN_CNX, TableUtilisateur._NAME, _NAME,
+                _Periode, _Periode, TableUtilisateur._DATE_FIN_CNX, TableUtilisateur._DATE_DEBUT_CNX,
+                _ID, TableUtilisateur._ID_CONSO);
+
+        database.execSQL(s);
+    }
+
+
 }

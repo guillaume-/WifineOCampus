@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,6 +25,21 @@ public class AnnotationUtils {
         for (Class<?> aClass : classes) {
             if(aClass.isAnnotationPresent(annotation))
                 results.add(aClass);
+        }
+        return results;
+    }
+
+    public static Set<Method> getAnnotationsMethods(Class aClass,
+                                                    Class<? extends Annotation> annotation)
+    {
+        Set<Method> results = new HashSet<>();
+        Method[] methods = aClass.getMethods();
+        if(methods != null) {
+            for (Method method : methods) {
+                if(method.isAnnotationPresent(annotation)) {
+                    results.add(method);
+                }
+            }
         }
         return results;
     }
