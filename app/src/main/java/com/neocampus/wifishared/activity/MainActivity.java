@@ -2,6 +2,8 @@ package com.neocampus.wifishared.activity;
 
 import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -18,7 +20,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +30,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageButton;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.neocampus.wifishared.R;
@@ -40,6 +46,7 @@ import com.neocampus.wifishared.listeners.OnFragmentConfigListener;
 import com.neocampus.wifishared.listeners.OnFragmentSetListener;
 import com.neocampus.wifishared.listeners.OnReachableClientListener;
 import com.neocampus.wifishared.listeners.OnServiceSetListener;
+import com.neocampus.wifishared.location.LocationManagment;
 import com.neocampus.wifishared.observables.BatterieObservable;
 import com.neocampus.wifishared.observables.ClientObservable;
 import com.neocampus.wifishared.observables.DataObservable;
@@ -66,10 +73,10 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     private View mAppBarContent;
     private Intent serviceintent;
     private OnServiceSetListener mServiceInterraction;
+    private LocationManagment locManage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -78,12 +85,10 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
 
         /*Check if permission is enabled for wifi configuration*/
         if (WifiApControl.checkPermission(this, true)) {
-
+            this.locManage = new LocationManagment(this);
             this.sqlManager = new SQLManager(this);
             this.sqlManager.open();
-
             this.apControl = WifiApControl.getInstance(this);
-
             this.mAppBarContent = LayoutInflater.from(this)
                     .inflate(R.layout.app_bar_content, null, false);
             ActionBar.LayoutParams params = new ActionBar.LayoutParams(
@@ -206,12 +211,39 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     }
 
     public void onClickToRunAPWifi(View v) {
+        if(! locManage.isAtUniversity()){
+            // Initialize a new instance of LayoutInflater service
+            LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+            // Inflate the custom layout/view
+            View customView = inflater.inflate(R.layout.gps_popup, null);
+            // Initialize a new instance of popup window
+            final PopupWindow mPopupWindow = new PopupWindow(
+                    customView,
+                    DrawerLayout.LayoutParams.WRAP_CONTENT,
+                    DrawerLayout.LayoutParams.WRAP_CONTENT
+            );
+            // Set an elevation value for popup window
+            // Call requires API level 21
+            if(Build.VERSION.SDK_INT>=21){
+                mPopupWindow.setElevation(5.0f);
+            }
+            // Get a reference for the custom view close button
+            ImageButton closeButton = (ImageButton) customView.findViewById(R.id.ib_close);
+            // Set a click listener for the popup window close button
+            closeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Dismiss the popup window
+                    mPopupWindow.dismiss();
+                }
+            });
+            mPopupWindow.showAtLocation(this.getCurrentFocus(), Gravity.CENTER,0,0);
+        }
 
         v.startAnimation(AnimationUtils.
                 loadAnimation(v.getContext(), R.anim.pressed_anim));
         WifiConfiguration configuration
                 = WifiApControl.getUPSWifiConfiguration();
-
         if (isUPSWifiConfiguration(configuration)) {
             if (apControl.isWifiApEnabled()) {
                 apControl.disable();
