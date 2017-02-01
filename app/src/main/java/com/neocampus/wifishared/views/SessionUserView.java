@@ -42,7 +42,7 @@ public class SessionUserView extends LinearLayout implements OnAdapterViewListen
 
     private void onInit() {
         adapter = new ListClientAdapter(getContext(),
-                this, R.layout.app_sessions_layout, clients);
+                this, R.layout.app_users_recent, clients);
         ListView lvItems = (ListView) findViewById(R.id.lvClients);
         lvItems.setAdapter(adapter);
     }

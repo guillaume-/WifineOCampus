@@ -1,5 +1,10 @@
 package com.neocampus.wifishared.listeners;
 
+import com.neocampus.wifishared.sql.database.TableConsommation;
+import com.neocampus.wifishared.sql.database.TableUtilisateur;
+
+import java.util.List;
+
 /**
  * Created by Hirochi ☠ on 10/01/17.
  */
@@ -20,4 +25,8 @@ public interface OnActivitySetListener {
     void        showAppBarRefresh();
     void        hideAppBarSaveConfig();
     void        showAppBarSaveConfig();
+
+    /**/
+    List<TableConsommation>   getAllConsommations();
+    List<TableUtilisateur> getUtilisateurs(int iDConso);
 }

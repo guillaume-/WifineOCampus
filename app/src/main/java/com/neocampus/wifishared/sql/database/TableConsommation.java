@@ -72,8 +72,8 @@ public class TableConsommation extends SqlDataSchema {
         this.values.put(_Periode,period);
     }
 
-    public int getDateEnd(){
-        return this.values.getAsInteger(_Date_End);
+    public long getDateEnd(){
+        return this.values.getAsLong(_Date_End);
     }
 
     public void setRunningPeriode(int period){

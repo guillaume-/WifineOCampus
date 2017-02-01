@@ -36,7 +36,6 @@
     <string name="heure_fin">Heure fin</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="service_name">Service Wifi neOCampus</string>
     <string name="seuil_du_temps_de_partage">Seuil de la durée de partage</string>
     <string name="non">Non</string>
@@ -46,5 +45,8 @@
     <string name="condition_data">⚠ Le seuil de transmission doit être supérieur à (Total transmission)</string>
     <string name="condition_supported">Le partage wifi n\'est pas supporté</string>
     <string name="condition_shared">⚠ Arrêtez le partage en cours</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

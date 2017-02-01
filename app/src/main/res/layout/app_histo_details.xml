@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/title_historique"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Historique des partages"
+                android:textAppearance="@style/AppTheme.TextSmallStyle"
+                android:textStyle="normal|bold"
+                android:typeface="serif" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:background="@drawable/cu_solid_bottom_border">
+
+            <TextView
+                android:text="@string/adresse_physique"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorTextContent"
+                android:typeface="monospace"
+                android:fontFamily="serif"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="0.40"
+                android:layout_width="0dp"
+                android:background="@drawable/cu_solid_end_border"
+                android:gravity="center_vertical" />
+
+            <TextView
+                android:text="@string/adresse_ip"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorTextContent"
+                android:typeface="monospace"
+                android:fontFamily="serif"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="0.40"
+                android:layout_width="0dp"
+                android:background="@drawable/cu_solid_end_border"
+                android:gravity="center_vertical|center_horizontal" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.15"
+                android:background="@color/colorPrimaryDark" />
+
+        </LinearLayout>
+
+        <com.neocampus.wifishared.views.UsersHistoView
+            android:id="@+id/users_historique"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ListView
+                android:id="@+id/lvClients"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:dividerHeight="-2dp" />
+
+        </com.neocampus.wifishared.views.UsersHistoView>
+
+        <TextView
+            android:text="&lt;&lt; Revenir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/consommation_back"
+            android:padding="10dp"
+            android:background="@drawable/cu_solid_bottom_border"
+            android:textSize="18sp"
+            android:layout_gravity="right"
+            android:layout_marginBottom="30dp"
+            android:layout_marginTop="20dp" />
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

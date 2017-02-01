@@ -219,11 +219,12 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
         int idConso =
                 hotspotObservable.getSessionId();
         if (idConso > 0) {
+            long date = new Date().getTime();
             long dataTx = dataObservable.getValue();
 
             sqlManager.setConfigurationD(dataTx);
             sqlManager.updateConsommationDataTx(idConso, dataTx);
-            sqlManager.updateConsommationDateEnd(idConso, new Date().getTime());
+            sqlManager.updateConsommationDateEnd(idConso, date);
             hotspotObservable.setSessionId(-1);
         }
     }

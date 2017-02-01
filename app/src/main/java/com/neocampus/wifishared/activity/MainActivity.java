@@ -31,6 +31,7 @@ import android.widget.Toast;
 import com.neocampus.wifishared.R;
 import com.neocampus.wifishared.fragments.FragmentBatterie;
 import com.neocampus.wifishared.fragments.FragmentHome;
+import com.neocampus.wifishared.fragments.FragmentSession;
 import com.neocampus.wifishared.fragments.FragmentSettings;
 import com.neocampus.wifishared.fragments.FragmentTime;
 import com.neocampus.wifishared.fragments.FragmentTraffic;
@@ -47,6 +48,8 @@ import com.neocampus.wifishared.observables.HotspotObservable;
 import com.neocampus.wifishared.observables.TimeObservable;
 import com.neocampus.wifishared.services.ServiceNeOCampus;
 import com.neocampus.wifishared.sql.database.TableConfiguration;
+import com.neocampus.wifishared.sql.database.TableConsommation;
+import com.neocampus.wifishared.sql.database.TableUtilisateur;
 import com.neocampus.wifishared.sql.manage.SQLManager;
 import com.neocampus.wifishared.utils.BatterieUtils;
 import com.neocampus.wifishared.utils.FragmentUtils;
@@ -144,6 +147,10 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         } else if (id == R.id.nav_users) {
             if (fragment.getClass() != FragmentUsers.class) {
                 fragment = FragmentUtils.showFragment(this, FragmentUsers.class);
+            }
+        } else if (id == R.id.nav_historique) {
+            if (fragment.getClass() != FragmentSession.class) {
+                fragment = FragmentUtils.showFragment(this, FragmentSession.class);
             }
         } else if (id == R.id.nav_setting) {
             if (fragment.getClass() != FragmentSettings.class) {
@@ -416,6 +423,16 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     @Override
     public void showAppBarSaveConfig() {
         mAppBarContent.findViewById(R.id.app_bar_save_config).setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public List<TableConsommation> getAllConsommations() {
+        return sqlManager.getAllConsommations();
+    }
+
+    @Override
+    public List<TableUtilisateur> getUtilisateurs(int iDConso) {
+        return sqlManager.getUtilisateurs(iDConso);
     }
 
     private boolean verifyConditions() {

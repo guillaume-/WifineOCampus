@@ -22,9 +22,9 @@ public class ListClientAdapter extends ArrayAdapter {
     private OnAdapterViewListener listener;
 
     public ListClientAdapter(Context context,
-                             OnAdapterViewListener listener,int resLayout, List<?> clients) {
+                             OnAdapterViewListener listener,int resLayout, List<?> objects) {
 
-        super(context, 0, clients);
+        super(context, 0, objects);
         this.context = context;
         this.listener = listener;
         this.resLayout = resLayout;
