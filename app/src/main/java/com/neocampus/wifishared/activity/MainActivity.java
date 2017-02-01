@@ -57,7 +57,6 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-
 public class MainActivity extends AppCompatActivity implements ServiceConnection,
         NavigationView.OnNavigationItemSelectedListener, OnActivitySetListener, Observer {
 
@@ -474,6 +473,4 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
                 configuration = apControl.getWifiApConfiguration();
         return WifiApControl.equals(configuration, upsConfig);
     }
-
-
 }
