@@ -1,6 +1,9 @@
 package com.neocampus.wifishared.location;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -46,7 +49,7 @@ public class LocationManagment {
     }
 
     public boolean isAtUniversity(){
-        if(isOk) {
+         if(isOk) {
             try {
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 500.0f, locationListener);
                 lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -59,5 +62,4 @@ public class LocationManagment {
         }
         return false;
     }
-
 }
