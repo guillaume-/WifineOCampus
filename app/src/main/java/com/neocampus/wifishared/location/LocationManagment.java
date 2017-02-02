@@ -45,13 +45,15 @@ public class LocationManagment {
         };
     }
 
-    private boolean isAtUniversity(){
+    public boolean isAtUniversity(){
         if(isOk) {
             try {
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 500.0f, locationListener);
                 lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                return lastKnownLocation.distanceTo(MetroUPS) <= 2000.f; //in meters
-            } catch (SecurityException e) {
+                if(lastKnownLocation != null)
+                    return lastKnownLocation.distanceTo(MetroUPS) <= 2000.f; //in meters
+            } catch (SecurityException se) {
+                isOk = false;
                 return false;
             }
         }

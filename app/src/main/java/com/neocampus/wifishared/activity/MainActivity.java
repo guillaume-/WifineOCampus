@@ -2,8 +2,6 @@ package com.neocampus.wifishared.activity;
 
 import android.app.ActivityManager;
 import android.app.AlertDialog;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -20,7 +18,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -32,9 +29,7 @@ import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import com.neocampus.wifishared.R;
 import com.neocampus.wifishared.fragments.FragmentBatterie;
 import com.neocampus.wifishared.fragments.FragmentHome;
@@ -60,7 +55,6 @@ import com.neocampus.wifishared.utils.BatterieUtils;
 import com.neocampus.wifishared.utils.FragmentUtils;
 import com.neocampus.wifishared.utils.ParcelableUtils;
 import com.neocampus.wifishared.utils.WifiApControl;
-
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -220,13 +214,13 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
                     DrawerLayout.LayoutParams.WRAP_CONTENT,
                     DrawerLayout.LayoutParams.WRAP_CONTENT
             );
-            /*ImageButton closeButton = (ImageButton) customView.findViewById(R.id.ib_close);
+            ImageButton closeButton = (ImageButton) customView.findViewById(R.id.ib_close);
             closeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view){
                     mPopupWindow.dismiss();
                 }
-            });*/
+            });
             mPopupWindow.showAtLocation(this.getCurrentFocus(), Gravity.CENTER, 0, 0);
         }
 
