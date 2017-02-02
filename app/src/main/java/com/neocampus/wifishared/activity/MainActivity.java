@@ -4,9 +4,11 @@ import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.drawable.ColorDrawable;
+import android.net.sip.SipAudioCall;
 import android.net.wifi.WifiConfiguration;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,7 +29,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageButton;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 import com.neocampus.wifishared.R;
@@ -205,27 +206,10 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         }
     }
 
-    public void onClickToRunAPWifi(View v) {
-        if(! locManage.isAtUniversity()){
-            LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
-            View customView = inflater.inflate(R.layout.gps_popup, null);
-            final PopupWindow mPopupWindow = new PopupWindow(
-                    customView,
-                    DrawerLayout.LayoutParams.WRAP_CONTENT,
-                    DrawerLayout.LayoutParams.WRAP_CONTENT
-            );
-            ImageButton closeButton = (ImageButton) customView.findViewById(R.id.ib_close);
-            closeButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view){
-                    mPopupWindow.dismiss();
-                }
-            });
-            mPopupWindow.showAtLocation(this.getCurrentFocus(), Gravity.CENTER, 0, 0);
-        }
-
-        v.startAnimation(AnimationUtils.
-                loadAnimation(v.getContext(), R.anim.pressed_anim));
+    public void onClickToRunApWifi_GPS_OK(View v){
+        v.startAnimation(
+            AnimationUtils.loadAnimation(
+                v.getContext(), R.anim.pressed_anim));
         WifiConfiguration configuration
                 = WifiApControl.getUPSWifiConfiguration();
         if (isUPSWifiConfiguration(configuration)) {
@@ -242,6 +226,32 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
             sqlManager.setConfiguration(bytes);
             apControl.setWifiApConfiguration(configuration);
             apControl.enable();
+        }
+    }
+
+    public void onClickToRunAPWifi(View v) {
+        if((! apControl.isWifiApEnabled()) && (! locManage.isAtUniversity())){
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setTitle("Info. localisation");
+            alertDialogBuilder
+                    .setMessage("Hors UPS (GPS désactivé ?), neOCampus décline toute responsabilité quant à l'utilisation de l'application.")
+                    .setCancelable(false)
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    })
+                    .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            apControl.disable();
+                            MainActivity.this.finish();
+                        }
+                    });
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+            onClickToRunApWifi_GPS_OK(v);
+        } else {
+            onClickToRunApWifi_GPS_OK(v);
         }
     }
 
