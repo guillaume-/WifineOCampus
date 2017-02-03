@@ -267,7 +267,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
                     .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             apControl.disable();
-                            MainActivity.this.finish();
+                            dialog.cancel();
                         }
                     });
             AlertDialog alertDialog = alertDialogBuilder.create();

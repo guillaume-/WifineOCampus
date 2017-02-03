@@ -1,65 +1,64 @@
 package com.neocampus.wifishared.location;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
+import java.util.List;
+
 /**
  * Created by Guillaume RIPOLL on 26/01/2017.
  */
 public class LocationManagment {
-    private Location lastKnownLocation;
     private Location MetroUPS;
     private LocationListener locationListener;
     private LocationManager locationManager;
     Context context;
-    private boolean isOk = true;
 
     public LocationManagment(Context c) {
         context = c;
-        MetroUPS = new Location(LocationManager.GPS_PROVIDER);
+        MetroUPS = new Location("");
         MetroUPS.setLatitude(43.5609901);
         MetroUPS.setLongitude(1.4630574000000252);
         try {
             locationManager = (LocationManager) c.getSystemService(Context.LOCATION_SERVICE);
-        } catch (SecurityException e) {
-            isOk = false;
-        }
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                lastKnownLocation = location;
-            }
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {}
-            @Override
-            public void onProviderEnabled(String provider) {
-                isOk = true;
-            }
-            @Override
-            public void onProviderDisabled(String provider) {
-                isOk = false;
-            }
-        };
+        } catch (SecurityException e) {}
     }
 
     public boolean isAtUniversity(){
-         if(isOk) {
-            try {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 500.0f, locationListener);
-                lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                if(lastKnownLocation != null)
-                    return lastKnownLocation.distanceTo(MetroUPS) <= 2000.f; //in meters
-            } catch (SecurityException se) {
-                isOk = false;
+        // getting GPS status
+        boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        // getting network status
+        boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        if(!isGPSEnabled && !isNetworkEnabled)
+            return false;
+        else{
+            Location loc = find_Location();
+            if(loc != null)
+                return loc.distanceTo(MetroUPS) <= 2000.f; //in meters
+            else
                 return false;
-            }
         }
-        return false;
+    }
+
+    public Location find_Location() {
+        Location loc = null;
+        List<String> providers = locationManager.getProviders(true);
+        try {
+            for (String provider : providers) {
+                locationManager.requestLocationUpdates(provider, 1000, 0, new LocationListener() {
+                    public void onLocationChanged(Location location) {}
+                    public void onProviderDisabled(String provider) {}
+                    public void onProviderEnabled(String provider) {}
+                    public void onStatusChanged(String provider, int status, Bundle extras) {}
+                });
+                loc = locationManager.getLastKnownLocation(provider);
+                if( loc != null)
+                    return loc;
+            }
+        }catch(SecurityException e){}
+        return loc;
     }
 }
