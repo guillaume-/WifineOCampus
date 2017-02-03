@@ -13,7 +13,6 @@ import java.util.List;
  */
 public class LocationManagment {
     private Location MetroUPS;
-    private LocationListener locationListener;
     private LocationManager locationManager;
     Context context;
 
