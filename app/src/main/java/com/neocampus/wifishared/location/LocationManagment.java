@@ -35,9 +35,11 @@ public class LocationManagment {
             return false;
         else{
             Location loc = find_Location();
-            if(loc != null)
-                return loc.distanceTo(MetroUPS) <= 2000.f; //in meters
-            else
+            if(loc != null){
+                float distance = loc.distanceTo(MetroUPS);
+                boolean res = distance <= 2000.f; //in meters
+                return res;
+            } else
                 return false;
         }
     }

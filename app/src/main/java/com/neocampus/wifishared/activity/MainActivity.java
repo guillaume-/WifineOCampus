@@ -229,10 +229,16 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         }
     }
 
-    public void onClickToRunApWifi_GPS_OK(View v){
+    public void onClickToRunAPWifi(View v){
         v.startAnimation(
             AnimationUtils.loadAnimation(
                 v.getContext(), R.anim.pressed_anim));
+        if(is_GPS_OK()){
+            check_before_start();
+        }
+    }
+
+    private void check_before_start(){
         WifiConfiguration configuration
                 = WifiApControl.getUPSWifiConfiguration();
         if (isUPSWifiConfiguration(configuration)) {
@@ -252,7 +258,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         }
     }
 
-    public void onClickToRunAPWifi(View v) {
+    private boolean is_GPS_OK() {
         if((! apControl.isWifiApEnabled()) && (! locManage.isAtUniversity())){
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
             alertDialogBuilder.setTitle("Info. localisation");
@@ -261,20 +267,20 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
                     .setCancelable(false)
                     .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
+                            check_before_start();
                             dialog.cancel();
                         }
                     })
                     .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            apControl.disable();
                             dialog.cancel();
                         }
                     });
             AlertDialog alertDialog = alertDialogBuilder.create();
             alertDialog.show();
-            onClickToRunApWifi_GPS_OK(v);
+            return false;
         } else {
-            onClickToRunApWifi_GPS_OK(v);
+            return true;
         }
     }
 
