@@ -28,30 +28,78 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 
+/**
+ * FragmentHome est un fragment qui affiche une vue contenant les informations principales d'une session de partage en cours d'execution
+ *
+ * @see Fragment
+ * @see OnFragmentSetListener
+ */
 public class FragmentHome extends Fragment implements OnFragmentSetListener,
         OnReachableClientListener, Chronometer.OnChronometerTickListener {
 
+    /**
+     * Vue affiché par le fragment
+     */
     private View view;
+
+    /**
+     * Objet graphique qui affiche le nombre de client connecté
+     */
     private TextView clientCount;
+
+    /**
+     * Objet graphique qui affiche le niveau restant de la batterie avant l'arrêt forcé d'une session de partage
+     */
     private TextView batterieLevel;
+
+    /**
+     * Objet graphique qui affiche le seuil de la batterie
+     */
     private TextView batterieLimite;
+
+    /**
+     * Objet graphique qui affiche le total de la consommation de données
+     */
     private TextView dataLevel;
+
+    /**
+     * Objet graphique qui affiche le seuil de la consommation de données
+     */
     private TextView dataLimite;
+
+    /**
+     * Objet graphique qui affiche le temps restant avant l'arrêt forcé d'une session de partage
+     */
     private Chronometer chronometer;
+
+    /**
+     * Objet graphique qui affiche le seuil du temps d'activation d'une session de partage
+     */
     private TextView timeLimite;
+
+    /**
+     * Objet graphique qui permet d'activer ou de désactiver une session de partage
+     */
     private Button hotSpotButton;
 
+    /**
+     * Interface de communication avec l'activité principale {@link com.neocampus.wifishared.activity.MainActivity}
+     * #see {@link OnActivitySetListener}
+     */
     private OnActivitySetListener mListener;
 
+    /**
+     * Constructeur du fragment
+     */
     public FragmentHome() {
         // Required empty public constructor
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
+    /**
+     * Crée la vue affiché par le fragment
+     *
+     * @see Fragment#onCreateView(LayoutInflater, ViewGroup, Bundle)
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -96,12 +144,20 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
         return view;
     }
 
+    /**
+     * Reçoit la liste des clients connéctés
+     * @param clients liste des clients connéctés
+     */
     @Override
     public void onReachableClients(List<WifiApControl.Client> clients) {
         onRefreshClientCount(clients.size());
     }
 
-
+    /**
+     * Rafraichit les objets graphiques de la vue
+     *
+     * @see OnFragmentSetListener#onRefreshAll()
+     */
     @Override
     public void onRefreshAll() {
         onRefreshClientCount(0);
@@ -111,10 +167,19 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
         onRefreshBatterieLevel((int) BatterieUtils.getBatteryLevel(getContext()));
     }
 
+    /**
+     * @see OnFragmentSetListener#onRefreshClient(WifiApControl.Client)
+     */
     @Override
     public void onRefreshClient(WifiApControl.Client client) {
     }
 
+    /**
+     * Rafraichit le nombre de clients connectés
+     * @param newCount nouveau nombre de connectés
+     *
+     * @see OnFragmentSetListener#onRefreshClientCount(int)
+     */
     @Override
     public void onRefreshClientCount(final int newCount) {
         if (clientCount != null) {
@@ -127,6 +192,12 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
         }
     }
 
+    /**
+     * Rafraichit le temps d'activation de la session de partage en cours
+     * @param newDateValue nouveau temps d'activation
+     *
+     * @see OnFragmentSetListener#onRefreshClientCount(int)
+     */
     @Override
     public void onRefreshTimeValue(long newDateValue) {
         if (chronometer != null) {
@@ -142,6 +213,12 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
         }
     }
 
+    /**
+     * Rafraichit l'état d'une session de partage
+     * @param observable Observateur de l'état du Wi-FI AP
+     *
+     * @see OnFragmentSetListener#onRefreshHotpostState(HotspotObservable)
+     */
     @Override
     public void onRefreshHotpostState(HotspotObservable observable) {
         if (hotSpotButton != null) {
@@ -175,6 +252,12 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
         onRefreshAll();
     }
 
+    /**
+     * Rafraichit le total de consommation de données
+     * @param nouveau total de consommation de données
+     *
+     * @see OnFragmentSetListener#onRefreshDataTraffic(long)
+     */
     @Override
     public void onRefreshDataTraffic(long dataTrafficOctet) {
         if (dataLevel != null) {
@@ -194,6 +277,13 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
         }
     }
 
+    /**
+     * Rafraichit le niveau restant de la batterie
+     * @param nouveau niveau de la batterie
+     *
+     * @see OnFragmentSetListener#onRefreshBatterieLevel(int)
+     * @see OnActivitySetListener#getLimiteBatterie()
+     */
     @Override
     public void onRefreshBatterieLevel(int newBatterieLevel) {
         if (batterieLevel != null) {
@@ -202,6 +292,9 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
         }
     }
 
+    /**
+     * @see OnFragmentSetListener#onRefreshAllConfig()
+     */
     @Override
     public void onRefreshAllConfig() {
         onRefreshTimeConfig(this.mListener.getLimiteTemps());
@@ -209,6 +302,9 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
         onRefreshBatterieConfig(this.mListener.getLimiteBatterie());
     }
 
+    /**
+     * @see OnFragmentSetListener#onRefreshBatterieConfig(int)
+     */
     @Override
     public void onRefreshBatterieConfig(int newBatterieLimit) {
         if (batterieLimite != null) {
@@ -216,6 +312,9 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
         }
     }
 
+    /**
+     * @see OnFragmentSetListener#onRefreshTimeConfig(long)
+     */
     @Override
     public void onRefreshTimeConfig(long newTimeLimit) {
         if (timeLimite != null) {
@@ -228,6 +327,9 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
         }
     }
 
+    /**
+     * @see OnFragmentSetListener#onRefreshDataConfig(float)
+     */
     @Override
     public void onRefreshDataConfig(float newDataLimit) {
         if (dataLimite != null) {
@@ -241,7 +343,12 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
         }
     }
 
-
+    /**
+     * Met à jour le temps restant d'activation
+     * @param chronometer
+     *
+     * @see Chronometer.OnChronometerTickListener#onChronometerTick(Chronometer)
+     */
     @Override
     public void onChronometerTick(Chronometer chronometer) {
         long time = chronometer.getBase() - new Date().getTime();
@@ -261,6 +368,11 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
         chronometer.setText(timeText);
     }
 
+    /**
+     * @param context Context de l'application
+     *
+     * @see Fragment#onAttach(Context)
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -270,11 +382,6 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
             throw new RuntimeException(context.toString()
                     + " must implement OnActivitySetListener");
         }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
     }
 
 

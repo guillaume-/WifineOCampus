@@ -21,9 +21,25 @@ public interface OnActivitySetListener {
     void        postRequestDataTraffic();
 
     /**/
+
+    /**
+     * Rend invisible le button de rafraîchissement de l'affichage
+     */
     void        hideAppBarRefresh();
+
+    /**
+     * Rend visible le button de rafraîchissement de l'affichage
+     */
     void        showAppBarRefresh();
+
+    /**
+     * Rend invisible le button de sauvegarde de la configuration
+     */
     void        hideAppBarSaveConfig();
+
+    /**
+     * Rend visible le button de sauvegarde de la configuration
+     */
     void        showAppBarSaveConfig();
 
     /**/

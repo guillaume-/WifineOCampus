@@ -97,6 +97,7 @@ final public class WifiApControl extends Observable {
 
     private static int CODE_WRITE_SETTINGS_PERMISSION = 1555;
 
+    public static final String ACTION_CONNECTIVITY_CHANGE = "android.net.conn.CONNECTIVITY_CHANGE";
     public static final String ACTION_WIFI_AP_CHANGED = "android.net.wifi.WIFI_AP_STATE_CHANGED";
     public static final String EXTRA_WIFI_AP_STATE = "wifi_state";
 

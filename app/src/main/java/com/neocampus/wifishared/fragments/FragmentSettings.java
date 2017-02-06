@@ -18,24 +18,51 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.TimeZone;
 
-
+/**
+ * FragmentSettings est un fragment qui affiche une vue contenant l'ensemble des paramétrages de l'application
+ *
+ * @see Fragment
+ */
 public class FragmentSettings extends Fragment implements OnFragmentSetListener {
 
+    /**
+     * Vue affiché par le fragment
+     */
     private View view;
+
+    /**
+     * Objet graphique affichant le seuil de la batterie
+     */
     private TextView settingBatterie;
+
+    /**
+     * Objet graphique affichant le seuil du total de consommation de données
+     */
     private TextView settingData;
+
+    /**
+     * Objet graphique affichant le seuil du temps d'activation d'une session de partage
+     */
     private TextView settingTime;
+
+    /**
+     * Interface de communication avec l'activité principale {@link com.neocampus.wifishared.activity.MainActivity}
+     * #see {@link OnActivitySetListener}
+     */
     private OnActivitySetListener mListener;
 
+    /**
+     * Constructeur du fragment
+     */
     public FragmentSettings() {
         // Required empty public constructor
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
+    /**
+     * Crée la vue affiché par le fragment
+     *
+     * @see Fragment#onCreateView(LayoutInflater, ViewGroup, Bundle)
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -54,6 +81,11 @@ public class FragmentSettings extends Fragment implements OnFragmentSetListener 
         return view;
     }
 
+    /**
+     * @param context Context de l'application
+     *
+     * @see Fragment#onAttach(Context)
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -65,41 +97,58 @@ public class FragmentSettings extends Fragment implements OnFragmentSetListener 
         }
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
+    /**
+     * Do nothing
+     */
     @Override
     public void onRefreshAll(){
     }
 
+    /**
+     * Do nothing
+     */
     @Override
     public void onRefreshBatterieLevel(int newLevel) {
     }
 
+    /**
+     * Do nothing
+     */
     @Override
     public void onRefreshDataTraffic(long dataTrafficOctet) {
     }
 
+    /**
+     * Do nothing
+     */
     @Override
     public void onRefreshClient(WifiApControl.Client client) {
     }
 
+    /**
+     * Do nothing
+     */
     @Override
     public void onRefreshClientCount(int newCOunt) {
     }
 
+    /**
+     * Do nothing
+     */
     @Override
     public void onRefreshTimeValue(long newDateValue) {
-
     }
 
+    /**
+     * Do nothing
+     */
     @Override
     public void onRefreshHotpostState(HotspotObservable observable) {
     }
 
+    /**
+     * @see OnFragmentSetListener#onRefreshAllConfig()
+     */
     @Override
     public void onRefreshAllConfig() {
         onRefreshBatterieConfig(this.mListener.getLimiteBatterie());
@@ -107,6 +156,9 @@ public class FragmentSettings extends Fragment implements OnFragmentSetListener 
         onRefreshTimeConfig(this.mListener.getLimiteTemps());
     }
 
+    /**
+     * @see OnFragmentSetListener#onRefreshBatterieConfig(int)
+     */
     @Override
     public void onRefreshBatterieConfig(int newBatterieLimit) {
         if (settingBatterie != null) {
@@ -114,6 +166,9 @@ public class FragmentSettings extends Fragment implements OnFragmentSetListener 
         }
     }
 
+    /**
+     * @see OnFragmentSetListener#onRefreshDataConfig(float)
+     */
     @Override
     public void onRefreshDataConfig(float newDataLimit) {
         if (settingData != null) {
@@ -127,6 +182,9 @@ public class FragmentSettings extends Fragment implements OnFragmentSetListener 
         }
     }
 
+    /**
+     * @see OnFragmentSetListener#onRefreshTimeConfig(long)
+     */
     @Override
     public void onRefreshTimeConfig(long newTimeLimit) {
         if (settingTime != null) {

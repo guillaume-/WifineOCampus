@@ -36,8 +36,8 @@ public class TableConsommation extends SqlDataSchema {
     @Column(Type = SqlType.INTEGER, Nullable = true, value = "0")
     public static final String _Consommation_Tx = "Column_Consommation_Tx";
 
-    @Column(Type = SqlType.TEXT, Nullable = true)
-    public static final String _Localisation = "Column_Localisation";
+    @Column(Type = SqlType.INTEGER, Nullable = true)
+    public static final String _UPS_Location = "Column_UPS_Localisation";
 
 
     public TableConsommation(ContentValues values) {
@@ -96,9 +96,9 @@ public class TableConsommation extends SqlDataSchema {
         this.values.put(_Consommation_Tx, consommation);
     }
 
-    public String getPosition(){ return  this.values.getAsString(_Localisation); }
+    public boolean isUPSLocation(){ return  this.values.getAsBoolean(_UPS_Location); }
 
-    public void setPosition(String pos){ this.values.put(_Localisation, pos); }
+    public void setUPSLocation(boolean value){ this.values.put(_UPS_Location, value); }
 
     @Trigger(name = "TRIGGER_NB_USER")
     public static void triggerNbreUser(SQLiteDatabase database, String trigger_name)

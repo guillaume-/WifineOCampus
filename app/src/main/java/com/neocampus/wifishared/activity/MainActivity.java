@@ -4,6 +4,7 @@ import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.drawable.ColorDrawable;
@@ -53,6 +54,8 @@ import com.neocampus.wifishared.sql.database.TableUtilisateur;
 import com.neocampus.wifishared.sql.manage.SQLManager;
 import com.neocampus.wifishared.utils.BatterieUtils;
 import com.neocampus.wifishared.utils.FragmentUtils;
+import com.neocampus.wifishared.utils.LocationManagment;
+import com.neocampus.wifishared.utils.NetworkUtils;
 import com.neocampus.wifishared.utils.ParcelableUtils;
 import com.neocampus.wifishared.utils.WifiApControl;
 
@@ -60,17 +63,61 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-
+/**
+ * <b>MainActivity est l'activité lancé au démarrage de l'application.</b>
+ * <p>
+ * Cette classe représente le conteneur de la vue utilisateur,
+ * et centralise l'ensemble des actions entre les fonctionnalités.
+ *
+ * </p>
+ *
+ * @see OnActivitySetListener
+ */
 public class MainActivity extends AppCompatActivity implements ServiceConnection,
         NavigationView.OnNavigationItemSelectedListener, OnActivitySetListener, Observer {
 
+    /**
+     * Classe de communication avec la base de données
+     * @see SQLManager
+    */
     private SQLManager sqlManager;
+
+    /**
+     * Classe de configuration du partage WI-FI
+     * @see WifiApControl
+     */
     private WifiApControl apControl;
+
+    /**
+     * Fragment courante affiché par l'activité
+     * @see Fragment
+     */
     private Fragment fragment = null;
+
+    /**
+     *  Objet graphique contenant le toolbar en entete
+     */
     private View mAppBarContent;
+
+    /**
+     * Intent de connexion au service principal de l'application
+     * @see ServiceNeOCampus
+     * */
     private Intent serviceintent;
+
+    /**
+     * Interface de communication avec le service principal
+     * @see ServiceNeOCampus
+     */
     private OnServiceSetListener mServiceInterraction;
 
+    private LocationManagment locManage;
+
+    /**
+     * Initialise les variables membres
+     * @see AppCompatActivity#onCreate(Bundle)
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -82,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
 
         /*Check if permission is enabled for wifi configuration*/
         if (WifiApControl.checkPermission(this, true)) {
-
+            this.locManage = new LocationManagment(this);
             this.sqlManager = new SQLManager(this);
             this.sqlManager.open();
 
@@ -108,6 +155,10 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
             serviceintent = new Intent(this, ServiceNeOCampus.class);
             connectToService();
 
+            if(!locManage.isEnabled()){
+                buildAlertMessageNoGps();
+            }
+
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             finishAndRemoveTask();
         } else {
@@ -115,6 +166,10 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         }
     }
 
+    /**
+     * Ferme le volet des menus s'il est ouvert, ou restaure la vue précédente
+     * @see AppCompatActivity#onBackPressed()
+     */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -125,16 +180,22 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         }
     }
 
+    /**
+     * Cette méthode annule la création de menu
+     * @param menu
+     * @return vrai
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
-
+    /**
+     * Change la vue du fragment actuel en cas de clique sur un menu du volet des menus
+     * @param item menu sur lequel l'utilisateur a cliqué
+     * @return toujours vrai
+     * @see NavigationView.OnNavigationItemSelectedListener
+     */
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -164,6 +225,12 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         return true;
     }
 
+    /**
+     * Cloture la connexion de l'activité au service principal {@link ServiceNeOCampus} et ferme la base de données
+     *
+     * @see MainActivity#disconnectToService()
+     * @see AppCompatActivity#onDestroy()
+     */
     @Override
     protected void onDestroy() {
         disconnectToService();
@@ -173,6 +240,12 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         super.onDestroy();
     }
 
+    /**
+     * Rafraîchie l'affichage du fragment actuel s'il implemente {@link OnFragmentSetListener}
+     * @param v View sur laquel l'utilisateur a cliqué
+     *
+     * @see OnFragmentSetListener#onRefreshAll()
+     */
     public void onClickToRefresh(final View v) {
         v.startAnimation(AnimationUtils.
                 loadAnimation(v.getContext(), R.anim.pressed_anim));
@@ -190,6 +263,14 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         }, 3000);
     }
 
+    /**
+     * Sauvegarde dans la base de données, la limite courante configuré par l'utilisateur, en cas de clique
+     * @param v View sur laquelle l'utilisateur a cliqué
+     *
+     * @see OnFragmentConfigListener#getLimiteDataTraffic()
+     * @see OnFragmentConfigListener#getLimiteBatterie()
+     * @see OnFragmentConfigListener#getLimiteTemps()
+     */
     public void onClickToSaveConfig(final View v) {
         v.startAnimation(AnimationUtils.
                 loadAnimation(v.getContext(), R.anim.pressed_anim));
@@ -213,13 +294,15 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         }
     }
 
+    /**
+     * Démarrage et arrêt du partage en cas de clique
+     * @param v View sur laquel l'utilisateur a cliqué
+     */
     public void onClickToRunAPWifi(View v) {
-
         v.startAnimation(AnimationUtils.
                 loadAnimation(v.getContext(), R.anim.pressed_anim));
         WifiConfiguration configuration
                 = WifiApControl.getUPSWifiConfiguration();
-
         if (isUPSWifiConfiguration(configuration)) {
             if (apControl.isWifiApEnabled()) {
                 apControl.disable();
@@ -237,6 +320,10 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         }
     }
 
+    /**
+     * Affiche un fragment pour définir le seuil de transmission
+     * @param v View sur laquel l'utilisateur a cliqué
+     */
     public void onClickToDataConfig(final View v) {
         v.startAnimation(AnimationUtils.
                 loadAnimation(v.getContext(), R.anim.pressed_anim));
@@ -248,6 +335,10 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         }
     }
 
+    /**
+     * Affiche un fragment pour définir le seuil de la batterie
+     * @param v View sur laquel l'utilisateur a cliqué
+     */
     public void onClickToBatterieConfig(final View v) {
         v.startAnimation(AnimationUtils.
                 loadAnimation(v.getContext(), R.anim.pressed_anim));
@@ -259,6 +350,10 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         }
     }
 
+    /**
+     * Affiche un fragment pour définir le seuil du temps d'utilisation
+     * @param v View sur laquel l'utilisateur a cliqué
+     */
     public void onClickToTimeConfig(final View v) {
         v.startAnimation(AnimationUtils.
                 loadAnimation(v.getContext(), R.anim.pressed_anim));
@@ -270,6 +365,10 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         }
     }
 
+    /**
+     * Efface tous les informations d'historique de connexion
+     * @param v View sur laquel l'utilisateur a cliqué
+     */
     public void onClickToResetDataBase(final View v) {
         v.startAnimation(AnimationUtils.
                 loadAnimation(v.getContext(), R.anim.pressed_anim));
@@ -299,6 +398,9 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         }
     }
 
+    /**
+     * Se connecte au service principal {@link ServiceNeOCampus}
+     */
     private void connectToService() {
         if (!isServiceRunning(ServiceNeOCampus.class)) {
             startService(serviceintent);
@@ -306,6 +408,10 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         bindService(serviceintent, this, Context.BIND_AUTO_CREATE);
     }
 
+    /**
+     * Se deconnecte du service principal {@link ServiceNeOCampus} et force la sauvegarde
+     *
+     */
     private void disconnectToService() {
         if (isServiceRunning(ServiceNeOCampus.class)) {
             if (mServiceInterraction != null) {
@@ -315,6 +421,14 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         }
     }
 
+    /**
+     * <p>Est appelé lorsque la connexion au service principal {@link ServiceNeOCampus} est établie.</p>
+     * <p>Affiche les données initiales</p>
+     *
+     * @param name
+     * @param service
+     * @see ServiceConnection#onServiceConnected(ComponentName, IBinder)
+     */
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
         ServiceNeOCampus.ServiceNeOCampusBinder binder =
@@ -327,11 +441,22 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         postRequestDataTraffic();
     }
 
+    /**
+     * Est appelé lors de la déconnexion du service principal {@link ServiceNeOCampus}.
+     * @param name
+     * @see ServiceConnection#onServiceDisconnected(ComponentName)
+     */
     @Override
     public void onServiceDisconnected(ComponentName name) {
         mServiceInterraction = null;
     }
 
+    /**
+     * Est appelé lorsque l'état d'un observable a changé.
+     * @param o
+     * @param newValue
+     * @see Observer#update(Observable, Object)
+     */
     @Override
     public void update(Observable o, Object newValue) {
         if (fragment != null
@@ -353,6 +478,13 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         System.out.println("Activity : I am notified " + newValue);
     }
 
+    /**
+     * Récupère dans la base de données le seuil de transmission
+     * @return le seuil de transmission
+     *
+     * @see SQLManager#getConfiguration()
+     * @see TableConfiguration#getLimiteConsommation()
+     */
     @Override
     public float getLimiteDataTrafic() {
         TableConfiguration tableConfiguration = sqlManager.getConfiguration();
@@ -361,6 +493,13 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         return value;
     }
 
+    /**
+     * Récupère dans la base de données le seuil de la batterie
+     * @return le seuil de la batterie
+     *
+     * @see SQLManager#getConfiguration()
+     * @see TableConfiguration#getLimiteBatterie()
+     */
     @Override
     public int getLimiteBatterie() {
         TableConfiguration tableConfiguration = sqlManager.getConfiguration();
@@ -370,12 +509,24 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         return BatterieUtils.BATTERIE_DEFAULT_LIMIT;
     }
 
+    /**
+     * Récupère dans la base de données le seuil du temps de partage
+     * @return le seuil du temps de partage
+     *
+     * @see SQLManager#getConfiguration()
+     * @see TableConfiguration#getLimiteTemps()
+     */
     @Override
     public long getLimiteTemps() {
         TableConfiguration tableConfiguration = sqlManager.getConfiguration();
         return tableConfiguration.getLimiteTemps();
     }
 
+    /**
+     * post une demande de mise à jour des clients, au service principale {@link ServiceNeOCampus}
+     * @see OnServiceSetListener#peekReachableClients(OnReachableClientListener)
+     * @see OnServiceSetListener#peekAllClients(OnReachableClientListener)
+     */
     @Override
     public void postRequestListClients() {
         if (mServiceInterraction != null) {
@@ -387,6 +538,10 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         }
     }
 
+    /**
+     * post une demande de mise à jour de la consommation de données, au service principale {@link ServiceNeOCampus}
+     * @see OnServiceSetListener#peekDataTraffic(OnFragmentSetListener)
+     */
     @Override
     public void postRequestDataTraffic() {
         if (mServiceInterraction != null) {
@@ -396,6 +551,10 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         }
     }
 
+    /**
+     * post une demande de mise à jour du temps d'activation du partage, au service principale {@link ServiceNeOCampus}
+     * @see OnServiceSetListener#peekTimeValue(OnFragmentSetListener)
+     */
     @Override
     public void postRequestTimeValue() {
         if (mServiceInterraction != null) {
@@ -405,36 +564,85 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         }
     }
 
+    /**
+     * @see OnActivitySetListener#hideAppBarRefresh()
+     */
     @Override
     public void hideAppBarRefresh() {
         mAppBarContent.findViewById(R.id.app_bar_refresh).setVisibility(View.INVISIBLE);
     }
 
+    /**
+     * @see OnActivitySetListener#showAppBarRefresh()
+     */
     @Override
     public void showAppBarRefresh() {
         mAppBarContent.findViewById(R.id.app_bar_refresh).setVisibility(View.VISIBLE);
     }
 
+    /**
+     * @see OnActivitySetListener#hideAppBarSaveConfig()
+     */
     @Override
     public void hideAppBarSaveConfig() {
         mAppBarContent.findViewById(R.id.app_bar_save_config).setVisibility(View.INVISIBLE);
     }
 
+    /**
+     * @see OnActivitySetListener#showAppBarSaveConfig()
+     */
     @Override
     public void showAppBarSaveConfig() {
         mAppBarContent.findViewById(R.id.app_bar_save_config).setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Récupère dans la base de données la liste des partages de l'utilisateur
+     * @return la liste des partages de l'utilisateur
+     *
+     * @see SQLManager#getAllConsommations()
+     */
     @Override
     public List<TableConsommation> getAllConsommations() {
         return sqlManager.getAllConsommations();
     }
 
+    private void verifyAndRunAPWifi() {
+        WifiConfiguration configuration
+                = WifiApControl.getUPSWifiConfiguration();
+        if (isUPSWifiConfiguration(configuration)) {
+            if (apControl.isWifiApEnabled()) {
+                apControl.disable();
+            } else {
+                apControl.enable();
+            }
+        } else if (apControl.isEnabled()) {
+            apControl.disable();
+        } else {
+            WifiConfiguration userConfiguration = apControl.getConfiguration();
+            byte[] bytes = ParcelableUtils.marshall(userConfiguration);
+            sqlManager.setConfiguration(bytes);
+            apControl.setWifiApConfiguration(configuration);
+            apControl.enable();
+        }
+    }
+
+    /**
+     * Récupère dans la base de données la liste des clients d'un partage
+     * @param iDConso identifiant de la session de partage
+     * @return la liste des clients d'un partage
+     *
+     * @see SQLManager#getUtilisateurs(int)
+     */
     @Override
     public List<TableUtilisateur> getUtilisateurs(int iDConso) {
         return sqlManager.getUtilisateurs(iDConso);
     }
 
+    /**
+     * Vérifie si les conditions de lancements sont valides
+     * @return resultat de la vérification
+     */
     private boolean verifyConditions() {
         TableConfiguration configuration
                 = sqlManager.getConfiguration();
@@ -460,20 +668,66 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
             Toast.makeText(this, R.string.condition_supported, Toast.LENGTH_LONG).show();
             return false;
         }
+        else if(!NetworkUtils.isNetworkAvailable(this))
+        {
+            Toast.makeText(this, R.string.condition_internet, Toast.LENGTH_LONG).show();
+            return false;
+        }
+        else if(!verifyGPSEnabled())
+        {
+            return false;
+        }
         return true;
     }
 
-    private boolean verifyWifiDisabled()
-    {
+
+    /**
+     * Vérifie si une session de partage WI-FI néOCampus est activé
+     * @return resultat de la vérification
+     *
+     * @see WifiApControl#isEnabled()
+     * @see WifiApControl#isUPSWifiConfiguration()
+     */
+    private boolean verifyWifiDisabled() {
         if (apControl.isEnabled()
                 && apControl.isUPSWifiConfiguration()) {
             Toast.makeText(this, R.string.condition_shared, Toast.LENGTH_LONG).show();
             return false;
         }
         return true;
-
     }
 
+    private boolean verifyGPSEnabled() {
+        if(!locManage.isAtUniversity()){
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setTitle("Info. localisation");
+            alertDialogBuilder
+                    .setMessage("Hors UPS (GPS désactivé ?), neOCampus décline toute responsabilité quant à l'utilisation de l'application.")
+                    .setCancelable(false)
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            verifyAndRunAPWifi();
+                            dialog.cancel();
+                        }
+                    })
+                    .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * Vérifie si le service principale {@link ServiceNeOCampus} est en cours d'execution
+     * @return resultat de la vérification
+     *
+     */
     private boolean isServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningServiceInfo>
@@ -486,10 +740,38 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         return false;
     }
 
+    /**
+     * Vérifie si la configuration WI-FI AP est celle de néOCampus
+     * @return resultat de la vérification
+     *
+     * @see WifiApControl#getWifiApConfiguration()
+     */
     private boolean isUPSWifiConfiguration(WifiConfiguration upsConfig) {
         WifiConfiguration
                 configuration = apControl.getWifiApConfiguration();
         return WifiApControl.equals(configuration, upsConfig);
+    }
+
+
+    private boolean buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("GPS désactivé. Voulez-vous l'activer ?")
+                .setCancelable(false)
+                .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        Intent i = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getApplicationContext().startActivity(i);
+                    }
+                })
+                .setNegativeButton("Non", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
+        return true;
     }
 
 

@@ -203,11 +203,12 @@ public class SQLManager {
     /*==================== Debut de fonctions de manipulation de TableConsommation ====================*/
 
 
-    public int newConsommation(long date, long dataT0)
+    public int newConsommation(long date, long dataT0, boolean isUPS)
     {
         ContentValues value = new ContentValues();
         value.put(TableConsommation._Date_Start, date);
         value.put(TableConsommation._Consommation_T0, dataT0);
+        value.put(TableConsommation._UPS_Location, isUPS);
         return (int) database.insert(TableConsommation._NAME, null, value);
     }
 
@@ -302,11 +303,11 @@ public class SQLManager {
         return database.update(TableConsommation._NAME, values, selection, null);
     }
 
-    public int updateLocalisation(int id, String newLocation){
+    public int updateLocalisation(int id, boolean isUPSLocation){
         String selection = TableConsommation._ID + " = " + id;
 
         ContentValues values = new ContentValues();
-        values.put(TableConsommation._Localisation, newLocation);
+        values.put(TableConsommation._UPS_Location, isUPSLocation);
 
         return database.update(TableConsommation._NAME, values, selection, null);
     }

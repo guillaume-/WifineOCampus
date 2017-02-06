@@ -16,15 +16,18 @@ import com.neocampus.wifishared.observables.BatterieObservable;
 import com.neocampus.wifishared.observables.ClientObservable;
 import com.neocampus.wifishared.observables.DataObservable;
 import com.neocampus.wifishared.observables.HotspotObservable;
+import com.neocampus.wifishared.observables.NetworkObservable;
 import com.neocampus.wifishared.observables.TimeObservable;
 import com.neocampus.wifishared.receivers.OnAlarmReceiver;
 import com.neocampus.wifishared.receivers.OnBatterieReceiver;
 import com.neocampus.wifishared.receivers.OnHotspotReceiver;
+import com.neocampus.wifishared.receivers.OnNetworkReceiver;
 import com.neocampus.wifishared.sql.database.TableConfiguration;
 import com.neocampus.wifishared.sql.database.TableConsommation;
 import com.neocampus.wifishared.sql.database.TableUtilisateur;
 import com.neocampus.wifishared.sql.manage.SQLManager;
 import com.neocampus.wifishared.utils.BatterieUtils;
+import com.neocampus.wifishared.utils.LocationManagment;
 import com.neocampus.wifishared.utils.NotificationUtils;
 import com.neocampus.wifishared.utils.WifiApControl;
 
@@ -37,18 +40,21 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
 
     private ServiceNeOCampusBinder oCampusBinder;
     private SQLManager sqlManager;
+    private LocationManagment locationManagment;
 
     private ClientObservable clientObservable;
     private HotspotObservable hotspotObservable;
     private BatterieObservable batterieObservable;
     private DataObservable dataObservable;
     private TimeObservable timeObservable;
+    private NetworkObservable networkObservable;
 
     private ServiceDataTraffic serviceData;
     private ServiceTaskClients serviceTaskClients;
     private OnHotspotReceiver onHotspotReceiver;
     private OnBatterieReceiver onBatterieReceiver;
     private OnAlarmReceiver onAlarmReceiver;
+    private OnNetworkReceiver onNetworkReceiver;
 
     public ServiceNeOCampus() {
         this.oCampusBinder = new ServiceNeOCampusBinder();
@@ -57,11 +63,13 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
         this.batterieObservable = new BatterieObservable();
         this.dataObservable = new DataObservable();
         this.timeObservable = new TimeObservable();
+        this.networkObservable = new NetworkObservable();
     }
 
 
     @Override
     public void onCreate() {
+        this.locationManagment = new LocationManagment(this);
         this.sqlManager = new SQLManager(this);
         this.sqlManager.open();
 
@@ -70,6 +78,7 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
         this.onHotspotReceiver = new OnHotspotReceiver(this.hotspotObservable);
         this.onBatterieReceiver = new OnBatterieReceiver(this.batterieObservable);
         this.onAlarmReceiver = new OnAlarmReceiver(this.timeObservable);
+        this.onNetworkReceiver = new OnNetworkReceiver(this.networkObservable);
 
         this.restoreFromDataBase();
 
@@ -78,6 +87,7 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
         this.registerReceiver(this.onBatterieReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         this.registerReceiver(this.onAlarmReceiver, new IntentFilter(OnAlarmReceiver.ACTION_ALARM_ACTIVATED));
         this.registerReceiver(this.onHotspotReceiver, new IntentFilter(WifiApControl.ACTION_WIFI_AP_CHANGED));
+        this.registerReceiver(this.onNetworkReceiver, new IntentFilter(WifiApControl.ACTION_CONNECTIVITY_CHANGE));
 
         Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
         if (WifiApControl.checkPermission(this, false)) {
@@ -98,6 +108,7 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
         this.batterieObservable.deleteObservers();
         this.unregisterReceiver(onAlarmReceiver);
         this.unregisterReceiver(onHotspotReceiver);
+        this.unregisterReceiver(onNetworkReceiver);
         this.unregisterReceiver(onBatterieReceiver);
         this.sqlManager.close();
         super.onDestroy();
@@ -117,6 +128,7 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
     @Override
     public void addObserver(Observer observer) {
         batterieObservable.addObserver(observer);
+        networkObservable.addObserver(observer);
         hotspotObservable.addObserver(observer);
         clientObservable.addObserver(observer);
         dataObservable.addObserver(observer);
@@ -126,6 +138,7 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
     @Override
     public void removeObserver(Observer observer) {
         batterieObservable.deleteObserver(observer);
+        networkObservable.deleteObserver(observer);
         hotspotObservable.deleteObserver(observer);
         clientObservable.deleteObserver(observer);
         dataObservable.deleteObserver(observer);
@@ -195,12 +208,12 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
         this.onAlarmReceiver.stopAlarm(this, sqlManager);
     }
 
-    private void createSession()
-    {
+    private void createSession() {
         if(hotspotObservable.getSessionId() == -1) {
             long date = new Date().getTime();
             long dataT0 = serviceData.getBaseT0();
-            int idConso = sqlManager.newConsommation(date, dataT0);
+            boolean isUPS = locationManagment.isAtUniversity();
+            int idConso = sqlManager.newConsommation(date, dataT0, isUPS);
             hotspotObservable.setSessionId(idConso);
         }
     }
@@ -288,7 +301,13 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
             else if(client.date != null){
                 sqlManager.updateDisconnectedTime(client.date.id, client.date.disconnected);
             }
-            System.out.println(""+arg);
+        } else if(o instanceof NetworkObservable)
+        {
+            if(!networkObservable.isEnabled() &&
+                    hotspotObservable.isRunning() && hotspotObservable.isUPS()) {
+                stopHotpost();
+                NotificationUtils.showNetworkNotify(this);
+            }
         }
     }
 

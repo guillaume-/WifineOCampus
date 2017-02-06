@@ -66,4 +66,8 @@ public class NotificationUtils {
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(ID_NOTIFICATION, notification);
     }
+
+    public static void showNetworkNotify(Context context) {
+        show(context, "Le partage Wi-Fi s'est arrêté", "Impossible de se connecter à internet");
+    }
 }

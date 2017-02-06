@@ -45,6 +45,7 @@
     <string name="condition_data">⚠ Le seuil de transmission doit être supérieur à (Total transmission)</string>
     <string name="condition_supported">Le partage wifi n\'est pas supporté</string>
     <string name="condition_shared">⚠ Arrêtez le partage en cours</string>
+    <string name="condition_internet">"⚠ Internet mobile n'est pas accessible"</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

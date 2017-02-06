@@ -10,37 +10,51 @@ import android.view.ViewGroup;
 import com.neocampus.wifishared.R;
 import com.neocampus.wifishared.listeners.OnActivitySetListener;
 import com.neocampus.wifishared.listeners.OnFragmentConfigListener;
-import com.neocampus.wifishared.listeners.OnFragmentSetListener;
 import com.neocampus.wifishared.views.BatterieSurfaceView;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link OnFragmentSetListener} interface
- * to handle interaction events.
- * Use the {@link FragmentBatterie#newInstance} factory method to
- * create an instance of this fragment.
+ * FragmentBatterie est un fragment qui affiche une vue permettant la configuration du seuil de la batterie
+ *
+ * @see Fragment
+ * @see OnFragmentConfigListener
  */
 public class FragmentBatterie extends Fragment implements OnFragmentConfigListener {
 
+    /**
+     * Identifiant de la valeur initiale de la batterie
+     */
     private static final String ARG_PARAM1 = "param1";
+
+    /**
+     * Objet graphique de configuration de la batterie
+     * @see BatterieSurfaceView
+     */
     private BatterieSurfaceView surfaceView;
+
+    /**
+     * Valeur du seuil de la batterie
+     */
     private int mBatterieLimit;
 
+    /**
+     * Interface de communication avec l'activité principale {@link com.neocampus.wifishared.activity.MainActivity}
+     * #see {@link OnActivitySetListener}
+     */
     private OnActivitySetListener mListener;
 
+    /**
+     * Constructeur du fragment
+     */
     public FragmentBatterie() {
         // Required empty public constructor
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
+     * Crée une instance en initialisant le seuil de la batterie
      *
-     * @param batterie Parameter 1.
-     * @return A new instance of fragment FragmentBatterie.
+     * @param batterie seuil initial de la batterie
+     * @return une nouvelle instance de FragmentBatterie
      */
-    // TODO: Rename and change types and number of parameters
     public static FragmentBatterie newInstance(int batterie) {
         FragmentBatterie fragment = new FragmentBatterie();
         Bundle args = new Bundle();
@@ -49,6 +63,11 @@ public class FragmentBatterie extends Fragment implements OnFragmentConfigListen
         return fragment;
     }
 
+    /**
+     * Récupère le seuil initial de la batterie
+     *
+     * @see Fragment#onCreate(Bundle)
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +76,11 @@ public class FragmentBatterie extends Fragment implements OnFragmentConfigListen
         }
     }
 
+    /**
+     * Crée la vue affiché par le fragment
+     *
+     * @see Fragment#onCreateView(LayoutInflater, ViewGroup, Bundle)
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -69,6 +93,12 @@ public class FragmentBatterie extends Fragment implements OnFragmentConfigListen
         return view;
     }
 
+    /**
+     *
+     * @param context Context de l'application
+     *
+     * @see Fragment#onAttach(Context)
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -80,22 +110,40 @@ public class FragmentBatterie extends Fragment implements OnFragmentConfigListen
         }
     }
 
+    /**
+     * @see Fragment#onDetach()
+     */
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
     }
 
+    /**
+     * @return null
+     *
+     * @see OnFragmentConfigListener#getLimiteDataTraffic()
+     */
     @Override
     public float getLimiteDataTraffic() {
         return 0;
     }
 
+    /**
+     * @return seuil indiqué par l'utilisateur
+     *
+     * @see BatterieSurfaceView#getLimiteBatterie()
+     * @see OnFragmentConfigListener#getLimiteBatterie()
+     */
     @Override
     public int getLimiteBatterie() {
         return this.surfaceView.getLimiteBatterie();
     }
 
+    /**
+     * @return null
+     * @see OnFragmentConfigListener#getLimiteTemps()
+     */
     @Override
     public long getLimiteTemps() {
         return 0;
