@@ -19,6 +19,7 @@ import java.util.List;
 
 public class KeyboardViews extends KeyboardView {
 
+    private float density;
     private int colorEnable, colorDisable;
     private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
 
@@ -33,7 +34,8 @@ public class KeyboardViews extends KeyboardView {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        paint.setTextSize(70);
+        density = getContext().getResources().getDisplayMetrics().density;
+        paint.setTextSize(25.0f * density);
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setShadowLayer(2.0f, 0.0f, 2.0f, Color.BLACK);
         colorEnable = ContextCompat.
@@ -49,7 +51,8 @@ public class KeyboardViews extends KeyboardView {
         for(Keyboard.Key key: keys) {
             if(key.on) {
                 if (key.pressed) {
-                    canvas.drawCircle(key.x + (key.width / 2), key.y + ((key.height - 30) / 2), 80, paint);
+                    canvas.drawCircle(key.x + (key.width / 2),
+                            key.y + ((key.height - 30) / 2), 25.0f * density, paint);
                 }
                 if (key.icon != null) {
                     int width = key.icon.getIntrinsicWidth();

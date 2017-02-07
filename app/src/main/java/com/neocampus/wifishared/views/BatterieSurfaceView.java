@@ -4,9 +4,9 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -33,6 +33,7 @@ public class BatterieSurfaceView extends SurfaceView implements
     private float MaxBatterieH = 0;
     private Rect textBounds = new Rect();
     private int colorText, colorBackgroundOn, colorBackgroundOff;
+    private int colorContent, colorEmpty;
 
     public BatterieSurfaceView(Context context) {
         super(context);
@@ -55,19 +56,19 @@ public class BatterieSurfaceView extends SurfaceView implements
         holder.setFormat(PixelFormat.TRANSPARENT);
         holder.addCallback(this);
         setOnTouchListener(this);
-
-        paintText.setTextSize(80);
+        float density = getContext().getResources().getDisplayMetrics().density;
+        paintText.setTextSize(density * 30);
         paintText.setStyle(Paint.Style.FILL);
         colorText = ContextCompat.
                 getColor(getContext(), R.color.colorBatterieText);
-        colorBackgroundOn = ContextCompat.
+        colorContent = ContextCompat.
+                getColor(getContext(), R.color.colorSurfaceText);
+        colorEmpty = ContextCompat.
                 getColor(getContext(), R.color.colorBatterieBackgroundOn);
-        colorBackgroundOff = ContextCompat.
-                getColor(getContext(), R.color.colorBatterieBackgroundOff);
         paintText.setColor(Color.GRAY);
         paintText.setShadowLayer(2.0f, 0.0f, 2.0f, Color.BLACK);
         paint.setShadowLayer(15.0f, 0.0f, 2.0f, Color.parseColor("#c5cee7"));
-        paintText.setTextAlign(Paint.Align.CENTER);
+        paintText.setTextAlign(Paint.Align.LEFT);
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStrokeCap(Paint.Cap.ROUND);
         paint.setStrokeWidth(3);
@@ -82,51 +83,80 @@ public class BatterieSurfaceView extends SurfaceView implements
         int HalfSizeW = SizeW / 2;
         int HalfSizeH = SizeH / 2;
 
-        int QuartSizeW = HalfSizeW / 2;
-        int QuartSizeH = HalfSizeH / 2;
+        float ScaleStart = HalfSizeW - (SizeW / 3.5f);
+        float ScaleEnd = HalfSizeW + (SizeW / 3.5f);
+        float ScaleTop = HalfSizeH / 8.0f ;
+        float ScaleBottom = SizeH - ScaleTop;
+        float OvalSizeH = SizeH * 0.10f;
+        float ChargeStart = HalfSizeW - ((ScaleEnd- ScaleStart) * 0.30f);
+        float ChargeEnd = HalfSizeW + ((ScaleEnd- ScaleStart) * 0.30f);
+        float ChargeSizeH = OvalSizeH * 0.80f;
+        float ChargeScaleBottom = (ScaleTop - ((ScaleBottom - ScaleTop)*0.10f))+15;
 
-        paint.setStyle(Paint.Style.STROKE);
+        RectF ovalTop = new RectF(ScaleStart , ScaleTop,
+                ScaleEnd, ScaleTop + OvalSizeH);
 
-        float MinBatterieW = QuartSizeW;
-        float MaxBatterieW = QuartSizeW * 3;
-        MinBatterieH = QuartSizeH * (1.0f/2.0f);
-        MaxBatterieH = QuartSizeH * 3.5f;
+        RectF ovalBottom = new RectF(ScaleStart , ScaleBottom,
+                ScaleEnd, ScaleBottom - OvalSizeH);
 
+        RectF ovalChargeTop = new RectF(ChargeStart , ChargeScaleBottom,
+                ChargeEnd, ChargeScaleBottom + ChargeSizeH);
+
+        RectF ovalChargeBottom = new RectF(ChargeStart , ScaleTop,
+                ChargeEnd, ScaleTop + ChargeSizeH);
+
+        RectF ovalChargeCenter = new RectF(ChargeStart , ovalChargeTop.centerY(),
+                ChargeEnd, ovalChargeBottom.centerY());
+
+        RectF rectCenter = new RectF(ScaleStart , ovalTop.centerY(),
+                ScaleEnd, ovalBottom.centerY());
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        paint.setColor(colorEmpty);
+        canvas.drawRect(rectCenter, paint);
 
-        paint.setColor(colorBackgroundOn);
-        Path path = new Path();
-        path.moveTo(MinBatterieW, MinBatterieH);
-        path.lineTo(MinBatterieW, MaxBatterieH);
-        path.lineTo(MaxBatterieW, MaxBatterieH);
-        path.lineTo(MaxBatterieW, MinBatterieH);
-        path.lineTo(HalfSizeW + 100, MinBatterieH);
-        path.lineTo(HalfSizeW + 100, QuartSizeH * (1.0f/4.0f));
-        path.lineTo(HalfSizeW - 100, QuartSizeH * (1.0f/4.0f));
-        path.lineTo(HalfSizeW - 100, MinBatterieH);
-        canvas.drawPath(path, paint);
+        paint.setColor(colorContent);
 
-        paint.setStyle(Paint.Style.FILL);
+        float MinPosX = ScaleStart - 10;
+        float MaxPosX = ScaleEnd - 10;
+        MinBatterieH = ovalTop.centerY();
+        MaxBatterieH = ovalBottom.centerY();
 
-        float BatterieW = MaxBatterieW - MinBatterieW;
-        float BatterieH = MaxBatterieH - MinBatterieH;
+        float Step = (MaxBatterieH - MinBatterieH) / 100.f;
+        float ScalePosY = Step * limiteBatterie;
 
-        float SeulBatterieH = MaxBatterieH -
-                (BatterieH * (limiteBatterie / 100.0f));
+        RectF ovalValue = new RectF(ScaleStart , MaxBatterieH - (ScalePosY - (OvalSizeH / 2.0f)),
+                ScaleEnd, MaxBatterieH - (ScalePosY + (OvalSizeH / 2.0f)));
 
-        paint.setColor(colorBackgroundOff);
+        RectF rectValue = new RectF(ScaleStart , ovalValue.centerY(),
+                ScaleEnd, ovalBottom.centerY());
 
-        canvas.drawRect(MinBatterieW, MaxBatterieH,
-                MaxBatterieW, SeulBatterieH, paint );
+        canvas.drawRect(rectValue, paint);
 
-        int startX = 130;
-        canvas.drawLine(startX, SeulBatterieH, SizeW - startX, SeulBatterieH, paint);
-        canvas.drawCircle(SizeW - startX - 5, SeulBatterieH + 15, 20, paint);
+        paint.setColor(colorContent);
+        canvas.drawOval(ovalBottom, paint);
+
+        paint.setColor(Color.WHITE);
+        canvas.drawOval(ovalValue, paint);
+
+        paint.setColor(colorEmpty);
+        canvas.drawOval(ovalTop, paint);
+        canvas.drawRect(ovalChargeCenter, paint);
+        canvas.drawOval(ovalChargeTop, paint);
+        canvas.drawOval(ovalChargeBottom, paint);
+
+        paint.setColor(colorContent);
+        canvas.drawLine(MaxPosX + 40, ovalValue.centerY(), MaxPosX+10, ovalValue.centerY(), paint);
+//        canvas.drawCircle(ScaleEnd + 25, ovalValue.centerY() + 9, 10, paint);
+
+
+        paintText.setColor(colorEmpty);
 
         String batterie = String.format(Locale.FRANCE, "%d%%", limiteBatterie);
         paintText.getTextBounds(batterie, 0, batterie.length(), textBounds);
         paintText.setColor(limiteBatterie > 50 ? Color.WHITE : colorText);
-        canvas.drawText(batterie, HalfSizeW+20, HalfSizeH - textBounds.centerY(), paintText);
+        float x = (HalfSizeW - (textBounds.width() / 2f)) - textBounds.left;
+        float y = (HalfSizeH + (textBounds.height() / 2f)) - textBounds.bottom;
+        canvas.drawText(batterie, x, y, paintText);
 
     }
 

@@ -64,8 +64,9 @@ public class DataSurfaceView extends SurfaceView implements
         holder.addCallback(this);
         setOnTouchListener(this);
 
+        float density = getContext().getResources().getDisplayMetrics().density;
         paintText.setTextAlign(Paint.Align.LEFT);
-        paintText.setTextSize(80);
+        paintText.setTextSize(30*density);
         paintText.setStyle(Paint.Style.FILL);
         colorContent = ContextCompat.
                 getColor(getContext(), R.color.colorSurfaceText);

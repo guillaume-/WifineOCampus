@@ -111,6 +111,9 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
      */
     private OnServiceSetListener mServiceInterraction;
 
+    /**
+     * Utilitaire de géo-localisation
+     */
     private LocationManagment locManage;
 
     /**
@@ -607,6 +610,9 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         return sqlManager.getAllConsommations();
     }
 
+    /**
+     * Vérifie l'état du hotspot wifi, démarre ou arrête celui-ci
+     */
     private void verifyAndRunAPWifi() {
         WifiConfiguration configuration
                 = WifiApControl.getUPSWifiConfiguration();
@@ -697,6 +703,11 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         return true;
     }
 
+    /**
+     * Vérify si la localisation de l'utilisateur est possible et qu'il/elle est dans la zone du campus UPS
+     * affiche un message informant que le lancement du partage n'est pas pris en charge si l'utilisateur n'est pas dans le compus
+     * @return resultat de la vérification
+     */
     private boolean verifyGPSEnabled() {
         if(!locManage.isAtUniversity()){
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -752,8 +763,11 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         return WifiApControl.equals(configuration, upsConfig);
     }
 
-
-    private boolean buildAlertMessageNoGps() {
+    /**
+     * demande à l'utilisateur s'il souhaite activé sa géo-localisation
+     * @return resultat de la vérification
+     */
+    private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("GPS désactivé. Voulez-vous l'activer ?")
                 .setCancelable(false)
@@ -771,7 +785,6 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
                 });
         final AlertDialog alert = builder.create();
         alert.show();
-        return true;
     }
 
 

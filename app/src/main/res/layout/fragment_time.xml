@@ -25,7 +25,6 @@
                 android:typeface="serif"
                 android:background="@drawable/cu_solid_bottom_border"
                 android:padding="10dp"
-                android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp" />
 
             <LinearLayout
@@ -63,7 +62,7 @@
             android:layout_weight="1"
             android:layout_marginEnd="20dp"
             android:layout_marginStart="20dp"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="10dp">
 
             <com.neocampus.wifishared.views.ChronoTimeView
                 android:layout_width="match_parent"
