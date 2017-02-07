@@ -8,8 +8,18 @@ import java.util.List;
  * Created by Hirochi ☠ on 12/01/17.
  */
 
+/**
+ * Cette interface permet de transmettre une liste de clients
+ *
+ * @author Hirochi ☠
+ * @version 1.0.0
+ */
 public interface OnReachableClientListener {
-//    void onReachableClient(WifiApControl.Client client);
+
+    /**
+     * Reçoit une liste de clients
+     * @param clients liste de clients
+     */
     void onReachableClients(List<WifiApControl.Client> clients);
 
 }
