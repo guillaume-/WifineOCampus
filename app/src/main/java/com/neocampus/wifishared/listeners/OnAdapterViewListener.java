@@ -3,7 +3,7 @@ package com.neocampus.wifishared.listeners;
 import android.view.View;
 
 /**
- * Cette interface permet de définir l'affichage d'un élément d'une listView
+ * OnAdapterViewListener permet de définir l'affichage d'un élément d'une listView
  *
  * @author Hirochi ☠
  */

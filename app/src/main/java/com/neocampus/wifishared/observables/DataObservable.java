@@ -2,25 +2,32 @@ package com.neocampus.wifishared.observables;
 
 import java.util.Observable;
 
-/*
- * Created by Guillaume RIPOLL on 23/01/17.
- * DataObservable :
- * Detects dataTraffic changes at a period defined in services/ServiceDataTraffic
+/**
+ * DataObservable detects dataTraffic changes at a period defined in services/ServiceDataTraffic
  * and notify the Observer, which can stop the sharing
+ *
+ * @author Guillaume RIPOLL
  */
 public class DataObservable extends Observable {
+
+    /**
+     * Total de la consommation de données actuelle
+     */
     private long lastValue = 0;
 
     /**
-     *@return the value
+     * Renvoi la total consommation de données actuelle
+     *@return total consommation de données
      */
     public long getValue() {
         return lastValue;
     }
 
     /**
-     *@param dataTx
-     * the value to set
+     * Tente de modifier la total de consommmation de données, et notifie
+     * le changement en cas de succès
+     *@param dataTx total de consommation de données observé
+     *
      */
     public void setValue(long dataTx) {
         if(dataTx != lastValue) {

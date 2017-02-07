@@ -3,7 +3,7 @@ package com.neocampus.wifishared.listeners;
 import java.util.Observer;
 
 /**
- * Cette interface permet de communiquer avec le service prinpale {@link com.neocampus.wifishared.services.ServiceNeOCampus}
+ * OnServiceSetListener permet de communiquer avec le service prinpale {@link com.neocampus.wifishared.services.ServiceNeOCampus}
  *
  * @author Abdellah
  */

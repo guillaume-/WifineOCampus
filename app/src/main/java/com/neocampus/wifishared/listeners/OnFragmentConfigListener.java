@@ -1,7 +1,7 @@
 package com.neocampus.wifishared.listeners;
 
 /**
- * Cette interface permet de communiquer avec un fragment de configuration
+ * OnFragmentConfigListener permet de communiquer avec un fragment de configuration
  *
  * @author Hirochi ☠
  * @version 1.0.0

@@ -4,7 +4,7 @@ import com.neocampus.wifishared.observables.HotspotObservable;
 import com.neocampus.wifishared.utils.WifiApControl;
 
 /**
- * Cette interface permet de communiquer avec un fragment
+ * OnFragmentSetListener permet de communiquer avec un fragment
  *
  * @author Hirochi ☠
  * @version 1.0.0

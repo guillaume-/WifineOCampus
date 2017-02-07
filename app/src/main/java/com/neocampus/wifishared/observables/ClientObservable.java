@@ -10,29 +10,50 @@ import java.util.List;
 import java.util.Observable;
 
 /**
- * Created by Hirochi ☠ on 22/01/17.
+ * ClientObservable permet d'observer l'accès à une session de partage par des clients,
  */
-
 public class ClientObservable extends Observable {
-    List<WifiApControl.Client> clients;
-    List<WifiApControl.Client> historiqueClients;
 
+    /**
+     * Liste des clients connectés
+     */
+    private List<WifiApControl.Client> clients;
+
+    /**
+     * Historique des clients connectés depuis le lancement
+     */
+    private List<WifiApControl.Client> historiqueClients;
+
+    /**
+     * Constructeur de l'observateur
+     */
     public ClientObservable() {
         clients = new ArrayList<>();
         historiqueClients = new ArrayList<>();
     }
 
     /**
-     *@return the value
+     * Renvoi la liste des clients connectés
+     *@return liste des clients connectés
      */
     public List<WifiApControl.Client> getClients() {
         return clients;
     }
 
+    /**
+     * Renvoi l'historique des connexions de la session de partage en cours
+     * @return l'historique des connexions
+     */
     public List<WifiApControl.Client> getHistoriqueClients() {
         return historiqueClients;
     }
 
+    /**
+     * Ajoute à la liste des connectés et dans l'historique, un client s'étant connecté,
+     * et notifie le changement d'état
+     *
+     * @param client Client s'étant connecté à la session de partage
+     */
     public void addClient(WifiApControl.Client client) {
         client.date = new WifiApControl.DataSync();
         clients.add(client);
@@ -41,6 +62,11 @@ public class ClientObservable extends Observable {
         notifyObservers(client);
     }
 
+    /**
+     * Supprime de la liste des connectés, un client s'étant déconnecté de la session de partage,
+     * met à jour l'historique et notifie le changement d'état
+     * @param client Client s'étant deconnecté à la session de partage
+     */
     public void removeClient(WifiApControl.Client client) {
         clients.remove(client);
         client.connected = false;
@@ -52,6 +78,10 @@ public class ClientObservable extends Observable {
         notifyObservers(client);
     }
 
+    /**
+     * Ajoute ou met à jour l'historique des connexions
+     * @param client client s'étant connecté ou déconnecté
+     */
     private void logClients(WifiApControl.Client client){
         if(client.connected)
             historiqueClients.add(client);
@@ -60,6 +90,9 @@ public class ClientObservable extends Observable {
         }
     }
 
+    /**
+     * Réinitialise la liste en cas d'arrêt de la session de partage
+     */
     public void clear() {
         for (Iterator<WifiApControl.Client>
              iterator = clients.iterator(); iterator.hasNext(); ) {
@@ -68,11 +101,19 @@ public class ClientObservable extends Observable {
         historiqueClients.clear();
     }
 
+    /**
+     * Renvoi le nombre de client connecté
+     * @return
+     */
     public int getCount() {
         return clients.size();
     }
 
 
+    /**
+     * Restaure les données en cas d'arrêt intempestive
+     * @param utilisateur dernier état sauvegardé d'un client avant l'arrêt
+     */
     public void restoreClient(TableUtilisateur utilisateur) {
         WifiApControl.Client client = new WifiApControl.Client(
                 utilisateur.getAdressIP() , utilisateur.getAdressMac());

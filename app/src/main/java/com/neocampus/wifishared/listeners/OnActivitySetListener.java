@@ -6,7 +6,7 @@ import com.neocampus.wifishared.sql.database.TableUtilisateur;
 import java.util.List;
 
 /**
- * Cette interface permet de communiquer avec l'activité principale {@link com.neocampus.wifishared.activity.MainActivity}
+ * OnActivitySetListener permet de communiquer avec l'activité principale {@link com.neocampus.wifishared.activity.MainActivity}
  *
  * @author Hirochi ☠
  * @version 1.0.0

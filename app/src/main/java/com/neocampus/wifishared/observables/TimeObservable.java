@@ -3,18 +3,26 @@ package com.neocampus.wifishared.observables;
 import java.util.Observable;
 
 /**
- * Created by Hirochi ☠ on 22/01/17.
+ * TimeObservable permet d'observer le déclanchement d'une alarme et de notifier
+ * celui-ci
  */
-
 public class TimeObservable extends Observable {
+
+    /**
+     * Date du déclanchement de l'alarme
+     */
     private long date;
 
+    /**
+     * Constructeur de l'observateur
+     */
     public TimeObservable() {
         this.date = 0;
     }
 
     /**
-     *@return the value
+     * Renvoi la date du déclanchement de l'alarme
+     *@return date du déclanchement de l'alarme
      */
     public long getDate() {
         return date;
@@ -22,8 +30,8 @@ public class TimeObservable extends Observable {
 
 
     /**
-     *@param value
-     * the value to set
+     * Tente de modifier la date actuelle, notifie le changement en cas de succès
+     *@param value nouvelle date de déclanchement
      */
     public void setDate(long value) {
         if(this.date != value) {

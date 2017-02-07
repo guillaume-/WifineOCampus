@@ -5,11 +5,7 @@ import com.neocampus.wifishared.utils.WifiApControl;
 import java.util.List;
 
 /**
- * Created by Hirochi ☠ on 12/01/17.
- */
-
-/**
- * Cette interface permet de transmettre une liste de clients
+ * OnReachableClientListener permet de transmettre une liste de clients
  *
  * @author Hirochi ☠
  * @version 1.0.0
