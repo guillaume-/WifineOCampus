@@ -1,6 +1,6 @@
 package com.neocampus.wifishared.views;
 
-import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -77,7 +77,7 @@ public class ProgressSurfaceView extends SurfaceView implements
 
         float ScaleStart = HalfSizeW - (SizeW / 4.0f);
         float ScaleEnd = HalfSizeW + (SizeW / 4.0f);
-        float ScaleTop = HalfSizeH / 2.0f;
+        float ScaleTop = HalfSizeH / 1.8f;
         float ScaleBottom = SizeH - ScaleTop;
         float OvalSizeH = SizeH * 0.10f;
 
@@ -133,8 +133,8 @@ public class ProgressSurfaceView extends SurfaceView implements
         } else {
             Object o = getTag();
             if (o != null
-                    && o instanceof AlertDialog) {
-                ((AlertDialog) o).dismiss();
+                    && o instanceof Dialog) {
+                ((Dialog) o).dismiss();
             }
         }
 

@@ -7,7 +7,6 @@ import android.content.ServiceConnection;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.widget.Toast;
 
 import com.neocampus.wifishared.listeners.OnFragmentSetListener;
 import com.neocampus.wifishared.listeners.OnReachableClientListener;
@@ -89,7 +88,7 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
         this.registerReceiver(this.onHotspotReceiver, new IntentFilter(WifiApControl.ACTION_WIFI_AP_CHANGED));
         this.registerReceiver(this.onNetworkReceiver, new IntentFilter(WifiApControl.ACTION_CONNECTIVITY_CHANGE));
 
-        Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
         if (WifiApControl.checkPermission(this, false)) {
             onHotspotReceiver.updateHotspotState(this);
         }

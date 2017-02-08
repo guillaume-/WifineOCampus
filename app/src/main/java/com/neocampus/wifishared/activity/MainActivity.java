@@ -2,11 +2,13 @@ package com.neocampus.wifishared.activity;
 
 import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.wifi.WifiConfiguration;
 import android.os.Build;
@@ -25,7 +27,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
@@ -384,19 +385,14 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
             View view = LayoutInflater.from(this).
                     inflate(R.layout.app_progress_layout, null, false);
             View surfaceView = view.findViewById(R.id.progress);
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setView(view);
-            builder.setCancelable(false);
-            AlertDialog alert = builder.create();
-            WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-            lp.copyFrom(alert.getWindow().getAttributes());
-            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-            lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+            Dialog alert = new Dialog(this, R.style.AppTheme_AlertDialog);
+//            alert.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            alert.setContentView(view);
+            alert.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            alert.setCancelable(true);
             surfaceView.setTag(alert);
             alert.show();
-            alert.getWindow().setAttributes(lp);
-            alert.getWindow().setBackgroundDrawable(new
-                    ColorDrawable(android.graphics.Color.TRANSPARENT));
+
             sqlManager.removeAllUtilisateur();
             sqlManager.removeAllConsommations();
             sqlManager.setConfigurationD(0);
