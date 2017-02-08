@@ -32,6 +32,12 @@ public interface OnActivitySetListener {
     long        getLimiteTemps();
 
     /**
+     * Renvoi le code de notification
+     * @return code de notification
+     */
+    int         getNotificationCode();
+
+    /**
      * Poste une demande de mise à jour du temps d'activation d'une session de partage
      */
     void        postRequestTimeValue();

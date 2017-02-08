@@ -42,6 +42,9 @@ public class TableConfiguration extends SqlDataSchema {
     @Column(Type = SqlType.INTEGER, Nullable = true, value = "0")
     public static final String _Stored = "Column_Stored";
 
+    @Column(Type = SqlType.INTEGER, Nullable = true, value = "0x1111")
+    public static final String _Notification = "Column_Notification";
+
 
     public TableConfiguration(ContentValues values) {
         super(values);
@@ -106,5 +109,13 @@ public class TableConfiguration extends SqlDataSchema {
 
     public void setStored(boolean value) {
         this.values.put(_Stored, value);
+    }
+
+    public int getNotification() {
+        return this.values.getAsInteger(_Notification);
+    }
+
+    public void setNotification(int value) {
+        this.values.put(_Notification, value);
     }
 }

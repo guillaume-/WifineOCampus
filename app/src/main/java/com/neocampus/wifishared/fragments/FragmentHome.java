@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.neocampus.wifishared.listeners.OnFragmentSetListener;
 import com.neocampus.wifishared.listeners.OnReachableClientListener;
 import com.neocampus.wifishared.observables.HotspotObservable;
 import com.neocampus.wifishared.utils.BatterieUtils;
+import com.neocampus.wifishared.utils.NotificationUtils;
 import com.neocampus.wifishared.utils.WifiApControl;
 import com.neocampus.wifishared.views.CirclePageIndicator;
 import com.neocampus.wifishared.views.CirclePagerAdapter;
@@ -78,6 +80,11 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
     private TextView timeLimite;
 
     /**
+     * Objet graphique qui affiche le code de notification1
+     */
+    private TextView notification1;
+
+    /**
      * Objet graphique qui permet d'activer ou de désactiver une session de partage
      */
     private Button hotSpotButton;
@@ -86,7 +93,7 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
      * Interface de communication avec l'activité principale {@link com.neocampus.wifishared.activity.MainActivity}
      * #see {@link OnActivitySetListener}
      */
-    private OnActivitySetListener mListener;
+    private OnActivitySetListener onActivitySetListener;
 
     /**
      * Constructeur du fragment
@@ -104,8 +111,8 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        this.mListener.hideAppBarSaveConfig();
-        this.mListener.showAppBarRefresh();
+        this.onActivitySetListener.hideAppBarSaveConfig();
+        this.onActivitySetListener.showAppBarRefresh();
 
         this.view = inflater.inflate(R.layout.fragment_home, container, false);
 
@@ -116,6 +123,7 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
         this.batterieLevel = (TextView) view.findViewById(R.id.batterie_level_result);
         this.batterieLimite = (TextView) view.findViewById(R.id.batterie_level_limit);
         this.clientCount = (TextView) view.findViewById(R.id.reachable_client_count);
+        this.notification1 = (TextView) view.findViewById(R.id.notification_code);
         this.hotSpotButton = (Button) view.findViewById(R.id.button);
 
         this.chronometer.setOnChronometerTickListener(this);
@@ -161,9 +169,9 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
     @Override
     public void onRefreshAll() {
         onRefreshClientCount(0);
-        this.mListener.postRequestTimeValue();
-        this.mListener.postRequestListClients();
-        this.mListener.postRequestDataTraffic();
+        this.onActivitySetListener.postRequestTimeValue();
+        this.onActivitySetListener.postRequestListClients();
+        this.onActivitySetListener.postRequestDataTraffic();
         onRefreshBatterieLevel((int) BatterieUtils.getBatteryLevel(getContext()));
     }
 
@@ -254,7 +262,7 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
 
     /**
      * Rafraichit le total de consommation de données
-     * @param nouveau total de consommation de données
+     * @param dataTrafficOctet nouveau total de consommation de données
      *
      * @see OnFragmentSetListener#onRefreshDataTraffic(long)
      */
@@ -279,7 +287,7 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
 
     /**
      * Rafraichit le niveau restant de la batterie
-     * @param nouveau niveau de la batterie
+     * @param newBatterieLevel nouveau niveau de la batterie
      *
      * @see OnFragmentSetListener#onRefreshBatterieLevel(int)
      * @see OnActivitySetListener#getLimiteBatterie()
@@ -287,7 +295,7 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
     @Override
     public void onRefreshBatterieLevel(int newBatterieLevel) {
         if (batterieLevel != null) {
-            int batterieLimit = this.mListener.getLimiteBatterie();
+            int batterieLimit = this.onActivitySetListener.getLimiteBatterie();
             batterieLevel.setText(String.format(Locale.FRANCE, "%d %% ", newBatterieLevel - batterieLimit));
         }
     }
@@ -297,9 +305,10 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
      */
     @Override
     public void onRefreshAllConfig() {
-        onRefreshTimeConfig(this.mListener.getLimiteTemps());
-        onRefreshDataConfig(this.mListener.getLimiteDataTrafic());
-        onRefreshBatterieConfig(this.mListener.getLimiteBatterie());
+        onRefreshTimeConfig(this.onActivitySetListener.getLimiteTemps());
+        onRefreshDataConfig(this.onActivitySetListener.getLimiteDataTrafic());
+        onRefreshBatterieConfig(this.onActivitySetListener.getLimiteBatterie());
+        onRefreshNotificationCode(this.onActivitySetListener.getNotificationCode());
     }
 
     /**
@@ -344,6 +353,26 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
     }
 
     /**
+     *
+     */
+    public void onRefreshNotificationCode(int notificationCode) {
+        if (notification1 != null) {
+            String[] result = new String[]{"", "", ""};
+            if(NotificationUtils.isBatterieEnabled(notificationCode)) {
+                result[2] = "\uD83D\uDD0B";
+            }
+            if(NotificationUtils.isTimeEnabled(notificationCode)) {
+                result[0] = "⏰";
+            }
+            if(NotificationUtils.isDataEnabled(notificationCode)) {
+                result[1] = "\uD83D\uDCF6";
+            }
+            String notify = TextUtils.join(" ", result);
+            notification1.setText(!"".equals(notify.trim()) ? notify : "\uD83D\uDD15");
+        }
+    }
+
+    /**
      * Met à jour le temps restant d'activation
      * @param chronometer
      *
@@ -377,7 +406,7 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnActivitySetListener) {
-            mListener = (OnActivitySetListener) context;
+            onActivitySetListener = (OnActivitySetListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnActivitySetListener");

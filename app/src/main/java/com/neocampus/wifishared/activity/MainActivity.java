@@ -289,6 +289,8 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
                 long limite_temps = ((OnFragmentConfigListener) fragment).getLimiteTemps();
                 this.sqlManager.setConfigurationT(limite_temps);
             }
+            this.sqlManager.setConfigurationN(
+                    ((OnFragmentConfigListener) fragment).getNotificationCode());
         }
         super.onBackPressed();
         fragment = FragmentUtils.getForegroundFragment(this);
@@ -332,7 +334,8 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
                 loadAnimation(v.getContext(), R.anim.pressed_anim));
         if (verifyWifiDisabled()) {
             float limite_conso = getLimiteDataTrafic();
-            Fragment fragment = FragmentTraffic.newInstance(limite_conso);
+            Fragment fragment = FragmentTraffic.
+                    newInstance(limite_conso, getNotificationCode());
             this.fragment = FragmentUtils.showFragment(this, fragment,
                     R.anim.circle_zoom, R.anim.circle_inverse_zoom);
         }
@@ -347,7 +350,8 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
                 loadAnimation(v.getContext(), R.anim.pressed_anim));
         if (verifyWifiDisabled()) {
             int limite_batterie = getLimiteBatterie();
-            Fragment fragment = FragmentBatterie.newInstance(limite_batterie);
+            Fragment fragment = FragmentBatterie.
+                    newInstance(limite_batterie, getNotificationCode());
             this.fragment = FragmentUtils.showFragment(this, fragment,
                     R.anim.circle_zoom, R.anim.circle_inverse_zoom);
         }
@@ -362,7 +366,8 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
                 loadAnimation(v.getContext(), R.anim.pressed_anim));
         if (verifyWifiDisabled()) {
             long limite_temps = getLimiteTemps();
-            Fragment fragment = FragmentTime.newInstance(limite_temps);
+            Fragment fragment = FragmentTime.
+                    newInstance(limite_temps, getNotificationCode());
             this.fragment = FragmentUtils.showFragment(this, fragment,
                     R.anim.circle_zoom, R.anim.circle_inverse_zoom);
         }
@@ -525,6 +530,14 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         return tableConfiguration.getLimiteTemps();
     }
 
+    /**
+     * Récupère dans la base de données le code de notification
+     * @return le code de notification
+     */
+    public int getNotificationCode(){
+        TableConfiguration tableConfiguration = sqlManager.getConfiguration();
+        return tableConfiguration.getNotification();
+    }
     /**
      * post une demande de mise à jour des clients, au service principale {@link ServiceNeOCampus}
      * @see OnServiceSetListener#peekReachableClients(OnReachableClientListener)

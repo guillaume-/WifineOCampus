@@ -18,6 +18,12 @@ public class NotificationUtils {
     public static final int ID_NOTIFICATION
             = Math.abs("Wifi neOCampus".hashCode());
 
+    public static final int NOTIFY_BATTERIE = 0x1000;
+
+    public static final int NOTIFY_DATA = 0x0100;
+
+    public static final int NOTIFY_TIME = 0x0010;
+
     public static void showDataNotify(Context context, DataObservable observable)
     {
         String data;
@@ -41,6 +47,10 @@ public class NotificationUtils {
         show(context, "Le partage Wi-Fi s'est arrêté", "Le temps de partage s'est écoulé");
     }
 
+    public static void showNetworkNotify(Context context) {
+        show(context, "Le partage Wi-Fi s'est arrêté", "Impossible de se connecter à internet");
+    }
+
     public static void show(Context context, String titleText, String textContent)
     {
         Notification.BigTextStyle bigText = new Notification.BigTextStyle();
@@ -49,7 +59,7 @@ public class NotificationUtils {
         bigText.setSummaryText(textContent);
 
         int property = Notification.DEFAULT_LIGHTS;
-//        property |= Notification.DEFAULT_SOUND;
+        property |= Notification.DEFAULT_SOUND;
 
         Notification.Builder mBuilder = new Notification.Builder(context)
                 .setSmallIcon(R.drawable.ic_cloche)
@@ -67,7 +77,18 @@ public class NotificationUtils {
         mNotificationManager.notify(ID_NOTIFICATION, notification);
     }
 
-    public static void showNetworkNotify(Context context) {
-        show(context, "Le partage Wi-Fi s'est arrêté", "Impossible de se connecter à internet");
+    public static boolean isBatterieEnabled(int notificationCode)
+    {
+        return (notificationCode & NOTIFY_BATTERIE) == NOTIFY_BATTERIE;
+    }
+
+    public static boolean isTimeEnabled(int notificationCode)
+    {
+        return (notificationCode & NOTIFY_TIME) == NOTIFY_TIME;
+    }
+
+    public static boolean isDataEnabled(int notificationCode)
+    {
+        return (notificationCode & NOTIFY_DATA) == NOTIFY_DATA;
     }
 }

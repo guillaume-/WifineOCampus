@@ -198,7 +198,8 @@
             android:layout_gravity="center_horizontal"
             android:layout_weight="@integer/scale_c"
             android:layout_width="0dp"
-            android:text="@string/wait_info" />
+            android:text="@string/wait_info"
+            android:id="@+id/notification_code" />
 
         <ImageView
             app:srcCompat="@drawable/ic_edit"

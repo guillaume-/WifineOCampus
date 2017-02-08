@@ -85,7 +85,7 @@ public class BatterieSurfaceView extends SurfaceView implements
 
         float ScaleStart = HalfSizeW - (SizeW / 3.5f);
         float ScaleEnd = HalfSizeW + (SizeW / 3.5f);
-        float ScaleTop = HalfSizeH / 8.0f ;
+        float ScaleTop = HalfSizeH / 6.0f ;
         float ScaleBottom = SizeH - ScaleTop;
         float OvalSizeH = SizeH * 0.10f;
         float ChargeStart = HalfSizeW - ((ScaleEnd- ScaleStart) * 0.30f);
@@ -141,8 +141,9 @@ public class BatterieSurfaceView extends SurfaceView implements
         paint.setColor(colorEmpty);
         canvas.drawOval(ovalTop, paint);
         canvas.drawRect(ovalChargeCenter, paint);
-        canvas.drawOval(ovalChargeTop, paint);
         canvas.drawOval(ovalChargeBottom, paint);
+        canvas.drawOval(ovalChargeTop, paint);
+
 
         paint.setColor(colorContent);
         canvas.drawLine(MaxPosX + 40, ovalValue.centerY(), MaxPosX+10, ovalValue.centerY(), paint);

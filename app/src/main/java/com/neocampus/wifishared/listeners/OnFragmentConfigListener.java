@@ -25,4 +25,10 @@ public interface OnFragmentConfigListener {
      * @return seuil de temps d'activation
      */
     long    getLimiteTemps();
+
+    /**
+     * Renvoi le nouveau code de notification
+     * @return code de notification
+     */
+    int getNotificationCode();
 }

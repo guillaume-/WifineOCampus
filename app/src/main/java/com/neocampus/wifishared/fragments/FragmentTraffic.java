@@ -6,10 +6,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
 import com.neocampus.wifishared.R;
 import com.neocampus.wifishared.listeners.OnActivitySetListener;
 import com.neocampus.wifishared.listeners.OnFragmentConfigListener;
+import com.neocampus.wifishared.utils.NotificationUtils;
 import com.neocampus.wifishared.views.DataSurfaceView;
 
 /**
@@ -18,7 +21,7 @@ import com.neocampus.wifishared.views.DataSurfaceView;
  * @see Fragment
  * @see OnFragmentConfigListener
  */
-public class FragmentTraffic extends Fragment implements OnFragmentConfigListener {
+public class FragmentTraffic extends Fragment implements OnFragmentConfigListener, CompoundButton.OnCheckedChangeListener {
 
     /**
      * Identifiant de la valeur initiale de consommation de données
@@ -26,9 +29,19 @@ public class FragmentTraffic extends Fragment implements OnFragmentConfigListene
     private static final String ARG_PARAM1 = "param1";
 
     /**
+     * Identifiant du code de notification
+     */
+    private static final String ARG_PARAM2 = "param2";
+
+    /**
      * Valeur du seuil de consommation de données
      */
     private float mLimiteData;
+
+    /**
+     * Code de notification, la notification est active pour la batterie si : code >= 0x0100
+     */
+    private int notificationCode;
 
     /**
      * Objet graphique de configuration de consommation de données en GIGA
@@ -59,12 +72,14 @@ public class FragmentTraffic extends Fragment implements OnFragmentConfigListene
      * Crée une instance en initialisant le seuil de consommation de données
      *
      * @param limite_data seuil de consommation de données
+     * @param notificationCode code de notification
      * @return une nouvelle instance de FragmentTraffic
      */
-    public static FragmentTraffic newInstance(float limite_data) {
+    public static FragmentTraffic newInstance(float limite_data, int notificationCode) {
         FragmentTraffic fragment = new FragmentTraffic();
         Bundle args = new Bundle();
         args.putFloat(ARG_PARAM1, limite_data);
+        args.putInt(ARG_PARAM2, notificationCode);
         fragment.setArguments(args);
         return fragment;
     }
@@ -79,6 +94,7 @@ public class FragmentTraffic extends Fragment implements OnFragmentConfigListene
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             this.mLimiteData = getArguments().getFloat(ARG_PARAM1);
+            this.notificationCode = getArguments().getInt(ARG_PARAM2);
         }
     }
 
@@ -102,6 +118,10 @@ public class FragmentTraffic extends Fragment implements OnFragmentConfigListene
 
         this.megaSurfaceView.setDateType(DataSurfaceView.DATA_TYPE.DATA_MEGA);
         this.megaSurfaceView.setDataValue((float) (mLimiteData - Math.floor(mLimiteData))* 999.9f);
+
+        Switch aSwitch = (Switch) view.findViewById(R.id.switch1);
+        aSwitch.setChecked(NotificationUtils.isDataEnabled(notificationCode));
+        aSwitch.setOnCheckedChangeListener(this);
 
         return view;
     }
@@ -163,6 +183,25 @@ public class FragmentTraffic extends Fragment implements OnFragmentConfigListene
     @Override
     public long getLimiteTemps() {
         return 0;
+    }
+
+    /**
+     * @see OnFragmentConfigListener#getNotificationCode()
+     */
+    @Override
+    public int getNotificationCode() {
+        return notificationCode;
+    }
+
+    /**
+     * Modifier le code de notification, en cas d'activation ou de déssactivé de notification pour le traffic
+     * @param buttonView Vue sur laquelle l'utilisateur a cliqué
+     * @param isChecked Indique si la notification est activé ou pas
+     */
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        notificationCode += NotificationUtils.isDataEnabled(notificationCode) ?
+                -NotificationUtils.NOTIFY_DATA : NotificationUtils.NOTIFY_DATA;
     }
 
 

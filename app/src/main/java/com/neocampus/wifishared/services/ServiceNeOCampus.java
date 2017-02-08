@@ -279,17 +279,26 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
                     && hotspotObservable.isUPS()
                     && isOverBatterieLimit((Integer) arg)) {
                 stopHotpost();
-                NotificationUtils.showBatterieNotify(this, batterieObservable);
+                TableConfiguration tableConfiguration = sqlManager.getConfiguration();
+                if(NotificationUtils.isBatterieEnabled(tableConfiguration.getNotification())) {
+                    NotificationUtils.showBatterieNotify(this, batterieObservable);
+                }
             }
         } else if (o instanceof  DataObservable) {
             if(isOverDataLimit((long) arg)) {
                 stopHotpost();
-                NotificationUtils.showDataNotify(this, dataObservable);
+                TableConfiguration tableConfiguration = sqlManager.getConfiguration();
+                if(NotificationUtils.isDataEnabled(tableConfiguration.getNotification())) {
+                    NotificationUtils.showDataNotify(this, dataObservable);
+                }
             }
         } else if (o instanceof  TimeObservable) {
             if(isOverTimeLimit((long) arg)) {
                 stopHotpost();
-                NotificationUtils.showTimeNotify(this);
+                TableConfiguration tableConfiguration = sqlManager.getConfiguration();
+                if(NotificationUtils.isTimeEnabled(tableConfiguration.getNotification())) {
+                    NotificationUtils.showTimeNotify(this);
+                }
             }
         }else if (o instanceof  ClientObservable) {
             WifiApControl.Client client = (WifiApControl.Client) arg;

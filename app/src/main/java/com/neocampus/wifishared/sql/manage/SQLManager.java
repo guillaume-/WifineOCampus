@@ -172,6 +172,20 @@ public class SQLManager {
         return result;
     }
 
+    public int setConfigurationN(int notificationCode) {
+        int result;
+        String selection = TableConfiguration._ID + " = 1";
+
+        ContentValues value = new ContentValues();
+
+        value.put(TableConfiguration._Notification, notificationCode);
+
+        if ((result = database.update(TableConfiguration._NAME, value, selection, null)) == 0) {
+            return (int) database.insert(TableConfiguration._NAME, null, value);
+        }
+        return result;
+    }
+
     public TableConfiguration getConfiguration() {
         Cursor c = null;
         TableConfiguration tableConfiguration = null;
@@ -231,7 +245,7 @@ public class SQLManager {
         ArrayList<TableConsommation> consommations = new ArrayList<>();
         try {
             String s = String.format(Locale.FRANCE,
-                    "SELECT * FROM %s", TableConsommation._NAME);
+                    "SELECT * FROM %s order by %s desc", TableConsommation._NAME, TableConsommation._Date_Start);
             c = database.rawQuery(s, null);
             c.moveToFirst();
             while (!c.isAfterLast()) {

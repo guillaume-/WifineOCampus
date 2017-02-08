@@ -6,10 +6,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
 import com.neocampus.wifishared.R;
 import com.neocampus.wifishared.listeners.OnActivitySetListener;
 import com.neocampus.wifishared.listeners.OnFragmentConfigListener;
+import com.neocampus.wifishared.utils.NotificationUtils;
 import com.neocampus.wifishared.views.ChronoTimeView;
 
 import java.util.Date;
@@ -20,7 +23,7 @@ import java.util.Date;
  * @see Fragment
  * @see OnFragmentConfigListener
  */
-public class FragmentTime extends Fragment implements OnFragmentConfigListener{
+public class FragmentTime extends Fragment implements OnFragmentConfigListener, CompoundButton.OnCheckedChangeListener {
 
     /**
      * Identifiant de la valeur initiale du temps d'activation
@@ -28,9 +31,19 @@ public class FragmentTime extends Fragment implements OnFragmentConfigListener{
     private static final String ARG_PARAM1 = "param1";
 
     /**
+     * Identifiant du code de notification
+     */
+    private static final String ARG_PARAM2 = "param2";
+
+    /**
      * Valeur du seuil du temps d'activation
      */
     private long mTimeLimit;
+
+    /**
+     * Code de notification, la notification est active pour la batterie si : code >= 0x0010
+     */
+    private int notificationCode;
 
     /**
      * Objet graphique de configuration du temps d'activation
@@ -55,12 +68,14 @@ public class FragmentTime extends Fragment implements OnFragmentConfigListener{
      * Crée une instance en initialisant le seuil du temps d'activation
      *
      * @param time seuil initial du temps d'activation
+     * @param notificationCode code de notification
      * @return une nouvelle instance de FragmentTime
      */
-    public static FragmentTime newInstance(long time) {
+    public static FragmentTime newInstance(long time, int notificationCode) {
         FragmentTime fragment = new FragmentTime();
         Bundle args = new Bundle();
         args.putLong(ARG_PARAM1, time);
+        args.putInt(ARG_PARAM2, notificationCode);
         fragment.setArguments(args);
         return fragment;
     }
@@ -75,6 +90,7 @@ public class FragmentTime extends Fragment implements OnFragmentConfigListener{
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mTimeLimit = getArguments().getLong(ARG_PARAM1);
+            notificationCode = getArguments().getInt(ARG_PARAM2);
         }
     }
 
@@ -96,6 +112,10 @@ public class FragmentTime extends Fragment implements OnFragmentConfigListener{
 
         this.timeView.setHours((int) (mTimeLimit / (3600*1000)));
         this.timeView.setMinute(new Date(mTimeLimit).getMinutes());
+
+        Switch aSwitch = (Switch) view.findViewById(R.id.switch1);
+        aSwitch.setChecked(NotificationUtils.isTimeEnabled(notificationCode));
+        aSwitch.setOnCheckedChangeListener(this);
         return view;
     }
 
@@ -156,5 +176,24 @@ public class FragmentTime extends Fragment implements OnFragmentConfigListener{
     public long getLimiteTemps() {
         return ((timeView.getHours() * 3600)
                 + (timeView.getMinute() * 60))*1000;
+    }
+
+    /**
+     * @see OnFragmentConfigListener#getNotificationCode()
+     */
+    @Override
+    public int getNotificationCode() {
+        return notificationCode;
+    }
+
+    /**
+     * Modifier le code de notification, en cas d'activation ou de déssactivé de notification pour le temps
+     * @param buttonView Vue sur laquelle l'utilisateur a cliqué
+     * @param isChecked Indique si la notification est activé ou pas
+     */
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        notificationCode += NotificationUtils.isTimeEnabled(notificationCode) ?
+                -NotificationUtils.NOTIFY_TIME : NotificationUtils.NOTIFY_TIME;
     }
 }
