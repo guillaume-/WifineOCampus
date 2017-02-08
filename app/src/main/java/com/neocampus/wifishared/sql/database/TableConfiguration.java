@@ -42,7 +42,7 @@ public class TableConfiguration extends SqlDataSchema {
     @Column(Type = SqlType.INTEGER, Nullable = true, value = "0")
     public static final String _Stored = "Column_Stored";
 
-    @Column(Type = SqlType.INTEGER, Nullable = true, value = "0x1111")
+    @Column(Type = SqlType.INTEGER, Nullable = true, value = "4369")
     public static final String _Notification = "Column_Notification";
 
 
