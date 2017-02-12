@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/button"
-            android:paddingTop="20dp">
+            android:paddingTop="10dp">
 
             <LinearLayout
                 android:orientation="vertical"
@@ -94,7 +94,8 @@
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fillViewport="true">
+                android:fillViewport="true"
+                android:layout_weight="1">
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/id_view_pager"
@@ -127,7 +128,7 @@
                 android:orientation="horizontal"
                 android:id="@+id/id_circle_indicator"
                 android:layout_gravity="center_vertical|center_horizontal"
-                android:layout_marginBottom="30dp">
+                android:layout_marginBottom="10dp">
 
             </com.neocampus.wifishared.views.CirclePageIndicator>
 

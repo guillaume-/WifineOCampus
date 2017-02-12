@@ -144,6 +144,7 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
         timeObservable.deleteObserver(observer);
     }
 
+
     @Override
     public void peekDataTraffic(OnFragmentSetListener listener) {
         listener.onRefreshDataTraffic(dataObservable.getValue());
