@@ -62,18 +62,37 @@
             android:orientation="horizontal"
             android:padding="20dp">
 
-            <com.neocampus.wifishared.views.DataSurfaceView
-                android:id="@+id/echelle_surface"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/id_view_pager"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
 
-            <com.neocampus.wifishared.views.DataSurfaceView
-                android:id="@+id/data_configuration"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"/>
 
+                    <com.neocampus.wifishared.views.DataSurfaceView
+                        android:id="@+id/echelle_surface"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" />
+
+                    <com.neocampus.wifishared.views.DataSurfaceView
+                        android:id="@+id/data_configuration"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"/>
+
+
+                </android.support.v4.view.ViewPager>
+
+            <com.neocampus.wifishared.views.CirclePageIndicator
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/id_circle_indicator"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginBottom="10dp">
+
+            </com.neocampus.wifishared.views.CirclePageIndicator>
 
         </LinearLayout>
 

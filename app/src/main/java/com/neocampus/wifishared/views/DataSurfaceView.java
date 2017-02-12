@@ -75,7 +75,7 @@ public class DataSurfaceView extends SurfaceView implements
 
         paintText.setShadowLayer(4.0f, 0.0f, 2.0f, Color.BLACK);
         paint.setShadowLayer(15.0f, 0.0f, 2.0f, Color.parseColor("#c5cee7"));
-        paint.setStrokeWidth(5);
+        paint.setStrokeWidth(2);
     }
 
     private void drawToCanvas(Canvas canvas) {
@@ -87,8 +87,8 @@ public class DataSurfaceView extends SurfaceView implements
         int HalfSizeW = SizeW / 2;
         int HalfSizeH = SizeH / 2;
 
-        float ScaleStart = HalfSizeW - (SizeW / 2.5f);
-        float ScaleEnd = HalfSizeW + (SizeW / 2.5f);
+        float ScaleStart = HalfSizeW - (SizeW / 3.0f);
+        float ScaleEnd = HalfSizeW + (SizeW / 3.0f);
         float ScaleTop = HalfSizeH / 6.0f ;
         float ScaleBottom = SizeH - ScaleTop;
         float OvalSizeH = SizeH * 0.10f;
@@ -105,7 +105,7 @@ public class DataSurfaceView extends SurfaceView implements
         paint.setColor(colorEmpty);
         canvas.drawRect(rectCenter, paint);
 
-        paint.setColor(colorContent);
+
 
         float MinPosX = ScaleStart - 10;
         float MaxPosX = ScaleEnd - 10;
@@ -136,6 +136,7 @@ public class DataSurfaceView extends SurfaceView implements
         RectF rectValue = new RectF(ScaleStart , ovalValue.centerY(),
                 ScaleEnd, ovalBottom.centerY());
 
+        paint.setColor(colorContent);
         canvas.drawRect(rectValue, paint);
 
         paint.setColor(colorContent);
@@ -148,17 +149,8 @@ public class DataSurfaceView extends SurfaceView implements
         canvas.drawOval(ovalTop, paint);
 
         paint.setColor(colorContent);
-        switch (dateType) {
-            case DATA_MEGA:
-                canvas.drawLine(MaxPosX + 40, MaxDataHeight - ScalePosY, MaxPosX + 10, MaxDataHeight - ScalePosY, paint);
-                canvas.drawLine(MaxPosX + 40, MaxDataHeight - ScalePosY, MaxPosX + 40, MaxDataHeight - ScalePosY + 20, paint);
-                break;
-            default:
-                canvas.drawLine(MinPosX - 20, MaxDataHeight - ScalePosY, MinPosX + 10, MaxDataHeight - ScalePosY, paint);
-                canvas.drawLine(MinPosX - 20, MaxDataHeight - ScalePosY, MinPosX - 20, MaxDataHeight - ScalePosY + 20, paint);
-                break;
-        }
-
+        canvas.drawLine(MinPosX - 20, MaxDataHeight - ScalePosY, MinPosX + 10, MaxDataHeight - ScalePosY, paint);
+        canvas.drawLine(MinPosX - 20, MaxDataHeight - ScalePosY - 2, MinPosX - 20, MaxDataHeight - ScalePosY + 10, paint);
         paintText.setColor(colorEmpty);
 
         paintText.getTextBounds(level, 0, level.length(), textBounds);

@@ -3,6 +3,7 @@ package com.neocampus.wifishared.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import com.neocampus.wifishared.R;
 import com.neocampus.wifishared.listeners.OnActivitySetListener;
 import com.neocampus.wifishared.listeners.OnFragmentConfigListener;
 import com.neocampus.wifishared.utils.NotificationUtils;
+import com.neocampus.wifishared.views.CirclePageIndicator;
+import com.neocampus.wifishared.views.CirclePagerAdapter;
 import com.neocampus.wifishared.views.DataSurfaceView;
 
 /**
@@ -118,6 +121,11 @@ public class FragmentTraffic extends Fragment implements OnFragmentConfigListene
 
         this.megaSurfaceView.setDateType(DataSurfaceView.DATA_TYPE.DATA_MEGA);
         this.megaSurfaceView.setDataValue((float) (mLimiteData - Math.floor(mLimiteData))* 999.9f);
+
+        ViewPager viewPager = (ViewPager) view.findViewById(R.id.id_view_pager);
+        CirclePageIndicator indicator = (CirclePageIndicator) view.findViewById(R.id.id_circle_indicator);
+        viewPager.setAdapter(new CirclePagerAdapter(viewPager));
+        indicator.setViewPager(viewPager);
 
         Switch aSwitch = (Switch) view.findViewById(R.id.switch1);
         aSwitch.setChecked(NotificationUtils.isDataEnabled(notificationCode));
