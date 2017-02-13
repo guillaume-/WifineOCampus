@@ -6,13 +6,20 @@ import android.content.IntentFilter;
 import android.os.BatteryManager;
 
 /**
- * Created by JAMAA on 18/01/17.
+ * BatterieUtils permet d'éffectuer des actions en relation avec la batterie
  */
-
 public class BatterieUtils {
 
+    /**
+     * Limite par défaut du niveau de la batterie
+     */
     public static int BATTERIE_DEFAULT_LIMIT = 30;
 
+    /**
+     * Renvoi le niveau actuel de la batterie
+     * @param context contexte de l'application
+     * @return niveau de la batterie
+     */
     public static float getBatteryLevel(Context context) {
         Intent batteryIntent = context.registerReceiver(null,
                 new IntentFilter(Intent.ACTION_BATTERY_CHANGED));

@@ -11,25 +11,49 @@ import com.neocampus.wifishared.observables.TimeObservable;
 import com.neocampus.wifishared.sql.database.TableConfiguration;
 import com.neocampus.wifishared.sql.manage.SQLManager;
 
-/**
- * Created by Hirochi ☠ on 25/01/17.
- */
 
+/**
+ * OnAlarmReceiver permet d'installer une alarme
+ * et d'être informé lors de son activation
+ */
 public class OnAlarmReceiver extends BroadcastReceiver {
 
+    /**
+     * Libellé de l'action, permet d'identifier le signal du système
+     */
     public static final String ACTION_ALARM_ACTIVATED = "com.neocampus.wifishared.NEOCAMPUS_ALARM_ACTIVATED";
 
+    /**
+     * Observable qui détecte les activations de l'alarme et les notifie au {@link java.util.Observer}
+     * @see TimeObservable
+     */
     private TimeObservable observable;
 
+    /**
+     * Construteur de la classe, initialise l'{@link java.util.Observable}
+     * @param observable {@link TimeObservable} par défaut
+     */
     public OnAlarmReceiver(TimeObservable observable) {
         this.observable = observable;
     }
 
+    /**
+     * Cette méthode est appelé lorsque le système android active l'alarme qui a été installé,
+     * on modifier la date de la dernière activation
+     * @param context contexte de l'application
+     * @param intent contient les informations d'identification de l'évènement
+     *
+     * @see TimeObservable#setDate(long)
+     */
     @Override
     public void onReceive(Context context, Intent intent) {
         observable.setDate(System.currentTimeMillis());
     }
 
+    /**
+     * Supprime l'alarme installé
+     * @param context context de l'application
+     */
     public void removeAlarm(Context context) {
         Intent intent = new Intent(ACTION_ALARM_ACTIVATED);
         this.observable.setDate(0);
@@ -39,6 +63,11 @@ public class OnAlarmReceiver extends BroadcastReceiver {
         sender.cancel();
     }
 
+    /**
+     * Installe ou modifie une alarme
+     * @param context context de l'application
+     * @param dateFire date de l'activation de l'alarme
+     */
     public void updateAlarm(Context context, long dateFire) {
         try {
             Intent intent = new Intent(ACTION_ALARM_ACTIVATED);
@@ -60,6 +89,11 @@ public class OnAlarmReceiver extends BroadcastReceiver {
         }
     }
 
+    /**
+     * Indique si une alarme est installé
+     * @param context context de l'application
+     * @return vrai si installé faux sinon
+     */
     public static boolean existAlarm(Context context) {
         try {
             Intent intent = new Intent(ACTION_ALARM_ACTIVATED);
@@ -70,6 +104,16 @@ public class OnAlarmReceiver extends BroadcastReceiver {
         return false;
     }
 
+    /**
+     * Calcul la date d'activation d'une alarme si aucune n'a été sauvegardé dans la base de donnée
+     * puis sauvegarde nouvelle date
+     * @param context context de l'application
+     * @param manager interface de communication avec la base de données
+     *
+     * @see SQLManager#setConfigurationA(long)
+     * @see TableConfiguration#setDateAlarm(long)
+     * @see TableConfiguration#getDateAlarm()
+     */
     public void startAlarm(Context context, SQLManager manager) {
         TableConfiguration configuration = manager.getConfiguration();
         if (configuration.getDateAlarm() == 0) {
@@ -80,6 +124,13 @@ public class OnAlarmReceiver extends BroadcastReceiver {
         updateAlarm(context, configuration.getDateAlarm());
     }
 
+    /**
+     * Annule une alarme et supprime la date sauvegardé dans la base de données
+     * @param context contexte de l'application
+     * @param manager interface de communication avec la base de données
+     *
+     * @see SQLManager#setConfigurationA(long)
+     */
     public void stopAlarm(Context context, SQLManager manager) {
         if (existAlarm(context)) {
             removeAlarm(context);

@@ -54,10 +54,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Pattern;
 
-// WifiApControl provides control over Wi-Fi APs using the singleton pattern.
-// Even though isSupported should be reliable, the underlying hidden APIs that
-// are obtained via reflection to provide the main features may not work as
-// expected.
+/**
+ * WifiApControl permet d'éffectuer des actions en relation avec la configuration WIFI-AP
+ */
 final public class WifiApControl extends Observable {
 
     private static final String TAG = "WifiApControl";

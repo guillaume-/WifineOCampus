@@ -12,9 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Hirochi ☠ on 09/01/17.
+ * DexUtils permet d'éffectuer des actions en relation avec la compilation de l'application
  */
-
 public class DexUtils {
 
     private static final String EXTRACTED_NAME_EXT = ".classes";

@@ -19,21 +19,36 @@ import static com.neocampus.wifishared.utils.WifiApControl.WIFI_AP_STATE_ENABLIN
 import static com.neocampus.wifishared.utils.WifiApControl.WIFI_AP_STATE_FAILED;
 
 /**
- * Created by Hirochi ☠ on 10/01/17.
+ * OnHotspotReceiver permet d'être informé par le système android lors du changement de l'état du hotspot wifi,
+ * et notifie le nouvel état au {@link java.util.Observer}
  */
-
 public class OnHotspotReceiver extends BroadcastReceiver {
 
+    /**
+     * Observable qui détecte et notifie aux {@link java.util.Observer} le nouvel état
+     */
     private HotspotObservable observable;
 
+    /**
+     * Constructeur par défaut
+     */
     public OnHotspotReceiver() {
         this.observable = null;
     }
 
+    /**
+     * Constructeur de la classe, initialise l'{@link java.util.Observable}
+     * @param observable {@link HotspotObservable} par défaut
+     */
     public OnHotspotReceiver(HotspotObservable observable) {
         this.observable = observable;
     }
 
+    /**
+     * Cette méthode est appelé lorsque le système android notifie le changement de l'état du hotspot wifi
+     * @param context contexte de l'application
+     * @param intent contient les informations d'identification de l'évènement
+     */
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.hasExtra(EXTRA_WIFI_AP_STATE)) {
@@ -57,10 +72,18 @@ public class OnHotspotReceiver extends BroadcastReceiver {
                     }
                     break;
             }
-            System.out.println();
         }
     }
 
+    /**
+     * restaure la configuration par défaut de l'utilisateur
+     * @param context contexte de l'application
+     * @return vrai si la restauration s'est produite faux sinon
+     *
+     * @see TableConfiguration#getWifiConfiguration()
+     * @see ParcelableUtils#unmarshall(byte[], Class)
+     * @see WifiApControl#setWifiApConfiguration(WifiConfiguration)
+     */
     private boolean replaceUserWifiConfiguration(Context context) {
 
         WifiApControl apControl = WifiApControl.getInstance(context);
@@ -93,6 +116,11 @@ public class OnHotspotReceiver extends BroadcastReceiver {
         return true;
     }
 
+    /**
+     * Met à jour l'état du hotspot, lorsque le système indique un nouvel état,
+     * et notifie ce nouvel état au {@link java.util.Observer}
+     * @param context
+     */
     public void updateHotspotState(Context context) {
         if (observable != null
                 && WifiApControl.checkPermission(context)) {
