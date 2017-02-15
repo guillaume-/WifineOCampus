@@ -146,7 +146,7 @@ public class FragmentUsers extends Fragment implements OnFragmentSetListener,  O
      */
     @Override
     public void onRefreshClient(final WifiApControl.Client client) {
-        if(totalClientCount != null && sessionUserView != null) {
+        if(totalClientCount != null && sessionUserView != null && isAdded()) {
             totalClientCount.post(new Runnable() {
                 @Override
                 public void run() {
@@ -155,7 +155,7 @@ public class FragmentUsers extends Fragment implements OnFragmentSetListener,  O
                 }
             });
         }
-        if(reachableClientCount != null && reachableUserView != null) {
+        if(reachableClientCount != null && reachableUserView != null && isAdded()) {
             reachableClientCount.post(new Runnable() {
                 @Override
                 public void run() {
@@ -199,7 +199,7 @@ public class FragmentUsers extends Fragment implements OnFragmentSetListener,  O
      * @param clients nouvelle liste de connectés
      */
     private void onRefreshReachableClients(final List<WifiApControl.Client> clients) {
-        if (reachableClientCount != null && reachableUserView != null) {
+        if (reachableClientCount != null && reachableUserView != null && isAdded()) {
             reachableClientCount.post(new Runnable() {
                 @Override
                 public void run() {
@@ -215,7 +215,7 @@ public class FragmentUsers extends Fragment implements OnFragmentSetListener,  O
      * @param clients nouvelle liste de connectés
      */
     private void onRefreshSessionClients(final List<WifiApControl.Client> clients) {
-        if(totalClientCount != null && sessionUserView != null) {
+        if(totalClientCount != null && sessionUserView != null && isAdded()) {
             totalClientCount.post(new Runnable() {
                 @Override
                 public void run() {

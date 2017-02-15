@@ -6,9 +6,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Created by Hirochi on 14/10/2016.
+ * <b>Cette classe permet de fournir une instance unique d'un objet permettant de communiquer</b>
+ *
+ * @author NALINGA
  */
-
 public class SQLDatabaseManager {
 
     private AtomicInteger mOpenCounter = new AtomicInteger();
@@ -17,6 +18,10 @@ public class SQLDatabaseManager {
     private static SQLiteOpenHelper mDatabaseHelper;
     private SQLiteDatabase mDatabase;
 
+    /**
+     * Méthode de création et d'initialisation d'une instance de communication
+     * @param helper
+     */
     public static synchronized void initializeInstance(SQLiteOpenHelper helper) {
         if (instance == null) {
             instance = new SQLDatabaseManager();
@@ -24,15 +29,22 @@ public class SQLDatabaseManager {
         }
     }
 
+    /**
+     * Méthode permettant la création de plusieurs instances de communication
+     * @return une instance de communication
+     */
     public static synchronized SQLDatabaseManager getInstance() {
         if (instance == null) {
             throw new IllegalStateException(SQLDatabaseManager.class.getSimpleName() +
                     " is not initialized, call initializeInstance(..) method first.");
         }
-
         return instance;
     }
 
+    /**
+     * Méthode pour ouverture de base de données
+     * @return une instance de communication avec la base de données
+     */
     public synchronized SQLiteDatabase openDatabase() {
         if(mOpenCounter.incrementAndGet() == 1) {
             // Opening new database
@@ -41,11 +53,12 @@ public class SQLDatabaseManager {
         return mDatabase;
     }
 
+    /**
+     * Méthode de fermeture de base de données
+     */
     public synchronized void closeDatabase() {
         if(mOpenCounter.decrementAndGet() == 0) {
-            // Closing database
             mDatabase.close();
-
         }
     }
 

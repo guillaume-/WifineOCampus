@@ -24,7 +24,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-
+/**
+ * <b>Cette classe permet de mettre à niveau automatiquement la base de données lors de changement de structure</b>
+ * @author NALINGA
+ */
 public class SQLiteHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "database.db";
@@ -36,6 +39,10 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         this.context = context;
     }
 
+    /**
+     *  Cette méthode permet de créer un ensemble de table à partir d'un ensemble de classe
+     * @param database
+     */
     @Override
     public void onCreate(SQLiteDatabase database) {
         try {
@@ -59,6 +66,12 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Cette méthode permet de mettre à jour la structure de table en cas de modification de la version de base de données
+     * @param database
+     * @param oldVersion
+     * @param newVersion
+     */
     @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
         HashMap<String, Cursor> hashMap = new HashMap<>();
@@ -125,6 +138,12 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Cette méthode permet de réinitialiser la base de données en cas de régression de version
+     * @param database
+     * @param oldVersion
+     * @param newVersion
+     */
     @Override
     public void onDowngrade(SQLiteDatabase database, int oldVersion, int newVersion) {
         try {
@@ -152,6 +171,13 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Cette méthode permet de créer une table à partir d'une classe de manière automatique
+     * @param aClass
+     * @return une requête sql pour la création de la table
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
     private static String buildSQL(Class<?> aClass)
             throws NoSuchFieldException, IllegalAccessException {
 
@@ -185,6 +211,12 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         return s.toString();
     }
 
+    /**
+     * Cette méthode permet de stocker le contenu de la base de données avant une altération de la base
+     * @param database
+     * @param tableName
+     * @return
+     */
     private static Cursor store(SQLiteDatabase database, String tableName) {
         database.execSQL(String.format("ALTER TABLE %s RENAME TO %s", tableName, "_"+tableName+"_"));
         Cursor c;
@@ -196,6 +228,12 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Cette méthode permet de restaurer le contenu de la base de données après une altération
+     * @param database
+     * @param tableName
+     * @param c
+     */
     private static void restore(SQLiteDatabase database,String tableName, Cursor c) {
         c.moveToFirst();
         while (!c.isAfterLast()) {
@@ -228,6 +266,13 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         c.close();
     }
 
+    /**
+     * Cette méthode permet de créer des tables à partir de la liste de classe fournie en paramètre
+     * @param database
+     * @param listClasses
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
     private static void createAllTables(SQLiteDatabase database, List<Class<?>> listClasses)
             throws NoSuchFieldException, IllegalAccessException {
         /*Create all tables*/
@@ -237,6 +282,13 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Cette méthode permet de créer des triggers à partir de la liste de classe fournie en paramètre
+     * @param database
+     * @param listClasses
+     * @throws InvocationTargetException
+     * @throws IllegalAccessException
+     */
     private static void createAllTriggers(SQLiteDatabase database, List<Class<?>> listClasses)
             throws InvocationTargetException, IllegalAccessException {
         for (Class<?> aClass : listClasses) {
@@ -249,6 +301,10 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Cette méthode permet de supprimer tous les triggers qui sont crées
+     * @param database
+     */
     private static void dropAllTriggers(SQLiteDatabase database)
     {
         Cursor cursor = database.rawQuery("SELECT name FROM sqlite_master WHERE type='trigger'", null);
@@ -263,6 +319,10 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         cursor.close();
     }
 
+    /**
+     * Cette méthode permet de supprimer toutes les tables de la base de données
+     * @param database
+     */
     private static void dropAllTables(SQLiteDatabase database)
     {
         Cursor cursor = database.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);

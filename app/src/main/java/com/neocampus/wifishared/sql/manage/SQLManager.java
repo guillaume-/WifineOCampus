@@ -14,17 +14,30 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 /**
- * Created by NALINGA on 23/07/2015.
+ * <b>Classe qui rassemble les fonctions de manipulation de la base de données.</b>
+ * <p>
+ *     Cette classe contient des fonctions : insertion, mise à jour et suppression.
+ * </p>
+ *
+ * @author NALINGA
  */
 public class SQLManager {
 
     private SQLiteDatabase database;
 
+    /**
+     * Méthode qui initialise une instance de communication
+     * @param context
+     */
     public SQLManager(Context context) {
         SQLiteHelper dbHelper = new SQLiteHelper(context);
         SQLDatabaseManager.initializeInstance(dbHelper);
     }
 
+    /**
+     * Méthode qui ouvre une instance de communication
+     * @throws SQLException
+     */
     public synchronized void open() throws SQLException {
         database = SQLDatabaseManager.getInstance().openDatabase();
     }
@@ -46,6 +59,11 @@ public class SQLManager {
 
 //    IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE Name = 'Trigger' AND Type = 'TR')
 
+    /**
+     * Méthode qui récupère l'ensemble des données contenues dans le curseur.
+     * @param c
+     * @return une liste des données contenues dans le curseur
+     */
     private static ContentValues cursorToContentValues(Cursor c) {
         ContentValues values = new ContentValues();
         for (int i = 0; i < c.getColumnCount(); i++) {
@@ -74,6 +92,11 @@ public class SQLManager {
 
     /*==================== Débuts des fonctions de manipulations de TableConfiguration ====================*/
 
+    /**
+     * Méthode de mise à jour de colonne configuration de TableConfiguration
+     * @param config
+     * @return ID de l'insertion
+     */
     public int setConfiguration(byte[] config) {
         int result;
         String selection = TableConfiguration._ID + " = 1";
@@ -88,6 +111,11 @@ public class SQLManager {
         return result;
     }
 
+    /**
+     * Méthode de mise à jour de colonne limite de batterie de TableConfiguration
+     * @param limite_batterie
+     * @return ID de l'insertion
+     */
     public int setConfigurationB(int limite_batterie) {
         int result;
         String selection = TableConfiguration._ID + " = 1";
@@ -102,6 +130,11 @@ public class SQLManager {
         return result;
     }
 
+    /**
+     * Méthode de mise à jour de colonne limite de consommation de TableConfiguration
+     * @param limite_conso
+     * @return ID de l'insertion
+     */
     public int setConfigurationC(long limite_conso) {
         int result;
         String selection = TableConfiguration._ID + " = 1";
@@ -116,6 +149,11 @@ public class SQLManager {
         return result;
     }
 
+    /**
+     * Méthode de mise à jour de colonne limite de temps de TableConfiguration
+     * @param limite_temps
+     * @return ID de l'insertion
+     */
     public int setConfigurationT(long limite_temps) {
         int result;
         String selection = TableConfiguration._ID + " = 1";
@@ -130,6 +168,11 @@ public class SQLManager {
         return result;
     }
 
+    /**
+     * Méthode de mise à jour de colonne date de début de partage de TableConfiguration
+     * @param dataT0
+     * @return ID de l'insertion
+     */
     public int setConfigurationD(long dataT0) {
         int result;
         String selection = TableConfiguration._ID + " = 1";
@@ -144,6 +187,11 @@ public class SQLManager {
         return result;
     }
 
+    /**
+     * Méthode de mise à jour de colonne date de fin de partage de TableConfiguration
+     * @param date_alarm
+     * @return ID de l'insertion
+     */
     public int setConfigurationA(long date_alarm) {
         int result;
         String selection = TableConfiguration._ID + " = 1";
@@ -158,6 +206,11 @@ public class SQLManager {
         return result;
     }
 
+    /**
+     * Méthode de mise à jour de colonne qui indique un sauvegarde forcé de TableConfiguration
+     * @param stored
+     * @return ID de l'insertion
+     */
     public int setConfigurationS(boolean stored) {
         int result;
         String selection = TableConfiguration._ID + " = 1";
@@ -172,6 +225,11 @@ public class SQLManager {
         return result;
     }
 
+    /**
+     * Méthode de mise à jour de colonne qui indique le code de notification
+     * @param notificationCode
+     * @return ID de l'insertion
+     */
     public int setConfigurationN(int notificationCode) {
         int result;
         String selection = TableConfiguration._ID + " = 1";
@@ -186,6 +244,10 @@ public class SQLManager {
         return result;
     }
 
+    /**
+     * Méthode qui retourne les informations de configuration de TableConfiguration
+     * @return une liste contenant les données de TableConfiguration
+     */
     public TableConfiguration getConfiguration() {
         Cursor c = null;
         TableConfiguration tableConfiguration = null;
@@ -217,6 +279,12 @@ public class SQLManager {
     /*==================== Debut de fonctions de manipulation de TableConsommation ====================*/
 
 
+    /**
+     * Méthode pour une insertion de date et data definie dans la TableConsommation
+     * @param date
+     * @param dataT0
+     * @return ID de l'insertion
+     */
     public int newConsommation(long date, long dataT0, boolean isUPS)
     {
         ContentValues value = new ContentValues();
@@ -226,6 +294,15 @@ public class SQLManager {
         return (int) database.insert(TableConsommation._NAME, null, value);
     }
 
+    /**
+     * Méthode pour une nouvelle insertion dans la TableConsommation
+     * @param date
+     * @param nbre_user
+     * @param periode
+     * @param dataT0
+     * @param dataTx
+     * @return ID de l'insertion
+     */
     public int addConsommation(long date,
                                int nbre_user, int periode, long dataT0, long dataTx) {
 
@@ -240,6 +317,10 @@ public class SQLManager {
         return (int) database.insert(TableConsommation._NAME, null, value);
     }
 
+    /**
+     * Méthode pour l'extration de données de TableConsommation
+     * @return une liste contenant les données de TableConsommation
+     */
     public ArrayList<TableConsommation> getAllConsommations() {
         Cursor c = null;
         ArrayList<TableConsommation> consommations = new ArrayList<>();
@@ -262,6 +343,10 @@ public class SQLManager {
         }
     }
 
+    /**
+     * Méthode de suppression par ID dans TableConsommation
+     * @param iD
+     */
     public void removeConsommationByID(int iD) {
 
         String delete = String.format(Locale.FRANCE,
@@ -269,11 +354,19 @@ public class SQLManager {
         database.delete(TableConsommation._NAME, delete, null);
     }
 
+    /**
+     * Méthode de suppression de tous les données de TableConsommation
+     */
     public void removeAllConsommations() {
         database.delete(TableConsommation._NAME, null, null);
     }
 
 
+    /**
+     * Méthode pour mettre à jour le nombre des users sur la borne
+     * @param id
+     * @param newCount
+     */
     public void updateNbreUser(int id, int newCount){
         database.execSQL(String.format(Locale.FRANCE,
                 "UPDATE %s SET %s=%s + %d WHERE %s = ?",
@@ -282,6 +375,11 @@ public class SQLManager {
                 new String[]{String.valueOf(id)});
     }
 
+    /**
+     * Méthode pour mettre à jour la période de partage de connexion
+     * @param id
+     * @param periode
+     */
     public void updatePeriode(int id, int periode ) {
         database.execSQL(String.format(Locale.FRANCE,
                 "UPDATE %s SET %s=%s + %d WHERE %s = ?",
@@ -290,6 +388,12 @@ public class SQLManager {
                 new String[]{String.valueOf(id)});
     }
 
+    /**
+     * Méthode pour mettre à jour la date de fin de partage de connexion
+     * @param id
+     * @param date
+     * @return le nombre de lignes qui vient d'être mis à jour
+     */
     public int updateConsommationDateEnd(int id, long date ) {
 
         String selection = TableConsommation._ID + " = " + id;
@@ -300,6 +404,12 @@ public class SQLManager {
         return database.update(TableConsommation._NAME, values, selection, null);
     }
 
+    /**
+     * Méthode pour mettre à jour data initial de partage
+     * @param id
+     * @param newConsommation
+     * @return le nombre de lignes qui vient d'être mis à jour
+     */
     public int updateConsommationDataT0(int id, long newConsommation){
         String selection = TableConsommation._ID + " = " + id;
 
@@ -308,6 +418,13 @@ public class SQLManager {
 
         return database.update(TableConsommation._NAME, values, selection, null);
     }
+
+    /**
+     * Méthode pour mettre à jour la consommation de data sur la borne
+     * @param id
+     * @param newConsommation
+     * @return le nombre de lignes qui vient d'être mis à jour
+     */
     public int updateConsommationDataTx(int id, long newConsommation){
         String selection = TableConsommation._ID + " = " + id;
 
@@ -317,6 +434,12 @@ public class SQLManager {
         return database.update(TableConsommation._NAME, values, selection, null);
     }
 
+    /**
+     * Méthode pour mettre à jour la localisation
+     * @param id
+     * @param newLocation
+     * @return le nombre de lignes qui vient d'être mis à jour
+     */
     public int updateLocalisation(int id, boolean isUPSLocation){
         String selection = TableConsommation._ID + " = " + id;
 
@@ -326,6 +449,10 @@ public class SQLManager {
         return database.update(TableConsommation._NAME, values, selection, null);
     }
 
+    /**
+     * Méthode pour recuperer la dernière insertion dans TableConsommation
+     * @return la dernière insertion
+     */
     public TableConsommation getLastConsommation() {
         Cursor c = null;
         TableConsommation tableConsommation = null;
@@ -353,6 +480,15 @@ public class SQLManager {
     /*==================== Débuts des fonctions de manipulations de TableUtilisateur ====================*/
 
 
+    /**
+     * Méthode d'insertion dans la TableUtilisateur
+     * @param idconso
+     * @param adresse_mac
+     * @param adresse_ip
+     * @param date_debut_cnx
+     * @param date_fin_cnx
+     * @return ID de l'insertion
+     */
     public int addUtilisateur(int idconso, String adresse_mac, String adresse_ip, long date_debut_cnx, long date_fin_cnx) {
 
         ContentValues value = new ContentValues();
@@ -366,6 +502,11 @@ public class SQLManager {
         return (int) database.insert(TableUtilisateur._NAME, null, value);
     }
 
+    /**
+     * Méthode pour extraire les données de TableUtilisateur à partir de ID_CONSO
+     * @param idConso
+     * @return une liste des users à partir de ID_CONSO
+     */
     public ArrayList<TableUtilisateur> getUtilisateurs(int idConso) {
         Cursor c = null;
         ArrayList<TableUtilisateur> utilisateurs = new ArrayList<>();
@@ -389,6 +530,10 @@ public class SQLManager {
         }
     }
 
+    /**
+     * Méthode pour extraire les données de TableUtilisateur
+     * @return la liste de tous les users
+     */
     public ArrayList<TableUtilisateur> getAllUtilisateurs() {
         Cursor c = null;
         ArrayList<TableUtilisateur> utilisateurs = new ArrayList<>();
@@ -411,6 +556,12 @@ public class SQLManager {
         }
     }
 
+    /**
+     * Méthode pour mettre à jour date de début de partage de connexion
+     * @param id
+     * @param time
+     * @return le nombre de ligne qui vient d'être mis à jour
+     */
     public int updateConnectedTime(int id, long time){
         String selection = TableUtilisateur._ID + " = " + id;
 
@@ -420,6 +571,12 @@ public class SQLManager {
         return database.update(TableUtilisateur._NAME, values, selection, null);
     }
 
+    /**
+     * Méthode pour mettre à jour date de fin de partage de connexion
+     * @param id
+     * @param time
+     * @return le nombre de ligne qui vient d'être mis à jour
+     */
     public int updateDisconnectedTime(int id, long time){
         String selection = TableUtilisateur._ID + " = " + id;
 
@@ -429,156 +586,22 @@ public class SQLManager {
         return database.update(TableUtilisateur._NAME, values, selection, null);
     }
 
+    /**
+     * Méthode de suppression des users à partir de ID
+     * @param iduser
+     */
     public void removeUtilisateurByID(int iduser) {
         String delete = String.format(Locale.FRANCE,  "%s = %d", TableUtilisateur._ID, iduser);
         database.delete(TableUtilisateur._NAME, delete, null);
     }
 
+    /**
+     * Méthode pour supprimer tous les users
+     */
     public void removeAllUtilisateur() {
         database.delete(TableUtilisateur._NAME, null, null);
     }
 
     /*==================== Fin des fonctions de manipulations de TableUtilisateur ====================*/
 
-
-//
-//    public void insertMultiple(Object[] objects) {
-//        TimeLog.begin();
-//        final int part = 100;
-//        int quotient = objects.length / part;
-//        int reste = objects.length % part;
-//        if (quotient > 0) {
-//            //insertArticleMultiplePart(TABLE_NAME, objects, 0, quotient * part, part);
-//        }
-//        TimeLog.mark("Quotient");
-//        if (reste > 0) {
-//            //insertArticleMultiplePart(TABLE_NAME, objects, quotient * part, quotient * part + reste, reste);
-//        }
-//        TimeLog.mark("Reste");
-//        TimeLog.end();
-//    }
-//
-//    private void insertMultiplePart(String tableName, Object[] objects,
-//                                    int indexFrom, int indexTo, int stepInsertion) {
-//        /*
-//        String[] columns = TableName.getColumns();
-//
-//        String column = TextUtils.join(",", columns);
-//
-//        String[] values = new String[columns.length];
-//        Arrays.fill(values, "?");
-//
-//        String replace = ",(" + TextUtils.join(",", values) + ")";
-//        String value = new String(new char[stepInsertion]).replace("\0", replace).substring(1);
-//
-//        String sql = String.format("INSERT INTO %DexUtils (%DexUtils) VALUES %DexUtils", tableName, column, value);
-//        SQLiteStatement statement = database.compileStatement(sql);
-//
-//        TableName table;
-//        int index = 1, step = 1;
-//        for (int i = indexFrom; i < indexTo; i++, step++) {
-//            table = objects[i];
-//            for (int j = 1; j <= columns.length; j++, index++) {
-//                Object object = table.get(Object.class, columns[j - 1]);
-//                if (object == null) {
-//                    statement.bindNull(index);
-//                } else if (object instanceof String) {
-//                    statement.bindString(index, object.toString());
-//                } else if (object instanceof byte[]) {
-//                    statement.bindBlob(index, (byte[]) object);
-//                } else if (object instanceof Integer) {
-//                    statement.bindLong(index, (Integer) object);
-//                } else if (object instanceof Long) {
-//                    statement.bindLong(index, (Long) object);
-//                } else if (object instanceof Boolean) {
-//                    statement.bindLong(index, ((Boolean) object) ? 1 : 0);
-//                }
-//            }
-//            if (step == stepInsertion) {
-//                index = 1;
-//                step = 0;
-//                statement.executeInsert();
-//                statement.clearBindings();
-//            }
-//        }
-//        statement.close();
-//        */
-//    }
-
-
-
-/*
-    public Object get() {
-        Cursor c = null;
-        Object object = null;
-        try {
-            String DexUtils = String.format(Locale.FRANCE,
-                    "SELECT * FROM %DexUtils", _NAME);
-            c = database.rawQuery(DexUtils, null);
-            if (c.moveToFirst()) {
-                object =
-                        new TableName(cursorToContentValues(c));
-            }
-            return object;
-        } finally {
-            if (c != null) {
-                c.close();
-            }
-        }
-    }
-    */
-
-    /*
-    public ArrayList<Object> getAll() {
-        Cursor c = null;
-        ArrayList<Object> objects = new ArrayList<>();
-        try {
-            String DexUtils = String.format(Locale.FRANCE,
-                    "SELECT * FROM %DexUtils ORDER BY %DexUtils desc", _NAME, _COLUMN);
-            c = database.rawQuery(DexUtils, null);
-            c.moveToFirst();
-            while (!c.isAfterLast()) {
-                Object object =
-                        new TableName(cursorToContentValues(c));
-                objects.add(object);
-                c.moveToNext();
-            }
-            return objects;
-        } finally {
-            if (c != null) {
-                c.close();
-            }
-        }
-    }
-    */
-
-    /*
-    public int update(Object object) {
-        String selection = _ID + " = " + Object.getId();
-
-        ContentValues values = new ContentValues();
-        return database.update(_NAME, values, selection, null);
-    }
-    */
-
-    /*
-    public void removeByID(int iD) {
-        String selection = String.format(Locale.FRANCE, "%DexUtils = %d",
-                _ID, iD);
-        database.delete(_NAME, selection, null);
-    }
-    */
-
-    /*
-    public void removeMultiple(List<Object> objects) {
-        List<Integer> integers = new ArrayList<>();
-        for (Object o : objects) {
-            integers.add(o.getId());
-        }
-        String ids = TextUtils.join(",", integers);
-        String selection = String.format(Locale.FRANCE, "%DexUtils in (%DexUtils)",
-                _ID, ids);
-        database.delete(_NAME, selection, null);
-    }
-    */
 }
