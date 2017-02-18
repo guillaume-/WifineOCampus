@@ -385,7 +385,7 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
         if (time > 0) {
             int minute = (int) ((time / 60000L) % 60L);
             int heure = (int) (time / (60000L * 60L));
-            if (heure > 1) {
+            if (heure >= 1) {
                 timeText = String.format(Locale.FRANCE, "%02dh%02d", heure, minute);
             } else if (minute > 1) {
                 timeText = String.format(Locale.FRANCE, "%02d min", minute);
