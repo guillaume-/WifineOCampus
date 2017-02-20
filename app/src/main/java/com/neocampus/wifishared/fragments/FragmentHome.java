@@ -94,6 +94,7 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
      * #see {@link OnActivitySetListener}
      */
     private OnActivitySetListener onActivitySetListener;
+    private boolean added;
 
     /**
      * Constructeur du fragment
@@ -190,7 +191,7 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
      */
     @Override
     public void onRefreshClientCount(final int newCount) {
-        if (clientCount != null && isAdded()) {
+        if (clientCount != null && added) {
             clientCount.post(new Runnable() {
                 @Override
                 public void run() {
@@ -208,7 +209,7 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
      */
     @Override
     public void onRefreshTimeValue(long newDateValue) {
-        if (chronometer != null && isAdded()) {
+        if (chronometer != null && added) {
             if (newDateValue == 0) {
                 chronometer.setBase(0L);
                 chronometer.setText("00 sec");
@@ -229,7 +230,7 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
      */
     @Override
     public void onRefreshHotpostState(HotspotObservable observable) {
-        if (hotSpotButton != null && isAdded()) {
+        if (hotSpotButton != null && added) {
             switch (observable.getState()) {
                 case WifiApControl.STATE_ENABLING:
                     hotSpotButton.setText(observable.isUPS() ?
@@ -268,7 +269,7 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
      */
     @Override
     public void onRefreshDataTraffic(long dataTrafficOctet) {
-        if (dataLevel != null && isAdded()) {
+        if (dataLevel != null && added) {
             final String strDataTraffic;
             float dataTraffic = dataTrafficOctet / (1000.0f * 1000.0f * 1000.0f);
             if (dataTraffic >= 1.0f) {
@@ -294,7 +295,7 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
      */
     @Override
     public void onRefreshBatterieLevel(int newBatterieLevel) {
-        if (batterieLevel != null && isAdded()) {
+        if (batterieLevel != null && added) {
             int batterieLimit = this.onActivitySetListener.getLimiteBatterie();
             batterieLevel.setText(String.format(Locale.FRANCE, "%d %% ", newBatterieLevel - batterieLimit));
         }
@@ -316,7 +317,7 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
      */
     @Override
     public void onRefreshBatterieConfig(int newBatterieLimit) {
-        if (batterieLimite != null && isAdded()) {
+        if (batterieLimite != null && added) {
             batterieLimite.setText(String.format(Locale.FRANCE, "%d %% ", newBatterieLimit));
         }
     }
@@ -326,7 +327,7 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
      */
     @Override
     public void onRefreshTimeConfig(long newTimeLimit) {
-        if (timeLimite != null && isAdded()) {
+        if (timeLimite != null && added) {
             SimpleDateFormat format;
             String s = 60 * 60 * 1000 <= newTimeLimit ?
                     "HH'h'mm" : "mm 'min'";
@@ -341,7 +342,7 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
      */
     @Override
     public void onRefreshDataConfig(float newDataLimit) {
-        if (dataLimite != null && isAdded()) {
+        if (dataLimite != null && added) {
             String limiteData;
             if (newDataLimit >= 1.0f) {
                 limiteData = String.format(Locale.FRANCE, "%.3f Go", newDataLimit);
@@ -356,7 +357,7 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
      *
      */
     public void onRefreshNotificationCode(int notificationCode) {
-        if (notification1 != null && isAdded()) {
+        if (notification1 != null && added) {
             String[] result = new String[]{"", "", ""};
             if(NotificationUtils.isBatterieEnabled(notificationCode)) {
                 result[2] = "\uD83D\uDD0B";
@@ -407,11 +408,16 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
         super.onAttach(context);
         if (context instanceof OnActivitySetListener) {
             onActivitySetListener = (OnActivitySetListener) context;
+            added = true;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnActivitySetListener");
         }
     }
 
-
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        added = false;
+    }
 }
