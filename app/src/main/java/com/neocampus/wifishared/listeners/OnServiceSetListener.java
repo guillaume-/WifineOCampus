@@ -10,50 +10,50 @@ import java.util.Observer;
 public interface OnServiceSetListener {
 
     /**
-     * Force la sauvegarde des donnÃ©es dans la base de donnÃ©es
+     * Force la sauvegarde des données dans la base de données
      */
     void    storeInDataBase();
 
     /**
-     * Permet de s'inscrire dans la liste d'un observateur afin d'obtenir une notification en cas de changement d'Ã©tat
+     * Permet de s'inscrire dans la liste d'un observateur afin d'obtenir une notification en cas de changement d'état
      * @param observer objet recevant la notification
      */
     void    addObserver(Observer observer);
 
     /**
-     * Permet de se dÃ©sinscrire de la liste d'un observateur
+     * Permet de se désinscrire de la liste d'un observateur
      * @param observer objet recevant la notification
      */
     void    removeObserver(Observer observer);
 
     /**
-     * Transmet le temps d'activation restant Ã  un fragment via l'interface de communication
+     * Transmet le temps d'activation restant à un fragment via l'interface de communication
      * @param listener interface de communication avec fragment
      */
     void    peekTimeValue(OnFragmentSetListener listener);
 
     /**
-     * Transmet le temps de total de consommation de donnÃ©es Ã  un fragment via l'interface de communication
+     * Transmet le temps de total de consommation de données à un fragment via l'interface de communication
      * @param listener interface de communication avec fragment
      */
     void    peekDataTraffic(OnFragmentSetListener listener);
 
     /**
-     * Transmet l'historique des connexions pour la session de partage actuelle Ã  un fragment,
+     * Transmet l'historique des connexions pour la session de partage actuelle à un fragment,
      * en utilisant son interface de communication
      * @param listener interface de communication avec fragment
      */
     void    peekAllClients(OnReachableClientListener listener);
 
     /**
-     * Transmet la liste de clients connectÃ©s pour la session de partage actuelle Ã  un fragment,
+     * Transmet la liste de clients connectés pour la session de partage actuelle à un fragment,
      * en utilisant son interface de communication
      * @param listener interface de communication avec fragment
      */
     void    peekReachableClients(OnReachableClientListener listener);
 
     /**
-     * RÃ©initialise le total de donnÃ©es
+     * Réinitialise le total de données
      */
     void    resetBaseT0();
 }

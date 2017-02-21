@@ -16,8 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+
 /**
- * Created by Hirochi â˜  on 31/01/17.
+ * SessionHistoView permet d'afficher la liste des sessions de partage réalisées
  */
 
 public class SessionHistoView extends LinearLayout implements OnAdapterViewListener {
@@ -69,7 +70,7 @@ public class SessionHistoView extends LinearLayout implements OnAdapterViewListe
         TextView textView5 = (TextView) view.findViewById(R.id.consommation_D0);
         TextView textView6 = (TextView) view.findViewById(R.id.consommation_DX);
 
-        textView1.setText(String.format(Locale.FRANCE, "Session NÂ°%d", consommation.getID()));
+        textView1.setText(String.format(Locale.FRANCE, "Session N°%d", consommation.getID()));
 
         textView5.setText(format2.format(consommation.getDate()));
         if(consommation.getDateEnd() != 0) {

@@ -16,10 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Created by Hirochi â˜  on 31/01/17.
- */
 
+/**
+ * UsersHistoView permet d'afficher la liste des clients connectés à une session de partage antérieure
+ */
 public class UsersHistoView extends LinearLayout implements OnAdapterViewListener {
 
     private ListClientAdapter adapter;
@@ -69,11 +69,11 @@ public class UsersHistoView extends LinearLayout implements OnAdapterViewListene
         textView2.setText(utilisateur.getAdressIP());
 
         if(utilisateur.getDateFinCnx() == 0) {
-            textView3.setText(String.format("Toujours connectÃ© : %s",
+            textView3.setText(String.format("Toujours connecté : %s",
                     format.format(utilisateur.getDateDebutCnx())));
         }
         else {
-            textView3.setText(String.format("De %s Ã  %s",
+            textView3.setText(String.format("De %s à %s",
                     format.format(utilisateur.getDateDebutCnx()),
                     format.format(utilisateur.getDateFinCnx())));
         }

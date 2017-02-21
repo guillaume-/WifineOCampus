@@ -16,10 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Created by Hirochi â˜  on 10/01/17.
- */
 
+/**
+ * SessionUserView permet d'afficher la vue de la liste des clients qui se sont connéctés depuis le début du partage
+ */
 public class SessionUserView extends LinearLayout implements OnAdapterViewListener {
 
     private List<WifiApControl.Client> clients = new ArrayList<>();
@@ -73,10 +73,10 @@ public class SessionUserView extends LinearLayout implements OnAdapterViewListen
         textView2.setText(client.ipAddr);
 
         if(client.connected) {
-            textView3.setText(String.format("Toujours connectÃ© : %s", format.format(client.date.connected)));
+            textView3.setText(String.format("Toujours connecté : %s", format.format(client.date.connected)));
         }
         else {
-            textView3.setText(String.format("De %s Ã  %s",
+            textView3.setText(String.format("De %s à %s",
                     format.format(client.date.connected),
                     format.format(client.date.disconnected)));
         }

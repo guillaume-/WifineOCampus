@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 /**
- * <b>Classe qui rassemble les fonctions de manipulation de la base de donnÃ©es.</b>
+ * <b>Classe qui rassemble les fonctions de manipulation de la base de données.</b>
  * <p>
- *     Cette classe contient des fonctions : insertion, mise Ã  jour et suppression.
+ *     Cette classe contient des fonctions : insertion, mise à jour et suppression.
  * </p>
  *
  * @author NALINGA
@@ -26,7 +26,7 @@ public class SQLManager {
     private SQLiteDatabase database;
 
     /**
-     * MÃ©thode qui initialise une instance de communication
+     * Méthode qui initialise une instance de communication
      * @param context
      */
     public SQLManager(Context context) {
@@ -35,7 +35,7 @@ public class SQLManager {
     }
 
     /**
-     * MÃ©thode qui ouvre une instance de communication
+     * Méthode qui ouvre une instance de communication
      * @throws SQLException
      */
     public synchronized void open() throws SQLException {
@@ -60,9 +60,9 @@ public class SQLManager {
 //    IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE Name = 'Trigger' AND Type = 'TR')
 
     /**
-     * MÃ©thode qui rÃ©cupÃ¨re l'ensemble des donnÃ©es contenues dans le curseur.
+     * Méthode qui récupère l'ensemble des données contenues dans le curseur.
      * @param c
-     * @return une liste des donnÃ©es contenues dans le curseur
+     * @return une liste des données contenues dans le curseur
      */
     private static ContentValues cursorToContentValues(Cursor c) {
         ContentValues values = new ContentValues();
@@ -90,10 +90,10 @@ public class SQLManager {
         return values;
     }
 
-    /*==================== DÃ©buts des fonctions de manipulations de TableConfiguration ====================*/
+    /*==================== Débuts des fonctions de manipulations de TableConfiguration ====================*/
 
     /**
-     * MÃ©thode de mise Ã  jour de colonne configuration de TableConfiguration
+     * Méthode de mise à jour de colonne configuration de TableConfiguration
      * @param config
      * @return ID de l'insertion
      */
@@ -112,7 +112,7 @@ public class SQLManager {
     }
 
     /**
-     * MÃ©thode de mise Ã  jour de colonne limite de batterie de TableConfiguration
+     * Méthode de mise à jour de colonne limite de batterie de TableConfiguration
      * @param limite_batterie
      * @return ID de l'insertion
      */
@@ -131,7 +131,7 @@ public class SQLManager {
     }
 
     /**
-     * MÃ©thode de mise Ã  jour de colonne limite de consommation de TableConfiguration
+     * Méthode de mise à jour de colonne limite de consommation de TableConfiguration
      * @param limite_conso
      * @return ID de l'insertion
      */
@@ -150,7 +150,7 @@ public class SQLManager {
     }
 
     /**
-     * MÃ©thode de mise Ã  jour de colonne limite de temps de TableConfiguration
+     * Méthode de mise à jour de colonne limite de temps de TableConfiguration
      * @param limite_temps
      * @return ID de l'insertion
      */
@@ -169,7 +169,7 @@ public class SQLManager {
     }
 
     /**
-     * MÃ©thode de mise Ã  jour de colonne date de dÃ©but de partage de TableConfiguration
+     * Méthode de mise à jour de colonne date de début de partage de TableConfiguration
      * @param dataT0
      * @return ID de l'insertion
      */
@@ -188,7 +188,7 @@ public class SQLManager {
     }
 
     /**
-     * MÃ©thode de mise Ã  jour de colonne date de fin de partage de TableConfiguration
+     * Méthode de mise à jour de colonne date de fin de partage de TableConfiguration
      * @param date_alarm
      * @return ID de l'insertion
      */
@@ -207,7 +207,7 @@ public class SQLManager {
     }
 
     /**
-     * MÃ©thode de mise Ã  jour de colonne qui indique un sauvegarde forcÃ© de TableConfiguration
+     * Méthode de mise à jour de colonne qui indique un sauvegarde forcé de TableConfiguration
      * @param stored
      * @return ID de l'insertion
      */
@@ -226,7 +226,7 @@ public class SQLManager {
     }
 
     /**
-     * MÃ©thode de mise Ã  jour de colonne qui indique le code de notification
+     * Méthode de mise à jour de colonne qui indique le code de notification
      * @param notificationCode
      * @return ID de l'insertion
      */
@@ -245,8 +245,8 @@ public class SQLManager {
     }
 
     /**
-     * MÃ©thode qui retourne les informations de configuration de TableConfiguration
-     * @return une liste contenant les donnÃ©es de TableConfiguration
+     * Méthode qui retourne les informations de configuration de TableConfiguration
+     * @return une liste contenant les données de TableConfiguration
      */
     public TableConfiguration getConfiguration() {
         Cursor c = null;
@@ -280,7 +280,7 @@ public class SQLManager {
 
 
     /**
-     * MÃ©thode pour une insertion de date et data definie dans la TableConsommation
+     * Méthode pour une insertion de date et data definie dans la TableConsommation
      * @param date
      * @param dataT0
      * @return ID de l'insertion
@@ -295,7 +295,7 @@ public class SQLManager {
     }
 
     /**
-     * MÃ©thode pour une nouvelle insertion dans la TableConsommation
+     * Méthode pour une nouvelle insertion dans la TableConsommation
      * @param date
      * @param nbre_user
      * @param periode
@@ -318,8 +318,8 @@ public class SQLManager {
     }
 
     /**
-     * MÃ©thode pour l'extration de donnÃ©es de TableConsommation
-     * @return une liste contenant les donnÃ©es de TableConsommation
+     * Méthode pour l'extration de données de TableConsommation
+     * @return une liste contenant les données de TableConsommation
      */
     public ArrayList<TableConsommation> getAllConsommations() {
         Cursor c = null;
@@ -344,7 +344,7 @@ public class SQLManager {
     }
 
     /**
-     * MÃ©thode de suppression par ID dans TableConsommation
+     * Méthode de suppression par ID dans TableConsommation
      * @param iD
      */
     public void removeConsommationByID(int iD) {
@@ -355,7 +355,7 @@ public class SQLManager {
     }
 
     /**
-     * MÃ©thode de suppression de tous les donnÃ©es de TableConsommation
+     * Méthode de suppression de tous les données de TableConsommation
      */
     public void removeAllConsommations() {
         database.delete(TableConsommation._NAME, null, null);
@@ -363,7 +363,7 @@ public class SQLManager {
 
 
     /**
-     * MÃ©thode pour mettre Ã  jour le nombre des users sur la borne
+     * Méthode pour mettre à jour le nombre des users sur la borne
      * @param id
      * @param newCount
      */
@@ -376,7 +376,7 @@ public class SQLManager {
     }
 
     /**
-     * MÃ©thode pour mettre Ã  jour la pÃ©riode de partage de connexion
+     * Méthode pour mettre à jour la période de partage de connexion
      * @param id
      * @param periode
      */
@@ -389,10 +389,10 @@ public class SQLManager {
     }
 
     /**
-     * MÃ©thode pour mettre Ã  jour la date de fin de partage de connexion
+     * Méthode pour mettre à jour la date de fin de partage de connexion
      * @param id
      * @param date
-     * @return le nombre de lignes qui vient d'Ãªtre mis Ã  jour
+     * @return le nombre de lignes qui vient d'être mis à jour
      */
     public int updateConsommationDateEnd(int id, long date ) {
 
@@ -405,10 +405,10 @@ public class SQLManager {
     }
 
     /**
-     * MÃ©thode pour mettre Ã  jour data initial de partage
+     * Méthode pour mettre à jour data initial de partage
      * @param id
      * @param newConsommation
-     * @return le nombre de lignes qui vient d'Ãªtre mis Ã  jour
+     * @return le nombre de lignes qui vient d'être mis à jour
      */
     public int updateConsommationDataT0(int id, long newConsommation){
         String selection = TableConsommation._ID + " = " + id;
@@ -420,10 +420,10 @@ public class SQLManager {
     }
 
     /**
-     * MÃ©thode pour mettre Ã  jour la consommation de data sur la borne
+     * Méthode pour mettre à jour la consommation de data sur la borne
      * @param id
      * @param newConsommation
-     * @return le nombre de lignes qui vient d'Ãªtre mis Ã  jour
+     * @return le nombre de lignes qui vient d'être mis à jour
      */
     public int updateConsommationDataTx(int id, long newConsommation){
         String selection = TableConsommation._ID + " = " + id;
@@ -435,10 +435,10 @@ public class SQLManager {
     }
 
     /**
-     * MÃ©thode pour mettre Ã  jour la localisation
+     * Méthode pour mettre à jour la localisation
      * @param id
      * @param newLocation
-     * @return le nombre de lignes qui vient d'Ãªtre mis Ã  jour
+     * @return le nombre de lignes qui vient d'être mis à jour
      */
     public int updateLocalisation(int id, boolean isUPSLocation){
         String selection = TableConsommation._ID + " = " + id;
@@ -450,8 +450,8 @@ public class SQLManager {
     }
 
     /**
-     * MÃ©thode pour recuperer la derniÃ¨re insertion dans TableConsommation
-     * @return la derniÃ¨re insertion
+     * Méthode pour recuperer la dernière insertion dans TableConsommation
+     * @return la dernière insertion
      */
     public TableConsommation getLastConsommation() {
         Cursor c = null;
@@ -477,11 +477,11 @@ public class SQLManager {
     /*==================== Fin des fonctions de manipulation de TableConsommation ====================*/
 
 
-    /*==================== DÃ©buts des fonctions de manipulations de TableUtilisateur ====================*/
+    /*==================== Débuts des fonctions de manipulations de TableUtilisateur ====================*/
 
 
     /**
-     * MÃ©thode d'insertion dans la TableUtilisateur
+     * Méthode d'insertion dans la TableUtilisateur
      * @param idconso
      * @param adresse_mac
      * @param adresse_ip
@@ -503,9 +503,9 @@ public class SQLManager {
     }
 
     /**
-     * MÃ©thode pour extraire les donnÃ©es de TableUtilisateur Ã  partir de ID_CONSO
+     * Méthode pour extraire les données de TableUtilisateur à partir de ID_CONSO
      * @param idConso
-     * @return une liste des users Ã  partir de ID_CONSO
+     * @return une liste des users à partir de ID_CONSO
      */
     public ArrayList<TableUtilisateur> getUtilisateurs(int idConso) {
         Cursor c = null;
@@ -531,7 +531,7 @@ public class SQLManager {
     }
 
     /**
-     * MÃ©thode pour extraire les donnÃ©es de TableUtilisateur
+     * Méthode pour extraire les données de TableUtilisateur
      * @return la liste de tous les users
      */
     public ArrayList<TableUtilisateur> getAllUtilisateurs() {
@@ -557,10 +557,10 @@ public class SQLManager {
     }
 
     /**
-     * MÃ©thode pour mettre Ã  jour date de dÃ©but de partage de connexion
+     * Méthode pour mettre à jour date de début de partage de connexion
      * @param id
      * @param time
-     * @return le nombre de ligne qui vient d'Ãªtre mis Ã  jour
+     * @return le nombre de ligne qui vient d'être mis à jour
      */
     public int updateConnectedTime(int id, long time){
         String selection = TableUtilisateur._ID + " = " + id;
@@ -572,10 +572,10 @@ public class SQLManager {
     }
 
     /**
-     * MÃ©thode pour mettre Ã  jour date de fin de partage de connexion
+     * Méthode pour mettre à jour date de fin de partage de connexion
      * @param id
      * @param time
-     * @return le nombre de ligne qui vient d'Ãªtre mis Ã  jour
+     * @return le nombre de ligne qui vient d'être mis à jour
      */
     public int updateDisconnectedTime(int id, long time){
         String selection = TableUtilisateur._ID + " = " + id;
@@ -587,7 +587,7 @@ public class SQLManager {
     }
 
     /**
-     * MÃ©thode de suppression des users Ã  partir de ID
+     * Méthode de suppression des users à partir de ID
      * @param iduser
      */
     public void removeUtilisateurByID(int iduser) {
@@ -596,7 +596,7 @@ public class SQLManager {
     }
 
     /**
-     * MÃ©thode pour supprimer tous les users
+     * Méthode pour supprimer tous les users
      */
     public void removeAllUtilisateur() {
         database.delete(TableUtilisateur._NAME, null, null);

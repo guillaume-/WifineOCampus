@@ -19,18 +19,18 @@ import static com.neocampus.wifishared.utils.WifiApControl.WIFI_AP_STATE_ENABLIN
 import static com.neocampus.wifishared.utils.WifiApControl.WIFI_AP_STATE_FAILED;
 
 /**
- * OnHotspotReceiver permet d'Ãªtre informÃ© par le systÃ¨me android lors du changement de l'Ã©tat du hotspot wifi,
- * et notifie le nouvel Ã©tat au {@link java.util.Observer}
+ * OnHotspotReceiver permet d'être informé par le système android lors du changement de l'état du hotspot wifi,
+ * et notifie le nouvel état au {@link java.util.Observer}
  */
 public class OnHotspotReceiver extends BroadcastReceiver {
 
     /**
-     * Observable qui dÃ©tecte et notifie aux {@link java.util.Observer} le nouvel Ã©tat
+     * Observable qui détecte et notifie aux {@link java.util.Observer} le nouvel état
      */
     private HotspotObservable observable;
 
     /**
-     * Constructeur par dÃ©faut
+     * Constructeur par défaut
      */
     public OnHotspotReceiver() {
         this.observable = null;
@@ -38,16 +38,16 @@ public class OnHotspotReceiver extends BroadcastReceiver {
 
     /**
      * Constructeur de la classe, initialise l'{@link java.util.Observable}
-     * @param observable {@link HotspotObservable} par dÃ©faut
+     * @param observable {@link HotspotObservable} par défaut
      */
     public OnHotspotReceiver(HotspotObservable observable) {
         this.observable = observable;
     }
 
     /**
-     * Cette mÃ©thode est appelÃ© lorsque le systÃ¨me android notifie le changement de l'Ã©tat du hotspot wifi
+     * Cette méthode est appelé lorsque le système android notifie le changement de l'état du hotspot wifi
      * @param context contexte de l'application
-     * @param intent contient les informations d'identification de l'Ã©vÃ¨nement
+     * @param intent contient les informations d'identification de l'évènement
      */
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -76,7 +76,7 @@ public class OnHotspotReceiver extends BroadcastReceiver {
     }
 
     /**
-     * restaure la configuration par dÃ©faut de l'utilisateur
+     * restaure la configuration par défaut de l'utilisateur
      * @param context contexte de l'application
      * @return vrai si la restauration s'est produite faux sinon
      *
@@ -117,8 +117,8 @@ public class OnHotspotReceiver extends BroadcastReceiver {
     }
 
     /**
-     * Met Ã  jour l'Ã©tat du hotspot, lorsque le systÃ¨me indique un nouvel Ã©tat,
-     * et notifie ce nouvel Ã©tat au {@link java.util.Observer}
+     * Met à jour l'état du hotspot, lorsque le système indique un nouvel état,
+     * et notifie ce nouvel état au {@link java.util.Observer}
      * @param context
      */
     public void updateHotspotState(Context context) {

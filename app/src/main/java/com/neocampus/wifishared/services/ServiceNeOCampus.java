@@ -36,21 +36,21 @@ import java.util.Observable;
 import java.util.Observer;
 
 /**
- * ServiceNeOCampus est une classe de service gÃ©nÃ©rale de l'application.
+ * ServiceNeOCampus est une classe de service générale de l'application.
  * <p>
- *     Le service contient tous les services d'arriÃ¨re plan de l'application et
- *     s'occupe de leur lancement ou de leur arrÃªt, tous les services sont associÃ©s a un observateur d'Ã©tat.
+ *     Le service contient tous les services d'arrière plan de l'application et
+ *     s'occupe de leur lancement ou de leur arrêt, tous les services sont associés a un observateur d'état.
  * </p>
  */
 public class ServiceNeOCampus extends Service implements OnServiceSetListener, Observer {
 
     /**
-     * {@link Binder} permet de se connectÃ© au service afin de communiquer avec cell-ci
+     * {@link Binder} permet de se connecté au service afin de communiquer avec cell-ci
      */
     private ServiceNeOCampusBinder oCampusBinder;
 
     /**
-     * Objet permettant de communication avec la base de donnÃ©es
+     * Objet permettant de communication avec la base de données
      */
     private SQLManager sqlManager;
 
@@ -60,37 +60,37 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
     private LocationManagment locationManagment;
 
     /**
-     * Observable permettant d'Ãªtre notifiÃ© sur un Ã©vÃ¨nnement de connexion
+     * Observable permettant d'être notifié sur un évènnement de connexion
      */
     private ClientObservable clientObservable;
 
     /**
-     * Observable permettant d'Ãªtre notifiÃ© sur un changement de la configuration WIFI-AP
+     * Observable permettant d'être notifié sur un changement de la configuration WIFI-AP
      */
     private HotspotObservable hotspotObservable;
 
     /**
-     * Observable permettant d'Ãªtre notifiÃ© sur un changement du niveau de la batterie
+     * Observable permettant d'être notifié sur un changement du niveau de la batterie
      */
     private BatterieObservable batterieObservable;
 
     /**
-     * Observable permettant d'Ãªtre notifiÃ© sur un changement de la consommation de donnÃ©es
+     * Observable permettant d'être notifié sur un changement de la consommation de données
      */
     private DataObservable dataObservable;
 
     /**
-     * Observable permettant d'Ãªtre notifiÃ© sur un dÃ©clenchement d'alarme
+     * Observable permettant d'être notifié sur un déclenchement d'alarme
      */
     private TimeObservable timeObservable;
 
     /**
-     * Observable permettant d'Ãªtre notifiÃ© sur un changement de l'accÃ¨s internet
+     * Observable permettant d'être notifié sur un changement de l'accès internet
      */
     private NetworkObservable networkObservable;
 
     /**
-     * Service d'observation de la consommation de donnÃ©es
+     * Service d'observation de la consommation de données
      */
     private ServiceDataTraffic serviceData;
 
@@ -115,12 +115,12 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
     private OnAlarmReceiver onAlarmReceiver;
 
     /**
-     * Service d'observation de l'accÃ¨s internet
+     * Service d'observation de l'accès internet
      */
     private OnNetworkReceiver onNetworkReceiver;
 
     /**
-     * Constructeur du service gÃ©nÃ©rale
+     * Constructeur du service générale
      */
     public ServiceNeOCampus() {
         this.oCampusBinder = new ServiceNeOCampusBinder();
@@ -134,7 +134,7 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
 
 
     /**
-     * Cette mÃ©thode initialise les services
+     * Cette méthode initialise les services
      */
     @Override
     public void onCreate() {
@@ -166,7 +166,7 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
     }
 
     /**
-     * Permet le redÃ©marrage du service en cas de fermetture de l'interface de l'application
+     * Permet le redémarrage du service en cas de fermetture de l'interface de l'application
      * @param intent
      * @param flags
      * @param startId
@@ -178,7 +178,7 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
     }
 
     /**
-     * Permet la dÃ©sactivation complÃ¨te les services
+     * Permet la désactivation complète les services
      */
     @Override
     public void onDestroy() {
@@ -205,8 +205,8 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
     }
 
     /**
-     * permet de dÃ©sinstaller le {@link Binder} permettant la communication
-     * @param conn {@link Binder} Ã  dÃ©sinstaller
+     * permet de désinstaller le {@link Binder} permettant la communication
+     * @param conn {@link Binder} à désinstaller
      */
     @Override
     public void unbindService(ServiceConnection conn) {
@@ -214,7 +214,7 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
     }
 
     /**
-     * Cette mÃ©thode permet de s'inscrire sur la liste des notifiÃ©s de tous les observables
+     * Cette méthode permet de s'inscrire sur la liste des notifiés de tous les observables
      * @param observer objet recevant la notification
      */
     @Override
@@ -228,7 +228,7 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
     }
 
     /**
-     * Cette mÃ©thode permet de se dÃ©sinscrire de la liste des notifiÃ©s de tous les observables
+     * Cette méthode permet de se désinscrire de la liste des notifiés de tous les observables
      * @param observer objet recevant la notification
      */
     @Override
@@ -243,7 +243,7 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
 
 
     /**
-     * Cette mÃ©thode actualise sur l'interface graphique la consommation de donnÃ©es si l'utilisateur en fait la demande
+     * Cette méthode actualise sur l'interface graphique la consommation de données si l'utilisateur en fait la demande
      * @param listener interface de communication avec fragment
      */
     @Override
@@ -252,7 +252,7 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
     }
 
     /**
-     * Cette mÃ©thode actualise sur l'interface graphique les clients connectÃ©s depuis le dÃ©but du partage
+     * Cette méthode actualise sur l'interface graphique les clients connectés depuis le début du partage
      * @param listener interface de communication avec fragment
      */
     @Override
@@ -261,7 +261,7 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
     }
 
     /**
-     * Cette mÃ©thode actualise sur l'interface graphique les clients actuellement connectÃ©s
+     * Cette méthode actualise sur l'interface graphique les clients actuellement connectés
      * @param listener interface de communication avec fragment
      */
     @Override
@@ -270,7 +270,7 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
     }
 
     /**
-     * Permet de reinitialiser le service d'observation de la consommation de donnÃ©es
+     * Permet de reinitialiser le service d'observation de la consommation de données
      */
     @Override
     public void resetBaseT0() {
@@ -279,7 +279,7 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
     }
 
     /**
-     * Cette mÃ©thode actualise sur l'interface graphique le temps pour lequel l'alarme se dÃ©clenchera
+     * Cette méthode actualise sur l'interface graphique le temps pour lequel l'alarme se déclenchera
      * @param listener interface de communication avec fragment
      */
     @Override
@@ -288,7 +288,7 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
     }
 
     /**
-     * Cette mÃ©thode permet de sauvegarder en urgence la consommation actuelle de donnÃ©es
+     * Cette méthode permet de sauvegarder en urgence la consommation actuelle de données
      */
     @Override
     public void storeInDataBase() {
@@ -298,7 +298,7 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
     }
 
     /**
-     * Cette mÃ©thode permet de restaurer la consommation de donnÃ©es sauvegardÃ© en urgence
+     * Cette méthode permet de restaurer la consommation de données sauvegardé en urgence
      */
     public void restoreFromDataBase() {
         TableConfiguration configuration = sqlManager.getConfiguration();
@@ -319,7 +319,7 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
     }
 
     /**
-     * Cette mÃ©thode permet de lancer tous les services d'observations
+     * Cette méthode permet de lancer tous les services d'observations
      */
     private void startWatchDog() {
         this.serviceData.startWatchDog(1000);
@@ -328,7 +328,7 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
     }
 
     /**
-     * Cette mÃ©thode permet de d'arrÃªter tous les services d'observations
+     * Cette méthode permet de d'arrêter tous les services d'observations
      */
     private void stopWatchDog() {
         this.serviceData.stopWatchDog();
@@ -337,8 +337,8 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
     }
 
     /**
-     * Cette mÃ©thode permet d'initialiser une ligne d'une session de partage
-     * dans la base de donnÃ©es
+     * Cette méthode permet d'initialiser une ligne d'une session de partage
+     * dans la base de données
      */
     private void createSession() {
         if(hotspotObservable.getSessionId() == -1) {
@@ -351,7 +351,7 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
     }
 
     /**
-     * Cette mÃ©thode permet de prÃ©-configurer le dÃ©marrage et l'arrÃªt d'un partage
+     * Cette méthode permet de pré-configurer le démarrage et l'arrêt d'un partage
      * @param enable etat du partage
      */
     public void setWatchDogState(boolean enable) {
@@ -365,8 +365,8 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
     }
 
     /**
-     * Cette mÃ©thode permet de sauvegarder dans
-     * la base de donnÃ©es tous les informations observÃ©es avant l'arrÃªt d'un partage
+     * Cette méthode permet de sauvegarder dans
+     * la base de données tous les informations observées avant l'arrêt d'un partage
      */
     public void saveInDataBase(){
         int idConso =
@@ -383,10 +383,10 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
     }
 
     /**
-     * Cette mÃ©thode teste si le temps d'activation du
-     * partage a Ã©tÃ© dÃ©passÃ© au dÃ©clenchement d'une alarme
-     * @param timeValue temps au dÃ©clenchement de l'alarme
-     * @return vrai si temps d'activation s'est Ã©coulÃ© faux sinon
+     * Cette méthode teste si le temps d'activation du
+     * partage a été dépassé au déclenchement d'une alarme
+     * @param timeValue temps au déclenchement de l'alarme
+     * @return vrai si temps d'activation s'est écoulé faux sinon
      */
     public boolean isOverTimeLimit(long timeValue) {
         TableConfiguration tableConfiguration = sqlManager.getConfiguration();
@@ -395,9 +395,9 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
     }
 
     /**
-     * Cette mÃ©thode teste si la consommation de donnÃ©es a atteint la limite dÃ©finie par l'utilisateur
-     * @param dataLevel consommation actuelle de donnÃ©es
-     * @return vrai si le seuil de consommation de donnÃ©es a Ã©tÃ© atteint faux sinon
+     * Cette méthode teste si la consommation de données a atteint la limite définie par l'utilisateur
+     * @param dataLevel consommation actuelle de données
+     * @return vrai si le seuil de consommation de données a été atteint faux sinon
      */
     public boolean isOverDataLimit(long dataLevel) {
         TableConfiguration tableConfiguration = sqlManager.getConfiguration();
@@ -405,7 +405,7 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
     }
 
     /**
-     * Cette mÃ©thode teste si le niveau de la batterie a atteint la limite dÃ©finie par l'utilisateur
+     * Cette méthode teste si le niveau de la batterie a atteint la limite définie par l'utilisateur
      * @param level niveau actuel de la batterie
      * @return
      */
@@ -415,7 +415,7 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
     }
 
     /**
-     * Permet d'arrÃªter le partage
+     * Permet d'arrêter le partage
      */
     private void stopHotpost() {
         if(WifiApControl.checkPermission(this)) {
@@ -427,9 +427,9 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
     }
 
     /**
-     * Cette mÃ©thode est appelÃ© par les observables pour notifier un changement
+     * Cette méthode est appelé par les observables pour notifier un changement
      * @param o observable source de la notification
-     * @param arg information sur le changement observÃ©
+     * @param arg information sur le changement observé
      */
     @Override
     public void update(Observable o, Object arg) {

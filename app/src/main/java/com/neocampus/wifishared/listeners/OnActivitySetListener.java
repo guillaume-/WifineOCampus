@@ -6,16 +6,16 @@ import com.neocampus.wifishared.sql.database.TableUtilisateur;
 import java.util.List;
 
 /**
- * OnActivitySetListener permet de communiquer avec l'activitÃ© principale {@link com.neocampus.wifishared.activity.MainActivity}
+ * OnActivitySetListener permet de communiquer avec l'activité principale {@link com.neocampus.wifishared.activity.MainActivity}
  *
- * @author Hirochi â˜ 
+ * @author Hirochi ?
  * @version 1.0.0
  */
 public interface OnActivitySetListener {
 
     /**
-     * Renvoi le seuil de consommation de donnÃ©es
-     * @return seuil de consommation de donnÃ©es
+     * Renvoi le seuil de consommation de données
+     * @return seuil de consommation de données
      */
     float       getLimiteDataTrafic();
 
@@ -38,27 +38,27 @@ public interface OnActivitySetListener {
     int         getNotificationCode();
 
     /**
-     * Poste une demande de mise Ã  jour du temps d'activation d'une session de partage
+     * Poste une demande de mise à jour du temps d'activation d'une session de partage
      */
     void        postRequestTimeValue();
 
     /**
-     * Poste une demande de mise Ã  jour des clients
+     * Poste une demande de mise à jour des clients
      */
     void        postRequestListClients();
 
     /**
-     * Poste une demande de mise Ã  jour du total de consommation de donnÃ©es
+     * Poste une demande de mise à jour du total de consommation de données
      */
     void        postRequestDataTraffic();
 
     /**
-     * Rend invisible le button de rafraÃ®chissement de l'affichage
+     * Rend invisible le button de rafraîchissement de l'affichage
      */
     void        hideAppBarRefresh();
 
     /**
-     * Rend visible le button de rafraÃ®chissement de l'affichage
+     * Rend visible le button de rafraîchissement de l'affichage
      */
     void        showAppBarRefresh();
 
@@ -81,7 +81,7 @@ public interface OnActivitySetListener {
     /**
      * Renvoi la liste de tous les clients d'une session de partage
      * @param iDConso identifiant de la session de partage
-     * @return liste des clients qui se sont connÃ©ctÃ©s
+     * @return liste des clients qui se sont connéctés
      */
     List<TableUtilisateur> getUtilisateurs(int iDConso);
 }

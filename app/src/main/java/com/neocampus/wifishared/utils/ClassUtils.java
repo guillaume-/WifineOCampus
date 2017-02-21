@@ -13,7 +13,7 @@ import java.util.Set;
 import dalvik.system.DexFile;
 
 /**
- * ClassUtils permet d'Ã©ffectuer des actions en relation avec les classes
+ * ClassUtils permet d'éffectuer des actions en relation avec les classes
  */
 public class ClassUtils {
 
@@ -25,13 +25,13 @@ public class ClassUtils {
     }
 
     /**
-     * Liste tous les classes d'un package en incluant les sous rÃ©pertoires,
+     * Liste tous les classes d'un package en incluant les sous répertoires,
      * @param context contexte de l'application
      * @param packageName repertoire dont on cherche les classes
      * @return liste des classes du package
      *
      * @throws PackageManager.NameNotFoundException si le package n'existe pas
-     * @throws IOException si le fichier comprÃ©ssÃ© des classes n'existe pas
+     * @throws IOException si le fichier compréssé des classes n'existe pas
      * @throws ClassNotFoundException si la classe n'existe pas
      */
     public static Set<Class<?>> getClasses(Context context, String packageName)
@@ -47,11 +47,11 @@ public class ClassUtils {
     }
 
     /**
-     * Liste tous les classes d'un rÃ©pertoire
+     * Liste tous les classes d'un répertoire
      * @param classLoader Gestionnaire des classes de l'application
-     * @param dexPath rÃ©pertoire dont on liste les classes
+     * @param dexPath répertoire dont on liste les classes
      * @param packageName package dont on liste les classes
-     * @return liste des classes du rÃ©pertoire
+     * @return liste des classes du répertoire
      */
     private static Set<Class<?>> getClasses(ClassLoader classLoader,
                                             String dexPath, String packageName) {
@@ -79,7 +79,7 @@ public class ClassUtils {
     }
 
     /**
-     * CrÃ©er une instance d'une classe
+     * Créer une instance d'une classe
      * @param aClass classe de l'instance
      * @return nouvelle instance de la classe
      */
@@ -96,10 +96,10 @@ public class ClassUtils {
     }
 
     /**
-     * Recherche une mÃ©thode dans une classe
-     * @param aClass classe de la mÃ©thode recherchÃ©
-     * @param methodeName nom de la mÃ©thode recherchÃ©
-     * @return MÃ©thode si trouvÃ©, null sinon
+     * Recherche une méthode dans une classe
+     * @param aClass classe de la méthode recherché
+     * @param methodeName nom de la méthode recherché
+     * @return Méthode si trouvé, null sinon
      */
     public static Method getMethod(Class aClass, String methodeName)
     {

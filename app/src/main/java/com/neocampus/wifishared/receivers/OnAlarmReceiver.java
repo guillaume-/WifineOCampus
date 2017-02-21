@@ -14,34 +14,34 @@ import com.neocampus.wifishared.sql.manage.SQLManager;
 
 /**
  * OnAlarmReceiver permet d'installer une alarme
- * et d'Ãªtre informÃ© lors de son activation
+ * et d'être informé lors de son activation
  */
 public class OnAlarmReceiver extends BroadcastReceiver {
 
     /**
-     * LibellÃ© de l'action, permet d'identifier le signal du systÃ¨me
+     * Libellé de l'action, permet d'identifier le signal du système
      */
     public static final String ACTION_ALARM_ACTIVATED = "com.neocampus.wifishared.NEOCAMPUS_ALARM_ACTIVATED";
 
     /**
-     * Observable qui dÃ©tecte les activations de l'alarme et les notifie au {@link java.util.Observer}
+     * Observable qui détecte les activations de l'alarme et les notifie au {@link java.util.Observer}
      * @see TimeObservable
      */
     private TimeObservable observable;
 
     /**
      * Construteur de la classe, initialise l'{@link java.util.Observable}
-     * @param observable {@link TimeObservable} par dÃ©faut
+     * @param observable {@link TimeObservable} par défaut
      */
     public OnAlarmReceiver(TimeObservable observable) {
         this.observable = observable;
     }
 
     /**
-     * Cette mÃ©thode est appelÃ© lorsque le systÃ¨me android active l'alarme qui a Ã©tÃ© installÃ©,
-     * on modifier la date de la derniÃ¨re activation
+     * Cette méthode est appelé lorsque le système android active l'alarme qui a été installé,
+     * on modifier la date de la dernière activation
      * @param context contexte de l'application
-     * @param intent contient les informations d'identification de l'Ã©vÃ¨nement
+     * @param intent contient les informations d'identification de l'évènement
      *
      * @see TimeObservable#setDate(long)
      */
@@ -51,7 +51,7 @@ public class OnAlarmReceiver extends BroadcastReceiver {
     }
 
     /**
-     * Supprime l'alarme installÃ©
+     * Supprime l'alarme installé
      * @param context context de l'application
      */
     public void removeAlarm(Context context) {
@@ -90,9 +90,9 @@ public class OnAlarmReceiver extends BroadcastReceiver {
     }
 
     /**
-     * Indique si une alarme est installÃ©
+     * Indique si une alarme est installé
      * @param context context de l'application
-     * @return vrai si installÃ© faux sinon
+     * @return vrai si installé faux sinon
      */
     public static boolean existAlarm(Context context) {
         try {
@@ -105,10 +105,10 @@ public class OnAlarmReceiver extends BroadcastReceiver {
     }
 
     /**
-     * Calcul la date d'activation d'une alarme si aucune n'a Ã©tÃ© sauvegardÃ© dans la base de donnÃ©e
+     * Calcul la date d'activation d'une alarme si aucune n'a été sauvegardé dans la base de donnée
      * puis sauvegarde nouvelle date
      * @param context context de l'application
-     * @param manager interface de communication avec la base de donnÃ©es
+     * @param manager interface de communication avec la base de données
      *
      * @see SQLManager#setConfigurationA(long)
      * @see TableConfiguration#setDateAlarm(long)
@@ -125,9 +125,9 @@ public class OnAlarmReceiver extends BroadcastReceiver {
     }
 
     /**
-     * Annule une alarme et supprime la date sauvegardÃ© dans la base de donnÃ©es
+     * Annule une alarme et supprime la date sauvegardé dans la base de données
      * @param context contexte de l'application
-     * @param manager interface de communication avec la base de donnÃ©es
+     * @param manager interface de communication avec la base de données
      *
      * @see SQLManager#setConfigurationA(long)
      */

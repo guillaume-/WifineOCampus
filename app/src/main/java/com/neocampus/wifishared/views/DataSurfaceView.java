@@ -19,9 +19,9 @@ import com.neocampus.wifishared.R;
 import java.util.Locale;
 
 /**
- * Created by Hirochi â˜  on 19/01/17.
+ * DataSurfaceView permet d'afficher la vue de configuration de la consommation de données
+ * @author Hirochi ?
  */
-
 public class DataSurfaceView extends SurfaceView implements
         SurfaceHolder.Callback, Runnable, View.OnTouchListener {
 

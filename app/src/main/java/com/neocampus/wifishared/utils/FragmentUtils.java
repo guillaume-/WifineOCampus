@@ -10,17 +10,17 @@ import com.neocampus.wifishared.R;
 import java.util.List;
 
 /**
- * FragmentUtils permet d'Ã©ffectuer des actions en relation avec les fragments
+ * FragmentUtils permet d'éffectuer des actions en relation avec les fragments
  */
 public class FragmentUtils {
 
     /**
-     * Affiche un fragment selon sa classe, crÃ©e une nouvelle instance si une aucune n'existe
+     * Affiche un fragment selon sa classe, crée une nouvelle instance si une aucune n'existe
 
-     * @param activity activity oÃ¹ affichÃ© le fragment
-     * @param aClass classe du fragment a affichÃ©
-     * @param animations tableau des animations a Ã©ffectuÃ© lors de l'affichage
-     * @return instance du fragment affichÃ©
+     * @param activity activity où affiché le fragment
+     * @param aClass classe du fragment a affiché
+     * @param animations tableau des animations a éffectué lors de l'affichage
+     * @return instance du fragment affiché
      */
     public static Fragment showFragment(AppCompatActivity activity,
                                   Class<?> aClass, Integer... animations) {
@@ -46,10 +46,10 @@ public class FragmentUtils {
 
     /**
      * Affiche un fragment via une instance de celle-ci
-     * @param activity activity oÃ¹ affichÃ© le fragment
-     * @param fragment instance du fragment a affichÃ©
-     * @param animations tableau des animations a Ã©ffectuÃ© lors de l'affichage
-     * @return instance du fragment affichÃ©
+     * @param activity activity où affiché le fragment
+     * @param fragment instance du fragment a affiché
+     * @param animations tableau des animations a éffectué lors de l'affichage
+     * @return instance du fragment affiché
      */
     public static Fragment showFragment(AppCompatActivity activity,
                                        Fragment fragment, Integer... animations) {
@@ -70,8 +70,8 @@ public class FragmentUtils {
 
     /**
      * Renvoi le fragment visible au premier plan
-     * @param activity activity oÃ¹ est affichÃ© le fragment
-     * @return instance du fragment affichÃ©
+     * @param activity activity où est affiché le fragment
+     * @return instance du fragment affiché
      */
     public static Fragment getForegroundFragment(AppCompatActivity activity) {
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
@@ -87,9 +87,9 @@ public class FragmentUtils {
 
     /**
      * Recherche une instance d'un fragment selon sa classe
-     * @param activity activity s'est affichÃ© le fragment recherchÃ©
-     * @param aClass classe du fragment recherchÃ©
-     * @return fragment recherchÃ© si trouvÃ©, null sinon
+     * @param activity activity s'est affiché le fragment recherché
+     * @param aClass classe du fragment recherché
+     * @return fragment recherché si trouvé, null sinon
      */
     public static Fragment getFragmentFromClass(AppCompatActivity activity, Class aClass)
     {

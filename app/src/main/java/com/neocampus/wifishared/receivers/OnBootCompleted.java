@@ -7,7 +7,7 @@ import android.content.Intent;
 import com.neocampus.wifishared.services.ServiceNeOCampus;
 
 /**
- * OnBootCompleted permet de d'effectuÃ© une action lors du dÃ©marrage du systÃ¨me android
+ * OnBootCompleted permet de d'effectué une action lors du démarrage du système android
  */
 public class OnBootCompleted extends BroadcastReceiver {
 
@@ -18,10 +18,10 @@ public class OnBootCompleted extends BroadcastReceiver {
     }
 
     /**
-     * Cette mÃ©thode est appelÃ© lorsque le systÃ¨me android dÃ©marre,
+     * Cette méthode est appelé lorsque le système android démarre,
      * on lance le service {@link ServiceNeOCampus}
      * @param context contexte de l'application
-     * @param intent contient les informations d'identification de l'Ã©vÃ¨nement
+     * @param intent contient les informations d'identification de l'évènement
      */
     @Override
     public void onReceive(Context context, Intent intent) {

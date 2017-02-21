@@ -14,8 +14,9 @@ import com.neocampus.wifishared.utils.WifiApControl;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
- * Created by Hirochi â˜  on 10/01/17.
+ * ReachableUserView permet d'afficher la vue sur la liste de clients connectés
  */
 
 public class ReachableUserView extends LinearLayout implements OnAdapterViewListener {

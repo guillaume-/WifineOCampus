@@ -14,9 +14,9 @@ import com.neocampus.wifishared.R;
 import java.util.List;
 
 /**
- * Created by Hirochi ☠ on 25/01/17.
+ * KeyboardViews permet d'afficher la vue de touche pour la configuration du temps d'activation
+ * @author Hirochi ?
  */
-
 public class KeyboardViews extends KeyboardView {
 
     private float density;

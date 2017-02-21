@@ -16,10 +16,10 @@ import android.view.SurfaceView;
 
 import com.neocampus.wifishared.R;
 
-/**
- * Created by Hirochi â˜  on 29/01/17.
- */
 
+/**
+ * ProgressSurfaceView permet d'afficher une animation d'écoulement
+ */
 public class ProgressSurfaceView extends SurfaceView implements
         SurfaceHolder.Callback, Runnable {
 

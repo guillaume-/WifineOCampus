@@ -5,8 +5,8 @@ import java.util.Observable;
 import static com.neocampus.wifishared.utils.WifiApControl.STATE_ENABLED;
 
 /**
- * HotspotObservable permet d'observer l'Ã©tat du WIFi-AP et
- * de notifier les changement d'Ã©tat.
+ * HotspotObservable permet d'observer l'état du WIFi-AP et
+ * de notifier les changement d'état.
  */
 public class HotspotObservable extends Observable {
 
@@ -16,7 +16,7 @@ public class HotspotObservable extends Observable {
     private boolean UPS;
 
     /**
-     * Indique l'Ã©tat du WIFI-AP
+     * Indique l'état du WIFI-AP
      */
     private int state;
 
@@ -42,8 +42,8 @@ public class HotspotObservable extends Observable {
     }
 
     /**
-     * Tente de modifier l'Ã©tat du WIFI-AP, notifie le changement en cas de rÃ©ussite
-     *@param state nouvelle Ã©tat observÃ©
+     * Tente de modifier l'état du WIFI-AP, notifie le changement en cas de réussite
+     *@param state nouvelle état observé
      */
     public void setState(int state) {
         if(this.state != state) {
@@ -54,15 +54,15 @@ public class HotspotObservable extends Observable {
     }
 
     /**
-     * Renvoi l'Ã©tat du WIFI-Ap
-     * @return Ã©tat du WIFI-Ap
+     * Renvoi l'état du WIFI-Ap
+     * @return état du WIFI-Ap
      */
     public int getState() {
         return state;
     }
 
     /**
-     * Modifie le type de configuration observÃ©
+     * Modifie le type de configuration observé
      * @param UPS vrai si configuration UPS, faux sinon
      */
     public void setUPS(boolean UPS) {
@@ -79,7 +79,7 @@ public class HotspotObservable extends Observable {
 
 
     /**
-     * DÃ©finie l'identifiant de la session actuelle en cas d'activation par l'utilisateur
+     * Définie l'identifiant de la session actuelle en cas d'activation par l'utilisateur
      * @param sessionId
      */
     public void setSessionId(int sessionId) {

@@ -8,29 +8,29 @@ import com.neocampus.wifishared.observables.NetworkObservable;
 import com.neocampus.wifishared.utils.NetworkUtils;
 
 /**
- * OnNetworkReceiver permet d'Ãªtre informÃ© par le systÃ¨me android lors du changement de l'Ã©tat de la connexion internet,
- * et notifie le nouvel Ã©tat au {@link java.util.Observer}
+ * OnNetworkReceiver permet d'être informé par le système android lors du changement de l'état de la connexion internet,
+ * et notifie le nouvel état au {@link java.util.Observer}
  */
 public class OnNetworkReceiver extends BroadcastReceiver {
 
     /**
-     * Observable qui dÃ©tecte et notifie aux {@link java.util.Observer} le nouvel Ã©tat
+     * Observable qui détecte et notifie aux {@link java.util.Observer} le nouvel état
      */
     private NetworkObservable observable;
 
     /**
      * Constructeur de la classe, initialise l'{@link java.util.Observable}
-     * @param observable {@link NetworkObservable} par dÃ©faut
+     * @param observable {@link NetworkObservable} par défaut
      */
     public OnNetworkReceiver(NetworkObservable observable) {
         this.observable = observable;
     }
 
     /**
-     * Cette mÃ©thode est appelÃ© lorsque le systÃ¨me android notifie le changement de l'Ã©tat de la connexion internet,
-     * on modifier l'Ã©tat de connexion internet mobile
+     * Cette méthode est appelé lorsque le système android notifie le changement de l'état de la connexion internet,
+     * on modifier l'état de connexion internet mobile
      * @param context contexte de l'application
-     * @param intent contient les informations d'identification de l'Ã©vÃ¨nement
+     * @param intent contient les informations d'identification de l'évènement
      *
      * @see NetworkObservable#setEnabled(boolean)
      */

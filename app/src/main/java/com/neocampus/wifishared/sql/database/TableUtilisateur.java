@@ -7,10 +7,10 @@ import com.neocampus.wifishared.sql.annotations.SqlType;
 import com.neocampus.wifishared.sql.annotations.Table;
 
 /**
- * <b>TableUtilisateur est la table qui staocke les informations des utilisatuers connectÃ©s Ã  une borne.</b>
+ * <b>TableUtilisateur est la table qui staocke les informations des utilisatuers connectés à une borne.</b>
  * <p>
- * Les informations stockÃ©es par cette table sont : adresse mac, adresse ip,
- * durÃ©e de connexion sur une borne.
+ * Les informations stockées par cette table sont : adresse mac, adresse ip,
+ * durée de connexion sur une borne.
  *
  * </p>
  *
@@ -49,7 +49,7 @@ public class TableUtilisateur extends SqlDataSchema {
     public static final String _ADRESSE_IP =  "Column_ADRESSE_IP";
 
     /**
-     * Colonne des dates de dÃ©but d'une connexion
+     * Colonne des dates de début d'une connexion
      */
     @Column(Type = SqlType.INTEGER, Nullable = true)
     public static final String _DATE_DEBUT_CNX =  "Column_DATE_DEBUT_CNX";
@@ -69,7 +69,7 @@ public class TableUtilisateur extends SqlDataSchema {
     }
 
     /**
-     * Cette mÃ©thode retourne identifiant de la TableUtilisateur
+     * Cette méthode retourne identifiant de la TableUtilisateur
      * @return ID d'un utilisateur
      */
     public int getID(){
@@ -77,61 +77,61 @@ public class TableUtilisateur extends SqlDataSchema {
     }
 
     /**
-     * Cette mÃ©thode retourne identifiant de TableConsommation
+     * Cette méthode retourne identifiant de TableConsommation
      * @return ID_CONSO de TableConsommation
      */
     public int getIdConso(){ return this.values.getAsInteger(_ID_CONSO); }
 
     /**
-     * Cette mÃ©thode met Ã  jour ID de TableConsommation
+     * Cette méthode met à jour ID de TableConsommation
      * @param id_conso
      */
     public void setIdConso(int id_conso){ this.values.put(_ID_CONSO, id_conso);}
 
     /**
-     * Cette mÃ©thode retourne adresse MAC d'un user de la borne
-     * @return une adresse MAC connectÃ©e sur la borne
+     * Cette méthode retourne adresse MAC d'un user de la borne
+     * @return une adresse MAC connectée sur la borne
      */
     public String getAdressMac(){ return this.values.getAsString(_ADRESSE_MAC); }
 
     /**
-     * Cette mÃ©thode met Ã  jour adresse MAC
+     * Cette méthode met à jour adresse MAC
      * @param adresse_mac
      */
     public void setAdressMac(String adresse_mac){ this.values.put(_ADRESSE_MAC, adresse_mac); }
 
     /**
-     * Cette mÃ©thode retourne adresse IP d'un user de la borne
-     * @return une adresse IP connectÃ©e sur la borne
+     * Cette méthode retourne adresse IP d'un user de la borne
+     * @return une adresse IP connectée sur la borne
      */
     public String getAdressIP(){ return this.values.getAsString(_ADRESSE_IP); }
 
     /**
-     * Cette mÃ©thode met Ã  jour adresse IP d'un user de la borne
+     * Cette méthode met à jour adresse IP d'un user de la borne
      * @param adresse_ip
      */
     public void setAdressIP(String adresse_ip){ this.values.put(_ADRESSE_MAC, adresse_ip); }
 
     /**
-     * Cette mÃ©thode retourne date de dÃ©but de connexion
-     * @return la date de dÃ©but de connexion
+     * Cette méthode retourne date de début de connexion
+     * @return la date de début de connexion
      */
     public long getDateDebutCnx(){ return this.values.getAsLong(_DATE_DEBUT_CNX); }
 
     /**
-     * Cette mÃ©thode met Ã  jour date de dÃ©but de connexion
+     * Cette méthode met à jour date de début de connexion
      * @param date_debut_cnx
      */
     public void setDateDebutCnx(long date_debut_cnx){ this.values.put(_DATE_DEBUT_CNX, date_debut_cnx); }
 
     /**
-     * Cette mÃ©thode retourne la date de fin de connexion
+     * Cette méthode retourne la date de fin de connexion
      * @return la date de fin de connexion
      */
     public long getDateFinCnx(){ return this.values.getAsLong(_DATE_FIN_CNX); }
 
     /**
-     * Cette mÃ©thode met Ã  jour la date de fin de connexion
+     * Cette méthode met à jour la date de fin de connexion
      * @param date_fin_cnx
      */
     public void setDateFinCnx(long date_fin_cnx){ this.values.put(_DATE_FIN_CNX, date_fin_cnx); }

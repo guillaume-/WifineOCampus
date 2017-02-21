@@ -19,14 +19,14 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 /**
- * FragmentSettings est un fragment qui affiche une vue contenant l'ensemble des paramÃ©trages de l'application
+ * FragmentSettings est un fragment qui affiche une vue contenant l'ensemble des paramétrages de l'application
  *
  * @see Fragment
  */
 public class FragmentSettings extends Fragment implements OnFragmentSetListener {
 
     /**
-     * Vue affichÃ© par le fragment
+     * Vue affiché par le fragment
      */
     private View view;
 
@@ -36,7 +36,7 @@ public class FragmentSettings extends Fragment implements OnFragmentSetListener 
     private TextView settingBatterie;
 
     /**
-     * Objet graphique affichant le seuil du total de consommation de donnÃ©es
+     * Objet graphique affichant le seuil du total de consommation de données
      */
     private TextView settingData;
 
@@ -46,7 +46,7 @@ public class FragmentSettings extends Fragment implements OnFragmentSetListener 
     private TextView settingTime;
 
     /**
-     * Interface de communication avec l'activitÃ© principale {@link com.neocampus.wifishared.activity.MainActivity}
+     * Interface de communication avec l'activité principale {@link com.neocampus.wifishared.activity.MainActivity}
      * #see {@link OnActivitySetListener}
      */
     private OnActivitySetListener mListener;
@@ -59,7 +59,7 @@ public class FragmentSettings extends Fragment implements OnFragmentSetListener 
     }
 
     /**
-     * CrÃ©e la vue affichÃ© par le fragment
+     * Crée la vue affiché par le fragment
      *
      * @see Fragment#onCreateView(LayoutInflater, ViewGroup, Bundle)
      */

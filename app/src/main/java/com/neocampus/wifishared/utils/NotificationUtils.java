@@ -11,7 +11,7 @@ import com.neocampus.wifishared.observables.DataObservable;
 import java.util.Locale;
 
 /**
- * NotificationUtils permet d'Ã©ffectuer des actions en relation avec la notification
+ * NotificationUtils permet d'éffectuer des actions en relation avec la notification
  */
 public class NotificationUtils {
     /**
@@ -26,7 +26,7 @@ public class NotificationUtils {
     public static final int NOTIFY_BATTERIE = 0x1000;
 
     /**
-     * Code de notification de la consommation de donnÃ©es
+     * Code de notification de la consommation de données
      */
     public static final int NOTIFY_DATA = 0x0100;
 
@@ -36,10 +36,10 @@ public class NotificationUtils {
     public static final int NOTIFY_TIME = 0x0010;
 
     /**
-     * Cette mÃ©thode affiche une notification,
-     * si le partage wifi s'arrÃªte sur franchissement du seuil de consommation de donnÃ©es
+     * Cette méthode affiche une notification,
+     * si le partage wifi s'arrête sur franchissement du seuil de consommation de données
      * @param context contexte de l'application
-     * @param observable contient la consommation de donnÃ©es
+     * @param observable contient la consommation de données
      */
     public static void showDataNotify(Context context, DataObservable observable)
     {
@@ -50,38 +50,38 @@ public class NotificationUtils {
         } else {
             data = String.format(Locale.FRANCE, "%.2f Mo", (dataTraffic * 1000.f));
         }
-        show(context,"Le partage Wi-Fi s'est arrÃªtÃ©", "La consommation de donnÃ©es a atteint "+data);
+        show(context,"Le partage Wi-Fi s'est arrêté", "La consommation de données a atteint "+data);
     }
 
     /**
-     * Cette mÃ©thode affiche une notification,
-     * si le partage wifi s'arrÃªte sur franchissement du seuil de la batterie
+     * Cette méthode affiche une notification,
+     * si le partage wifi s'arrête sur franchissement du seuil de la batterie
      * @param context contexte de l'application
      * @param observable contient le niveau de la batterie
      */
     public static void showBatterieNotify(Context context, BatterieObservable observable)
     {
-        show(context,"Le partage Wi-Fi s'est arrÃªtÃ©",
+        show(context,"Le partage Wi-Fi s'est arrêté",
                 "Le niveau de la batterie a atteint "+observable.getValue()+"%");
     }
 
     /**
-     * Cette mÃ©thode affiche une notification,
-     * si le partage wifi s'arrÃªte sur franchissement du temps d'activation
+     * Cette méthode affiche une notification,
+     * si le partage wifi s'arrête sur franchissement du temps d'activation
      * @param context contexte de l'application
      */
     public static void showTimeNotify(Context context)
     {
-        show(context, "Le partage Wi-Fi s'est arrÃªtÃ©", "Le temps de partage s'est Ã©coulÃ©");
+        show(context, "Le partage Wi-Fi s'est arrêté", "Le temps de partage s'est écoulé");
     }
 
     /**
-     * Cette mÃ©thode affiche une notification,
-     * si le partage wifi s'arrÃªte lors de la dÃ©sactivation d'internet mobile
+     * Cette méthode affiche une notification,
+     * si le partage wifi s'arrête lors de la désactivation d'internet mobile
      * @param context contexte de l'application
      */
     public static void showNetworkNotify(Context context) {
-        show(context, "Le partage Wi-Fi s'est arrÃªtÃ©", "Impossible de se connecter Ã  internet");
+        show(context, "Le partage Wi-Fi s'est arrêté", "Impossible de se connecter à internet");
     }
 
     /**
@@ -117,9 +117,9 @@ public class NotificationUtils {
     }
 
     /**
-     * VÃ©rifie si le code de notification de la batterie est prÃ©sent dans le code de notification
+     * Vérifie si le code de notification de la batterie est présent dans le code de notification
      * @param notificationCode code de notification
-     * @return vrai si la notification batterie est activÃ©, faux sinon
+     * @return vrai si la notification batterie est activé, faux sinon
      */
     public static boolean isBatterieEnabled(int notificationCode)
     {
@@ -127,9 +127,9 @@ public class NotificationUtils {
     }
 
     /**
-     * VÃ©rifie si le code de notification du temps est prÃ©sent dans le code de notification
+     * Vérifie si le code de notification du temps est présent dans le code de notification
      * @param notificationCode code de notification
-     * @return vrai si la notification temps est activÃ©, faux sinon
+     * @return vrai si la notification temps est activé, faux sinon
      */
     public static boolean isTimeEnabled(int notificationCode)
     {
@@ -137,9 +137,9 @@ public class NotificationUtils {
     }
 
     /**
-     * VÃ©rifie si le code de notification de consommation de donnÃ©es est prÃ©sent dans le code de notification
+     * Vérifie si le code de notification de consommation de données est présent dans le code de notification
      * @param notificationCode code de notification
-     * @return vrai si la notification consommation est activÃ©, faux sinon
+     * @return vrai si la notification consommation est activé, faux sinon
      */
     public static boolean isDataEnabled(int notificationCode)
     {

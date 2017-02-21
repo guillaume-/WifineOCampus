@@ -11,9 +11,9 @@ import com.neocampus.wifishared.listeners.OnAdapterViewListener;
 import java.util.List;
 
 /**
- * Created by Hirochi â˜  on 23/01/17.
+ * ListClientAdapter permet de gérer la liste des clients
+ * @author Hirochi ? 
  */
-
 public class ListClientAdapter extends ArrayAdapter {
 
     private int resLayout;

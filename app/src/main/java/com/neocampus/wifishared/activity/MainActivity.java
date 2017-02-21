@@ -65,10 +65,10 @@ import java.util.Observable;
 import java.util.Observer;
 
 /**
- * <b>MainActivity est l'activitÃ© lancÃ© au dÃ©marrage de l'application.</b>
+ * <b>MainActivity est l'activité lancé au démarrage de l'application.</b>
  * <p>
- * Cette classe reprÃ©sente le conteneur de la vue utilisateur,
- * et centralise l'ensemble des actions entre les fonctionnalitÃ©s.
+ * Cette classe représente le conteneur de la vue utilisateur,
+ * et centralise l'ensemble des actions entre les fonctionnalités.
  *
  * </p>
  *
@@ -78,9 +78,9 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         NavigationView.OnNavigationItemSelectedListener, OnActivitySetListener, Observer {
 
     /**
-     * Classe de communication avec la base de donnÃ©es
+     * Classe de communication avec la base de données
      * @see SQLManager
-    */
+     */
     private SQLManager sqlManager;
 
     /**
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     private WifiApControl apControl;
 
     /**
-     * Fragment courante affichÃ© par l'activitÃ©
+     * Fragment courant affiché par l'activité
      * @see Fragment
      */
     private Fragment fragment = null;
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     private OnServiceSetListener mServiceInterraction;
 
     /**
-     * Utilitaire de gÃ©o-localisation
+     * Utilitaire de géo-localisation
      */
     private LocationManagment locManage;
 
@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     }
 
     /**
-     * Ferme le volet des menus s'il est ouvert, ou restaure la vue prÃ©cÃ©dente
+     * Ferme le volet des menus s'il est ouvert, ou restaure la vue précédente
      * @see AppCompatActivity#onBackPressed()
      */
     @Override
@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     }
 
     /**
-     * Cette mÃ©thode annule la crÃ©ation de menu
+     * Cette méthode annule la création de menu
      * @param menu
      * @return vrai
      */
@@ -196,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
 
     /**
      * Change la vue du fragment actuel en cas de clique sur un menu du volet des menus
-     * @param item menu sur lequel l'utilisateur a cliquÃ©
+     * @param item menu sur lequel l'utilisateur a cliqué
      * @return toujours vrai
      * @see NavigationView.OnNavigationItemSelectedListener
      */
@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     }
 
     /**
-     * Cloture la connexion de l'activitÃ© au service principal {@link ServiceNeOCampus} et ferme la base de donnÃ©es
+     * Cloture la connexion de l'activité au service principal {@link ServiceNeOCampus} et ferme la base de données
      *
      * @see MainActivity#disconnectToService()
      * @see AppCompatActivity#onDestroy()
@@ -245,8 +245,8 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     }
 
     /**
-     * RafraÃ®chie l'affichage du fragment actuel s'il implemente {@link OnFragmentSetListener}
-     * @param v View sur laquel l'utilisateur a cliquÃ©
+     * Rafraéchie l'affichage du fragment actuel s'il implemente {@link OnFragmentSetListener}
+     * @param v View sur laquel l'utilisateur a cliqué
      *
      * @see OnFragmentSetListener#onRefreshAll()
      */
@@ -268,8 +268,8 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     }
 
     /**
-     * Sauvegarde dans la base de donnÃ©es, la limite courante configurÃ© par l'utilisateur, en cas de clique
-     * @param v View sur laquelle l'utilisateur a cliquÃ©
+     * Sauvegarde dans la base de données, la limite courante configurée par l'utilisateur, en cas de clique
+     * @param v View sur laquelle l'utilisateur a cliqué
      *
      * @see OnFragmentConfigListener#getLimiteDataTraffic()
      * @see OnFragmentConfigListener#getLimiteBatterie()
@@ -301,8 +301,8 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     }
 
     /**
-     * DÃ©marrage et arrÃªt du partage en cas de clique
-     * @param v View sur laquel l'utilisateur a cliquÃ©
+     * Démarrage et arrêt du partage en cas de clique
+     * @param v View sur laquel l'utilisateur a cliqué
      */
     public void onClickToRunAPWifi(View v) {
         v.startAnimation(AnimationUtils.
@@ -327,8 +327,8 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     }
 
     /**
-     * Affiche un fragment pour dÃ©finir le seuil de transmission
-     * @param v View sur laquel l'utilisateur a cliquÃ©
+     * Affiche un fragment pour définir le seuil de transmission
+     * @param v View sur laquel l'utilisateur a cliqué
      */
     public void onClickToDataConfig(final View v) {
         v.startAnimation(AnimationUtils.
@@ -343,8 +343,8 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     }
 
     /**
-     * Affiche un fragment pour dÃ©finir le seuil de la batterie
-     * @param v View sur laquel l'utilisateur a cliquÃ©
+     * Affiche un fragment pour définir le seuil de la batterie
+     * @param v View sur laquel l'utilisateur a cliqué
      */
     public void onClickToBatterieConfig(final View v) {
         v.startAnimation(AnimationUtils.
@@ -359,8 +359,8 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     }
 
     /**
-     * Affiche un fragment pour dÃ©finir le seuil du temps d'utilisation
-     * @param v View sur laquel l'utilisateur a cliquÃ©
+     * Affiche un fragment pour définir le seuil du temps d'utilisation
+     * @param v View sur laquel l'utilisateur a cliqué
      */
     public void onClickToTimeConfig(final View v) {
         v.startAnimation(AnimationUtils.
@@ -376,7 +376,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
 
     /**
      * Efface tous les informations d'historique de connexion
-     * @param v View sur laquel l'utilisateur a cliquÃ©
+     * @param v View sur laquel l'utilisateur a cliqué
      */
     public void onClickToResetDataBase(final View v) {
         v.startAnimation(AnimationUtils.
@@ -426,8 +426,8 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     }
 
     /**
-     * <p>Est appelÃ© lorsque la connexion au service principal {@link ServiceNeOCampus} est Ã©tablie.</p>
-     * <p>Affiche les donnÃ©es initiales</p>
+     * <p>Est appelé lorsque la connexion au service principal {@link ServiceNeOCampus} est établie.</p>
+     * <p>Affiche les données initiales</p>
      *
      * @param name
      * @param service
@@ -446,7 +446,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     }
 
     /**
-     * Est appelÃ© lors de la dÃ©connexion du service principal {@link ServiceNeOCampus}.
+     * Est appelé lors de la déconnexion du service principal {@link ServiceNeOCampus}.
      * @param name
      * @see ServiceConnection#onServiceDisconnected(ComponentName)
      */
@@ -456,7 +456,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     }
 
     /**
-     * Est appelÃ© lorsque l'Ã©tat d'un observable a changÃ©.
+     * Est appelé lorsque l'état d'un observable a changé.
      * @param o
      * @param newValue
      * @see Observer#update(Observable, Object)
@@ -483,7 +483,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     }
 
     /**
-     * RÃ©cupÃ¨re dans la base de donnÃ©es le seuil de transmission
+     * Récupère dans la base de données le seuil de transmission
      * @return le seuil de transmission
      *
      * @see SQLManager#getConfiguration()
@@ -498,7 +498,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     }
 
     /**
-     * RÃ©cupÃ¨re dans la base de donnÃ©es le seuil de la batterie
+     * Récupère dans la base de données le seuil de la batterie
      * @return le seuil de la batterie
      *
      * @see SQLManager#getConfiguration()
@@ -514,7 +514,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     }
 
     /**
-     * RÃ©cupÃ¨re dans la base de donnÃ©es le seuil du temps de partage
+     * Récupère dans la base de données le seuil du temps de partage
      * @return le seuil du temps de partage
      *
      * @see SQLManager#getConfiguration()
@@ -527,7 +527,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     }
 
     /**
-     * RÃ©cupÃ¨re dans la base de donnÃ©es le code de notification
+     * Récupère dans la base de données le code de notification
      * @return le code de notification
      */
     public int getNotificationCode(){
@@ -535,7 +535,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         return tableConfiguration.getNotification();
     }
     /**
-     * post une demande de mise Ã  jour des clients, au service principale {@link ServiceNeOCampus}
+     * Post une demande de mise à jour des clients, au service principale {@link ServiceNeOCampus}
      * @see OnServiceSetListener#peekReachableClients(OnReachableClientListener)
      * @see OnServiceSetListener#peekAllClients(OnReachableClientListener)
      */
@@ -551,7 +551,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     }
 
     /**
-     * post une demande de mise Ã  jour de la consommation de donnÃ©es, au service principale {@link ServiceNeOCampus}
+     * Post une demande de mise à jour de la consommation de données, au service principale {@link ServiceNeOCampus}
      * @see OnServiceSetListener#peekDataTraffic(OnFragmentSetListener)
      */
     @Override
@@ -564,7 +564,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     }
 
     /**
-     * post une demande de mise Ã  jour du temps d'activation du partage, au service principale {@link ServiceNeOCampus}
+     * Post une demande de mise à jour du temps d'activation du partage, au service principale {@link ServiceNeOCampus}
      * @see OnServiceSetListener#peekTimeValue(OnFragmentSetListener)
      */
     @Override
@@ -609,7 +609,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     }
 
     /**
-     * RÃ©cupÃ¨re dans la base de donnÃ©es la liste des partages de l'utilisateur
+     * Récupère dans la base de données la liste des partages de l'utilisateur
      * @return la liste des partages de l'utilisateur
      *
      * @see SQLManager#getAllConsommations()
@@ -620,7 +620,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     }
 
     /**
-     * VÃ©rifie l'Ã©tat du hotspot wifi, dÃ©marre ou arrÃªte celui-ci
+     * Vérifie l'état du hotspot wifi, démarre ou arrête celui-ci
      */
     private void verifyAndRunAPWifi() {
         WifiConfiguration configuration
@@ -643,7 +643,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     }
 
     /**
-     * RÃ©cupÃ¨re dans la base de donnÃ©es la liste des clients d'un partage
+     * Récupère dans la base de données la liste des clients d'un partage
      * @param iDConso identifiant de la session de partage
      * @return la liste des clients d'un partage
      *
@@ -655,8 +655,8 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     }
 
     /**
-     * VÃ©rifie si les conditions de lancements sont valides
-     * @return resultat de la vÃ©rification
+     * Vérifie si les conditions de lancements sont valides
+     * @return resultat de la vérification
      */
     private boolean verifyConditions() {
         TableConfiguration configuration
@@ -697,8 +697,8 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
 
 
     /**
-     * VÃ©rifie si une session de partage WI-FI nÃ©OCampus est activÃ©
-     * @return resultat de la vÃ©rification
+     * Vérifie si une session de partage WI-FI neOCampus est activé
+     * @return resultat de la vérification
      *
      * @see WifiApControl#isEnabled()
      * @see WifiApControl#isUPSWifiConfiguration()
@@ -713,16 +713,16 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     }
 
     /**
-     * VÃ©rify si la localisation de l'utilisateur est possible et qu'il/elle est dans la zone du campus UPS
+     * Vérifie si la localisation de l'utilisateur est possible et qu'il/elle est dans la zone du campus UPS
      * affiche un message informant que le lancement du partage n'est pas pris en charge si l'utilisateur n'est pas dans le compus
-     * @return resultat de la vÃ©rification
+     * @return resultat de la vérification
      */
     private boolean verifyGPSEnabled() {
         if(!locManage.isAtUniversity()){
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
             alertDialogBuilder.setTitle("Info. localisation");
             alertDialogBuilder
-                    .setMessage("Hors UPS (GPS dÃ©sactivÃ© ?), neOCampus dÃ©cline toute responsabilitÃ© quant Ã  l'utilisation de l'application.")
+                    .setMessage("Hors UPS (GPS désactivé ?), neOCampus décline toute responsabilité quant à l'utilisation de l'application.")
                     .setCancelable(false)
                     .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
@@ -744,8 +744,8 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     }
 
     /**
-     * VÃ©rifie si le service principale {@link ServiceNeOCampus} est en cours d'execution
-     * @return resultat de la vÃ©rification
+     * Vérifie si le service principale {@link ServiceNeOCampus} est en cours d'execution
+     * @return resultat de la vérification
      *
      */
     private boolean isServiceRunning(Class<?> serviceClass) {
@@ -761,8 +761,8 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     }
 
     /**
-     * VÃ©rifie si la configuration WI-FI AP est celle de nÃ©OCampus
-     * @return resultat de la vÃ©rification
+     * Vérifie si la configuration WI-FI AP est celle de neOCampus
+     * @return resultat de la vérification
      *
      * @see WifiApControl#getWifiApConfiguration()
      */
@@ -773,11 +773,11 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     }
 
     /**
-     * demande Ã  l'utilisateur s'il souhaite activÃ© sa gÃ©o-localisation
+     * demande à l'utilisateur s'il souhaite activer sa géo-localisation
      */
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("GPS dÃ©sactivÃ©. Voulez-vous l'activer ?")
+        builder.setMessage("GPS désactivé. Voulez-vous l'activer ?")
                 .setCancelable(false)
                 .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {

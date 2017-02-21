@@ -6,13 +6,13 @@ import android.os.Parcelable;
 import java.lang.reflect.Field;
 
 /**
- * ParcelableUtils permet d'Ã©ffectuer des actions en relation avec le transtypage
+ * ParcelableUtils permet d'éffectuer des actions en relation avec le transtypage
  */
 public class ParcelableUtils {
 
     /**
      * Transtype un objet de type Parcelable en tableau de byte
-     * @param parceable objet Ã  convertir
+     * @param parceable objet à convertir
      * @return tableau de byte
      */
     public static byte[] marshall(Parcelable parceable) {
@@ -25,7 +25,7 @@ public class ParcelableUtils {
 
     /**
      * Transtype un tableau de byte en objet de type Parcel
-     * @param bytes tableau de byte Ã  convertir
+     * @param bytes tableau de byte à convertir
      * @return tableau de byte
      */
     public static Parcel unmarshall(byte[] bytes) {
@@ -37,7 +37,7 @@ public class ParcelableUtils {
 
     /**
      * Transtype un tableau de byte en une certaine instance de classe
-     * @param bytes tableau de byte Ã  convertir
+     * @param bytes tableau de byte à convertir
      * @param aClassParcelable classe de conversion
      * @return instance de la classe
      */
@@ -49,10 +49,10 @@ public class ParcelableUtils {
 
     /**
      * * Transtype un tableau de byte en une certaine instance via un gestionnaire de conversion
-     * @param bytes tableau de byte Ã  convertir
+     * @param bytes tableau de byte à convertir
      * @param creator gestionnaire de conversion
      * @param <T> type dans lequel convertir
-     * @return instance rÃ©sultant de la conversion
+     * @return instance résultant de la conversion
      */
     public static <T> T unmarshall(byte[] bytes, Parcelable.Creator<T> creator) {
         Parcel parcel = unmarshall(bytes);

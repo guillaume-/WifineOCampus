@@ -10,10 +10,10 @@ import com.neocampus.wifishared.sql.annotations.Trigger;
 
 
 /**
- * <b>TableConsommation est la table qui staocke les informations li√©es √† la consommation des donn√©es de la borne.</b>
+ * <b>TableConsommation est la table qui staocke les informations liÈes ‡ la consommation des donnÈes de la borne.</b>
  * <p>
- * Les informations stock√©es par cette table sont : la date de d√©but et de fin d'une connexion, le nombre des utilisateurs,
- * la p√©riode de partage de connexion, le Mo d√©fini pour le partage, le Mo √† l'instant t, la localisation
+ * Les informations stockÈes par cette table sont : la date de dÈbut et de fin d'une connexion, le nombre des utilisateurs,
+ * la pÈriode de partage de connexion, le Mo dÈfini pour le partage, le Mo ‡ l'instant t, la localisation
  *
  * </p>
  * @author NALINGA
@@ -51,19 +51,19 @@ public class TableConsommation extends SqlDataSchema {
     public static final String _NbreUser = "Column_NombreUser";
 
     /**
-     * Colonne p√©riode de partage
+     * Colonne pÈriode de partage
      */
     @Column(Type = SqlType.INTEGER, Nullable = true, value = "0")
     public static final String _Periode = "Column_Periode";
 
     /**
-     * Colonne de Mo d√©fini pour le partage
+     * Colonne de Mo dÈfini pour le partage
      */
     @Column(Type = SqlType.INTEGER, Nullable = true, value = "0")
     public static final String _Consommation_T0 = "Column_Consommation_T0";
 
     /**
-     * Colonne de Mo d√©j√† consomm√©
+     * Colonne de Mo dÈj‡ consommÈ
      */
     @Column(Type = SqlType.INTEGER, Nullable = true, value = "0")
     public static final String _Consommation_Tx = "Column_Consommation_Tx";
@@ -75,7 +75,7 @@ public class TableConsommation extends SqlDataSchema {
     public static final String _UPS_Location = "Column_UPS_Localisation";
 
     /**
-     * Constructeur par d√©faut de la classe
+     * Constructeur par dÈfaut de la classe
      * @param values
      */
     public TableConsommation(ContentValues values) {
@@ -83,7 +83,7 @@ public class TableConsommation extends SqlDataSchema {
     }
 
     /**
-     * M√©thode qui retourne identifiant de la table
+     * MÈthode qui retourne identifiant de la table
      * @return un ID
      */
     public int getID(){
@@ -91,15 +91,15 @@ public class TableConsommation extends SqlDataSchema {
     }
 
     /**
-     * M√©thode qui retourne la date de d√©but de partage d'une session
-     * @return date de d√©but de partage
+     * MÈthode qui retourne la date de dÈbut de partage d'une session
+     * @return date de dÈbut de partage
      */
     public long getDate(){
         return  this.values.getAsLong(_Date_Start);
     }
 
     /**
-     * M√©thode qui met √† jour la date
+     * MÈthode qui met ‡ jour la date
      * @param date
      */
     public void setDate(long date){
@@ -107,7 +107,7 @@ public class TableConsommation extends SqlDataSchema {
     }
 
     /**
-     * M√©thode qui retourne le nombre de user sur une borne
+     * MÈthode qui retourne le nombre de user sur une borne
      * @return le nombre des users d'une borne
      */
     public int getNbreUser(){
@@ -115,7 +115,7 @@ public class TableConsommation extends SqlDataSchema {
     }
 
     /**
-     * M√©thode qui met √† jour le nombre de user sur une borne
+     * MÈthode qui met ‡ jour le nombre de user sur une borne
      * @param nbre_user
      */
     public void setNbreUser(int nbre_user){
@@ -123,15 +123,15 @@ public class TableConsommation extends SqlDataSchema {
     }
 
     /**
-     * M√©thode qui retourne la p√©riode de partage de connexion
-     * @return la p√©riode de partage de connexion
+     * MÈthode qui retourne la pÈriode de partage de connexion
+     * @return la pÈriode de partage de connexion
      */
     public int getPeriode(){
         return this.values.getAsInteger(_Periode);
     }
 
     /**
-     * M√©thode qui met √† jour la p√©riode de partage de connexion
+     * MÈthode qui met ‡ jour la pÈriode de partage de connexion
      * @param period
      */
     public void setPeriode(int period){
@@ -139,7 +139,7 @@ public class TableConsommation extends SqlDataSchema {
     }
 
     /**
-     * M√©thode qui retourne la date d'expiration de dur√©e de partage de connexion
+     * MÈthode qui retourne la date d'expiration de durÈe de partage de connexion
      * @return date de fin de partage de connexion
      */
     public long getDateEnd(){
@@ -147,7 +147,7 @@ public class TableConsommation extends SqlDataSchema {
     }
 
     /**
-     * M√©thode qui met √† jour la date d'expiration de dur√©e de partage de connexion
+     * MÈthode qui met ‡ jour la date d'expiration de durÈe de partage de connexion
      * @param period
      */
     public void setRunningPeriode(int period){
@@ -155,15 +155,15 @@ public class TableConsommation extends SqlDataSchema {
     }
 
     /**
-     * M√©thode qui retourne le Mo de partage d√©fini
-     * @return le Mo de partage d√©fini
+     * MÈthode qui retourne le Mo de partage dÈfini
+     * @return le Mo de partage dÈfini
      */
     public long getConsommationT0(){
         return this.values.getAsLong(_Consommation_T0);
     }
 
     /**
-     * M√©thode qui met √† jour le Mo de partage d√©fini
+     * MÈthode qui met ‡ jour le Mo de partage dÈfini
      * @param consommation
      */
     public void setConsommationT0(long consommation){
@@ -171,15 +171,15 @@ public class TableConsommation extends SqlDataSchema {
     }
 
     /**
-     * M√©thode qui retourne le Mo d√©j√† consomm√©
-     * @return le Mo d√©j√† consomm√©
+     * MÈthode qui retourne le Mo dÈj‡ consommÈ
+     * @return le Mo dÈj‡ consommÈ
      */
     public long getConsommationTx(){
         return this.values.getAsLong(_Consommation_Tx);
     }
 
     /**
-     * M√©thode qui met √† jour le Mo d√©j√† consomm√©
+     * MÈthode qui met ‡ jour le Mo dÈj‡ consommÈ
      * @param consommation
      */
     public void setConsommationTx(long consommation){
@@ -187,19 +187,19 @@ public class TableConsommation extends SqlDataSchema {
     }
 
     /**
-     * M√©thode qui retourne si la localisation est celui de l'UPS
+     * MÈthode qui retourne si la localisation est celui de l'UPS
      * @return la localisation
      */
     public boolean isUPSLocation(){ return  this.values.getAsBoolean(_UPS_Location); }
 
     /**
-     * M√©thode qui met √† jour la localisation
+     * MÈthode qui met ‡ jour la localisation
      * @param value
      */
     public void setUPSLocation(boolean value){ this.values.put(_UPS_Location, value); }
 
     /**
-     * M√©thode qui install un trigger dans la base de donn√©es, incr√©mentant le nombre user √† chaque ajout
+     * MÈthode qui install un trigger dans la base de donnÈes, incrÈmentant le nombre user ‡ chaque ajout
      * d'un utilisateur d'une borne
      * @param database
      * @param trigger_name
@@ -217,7 +217,7 @@ public class TableConsommation extends SqlDataSchema {
     }
 
     /**
-     * M√©thode qui install un trigger qui calcul la p√©riode de connexion d'un user et met √† jour la periode total de TableConsommation
+     * MÈthode qui install un trigger qui calcul la pÈriode de connexion d'un user et met ‡ jour la periode total de TableConsommation
      */
     @Trigger(name = "TRIGGER_PERIODE_USER")
     public static void triggerPeriodeUser(SQLiteDatabase database, String trigger_name)

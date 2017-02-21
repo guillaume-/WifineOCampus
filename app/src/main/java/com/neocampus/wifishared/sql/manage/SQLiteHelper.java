@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * <b>Cette classe permet de mettre Ã  niveau automatiquement la base de donnÃ©es lors de changement de structure</b>
+ * <b>Cette classe permet de mettre à niveau automatiquement la base de données lors de changement de structure</b>
  * @author NALINGA
  */
 public class SQLiteHelper extends SQLiteOpenHelper {
@@ -40,7 +40,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     /**
-     *  Cette mÃ©thode permet de crÃ©er un ensemble de table Ã  partir d'un ensemble de classe
+     *  Cette méthode permet de créer un ensemble de table à partir d'un ensemble de classe
      * @param database
      */
     @Override
@@ -67,7 +67,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Cette mÃ©thode permet de mettre Ã  jour la structure de table en cas de modification de la version de base de donnÃ©es
+     * Cette méthode permet de mettre à jour la structure de table en cas de modification de la version de base de données
      * @param database
      * @param oldVersion
      * @param newVersion
@@ -139,7 +139,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Cette mÃ©thode permet de rÃ©initialiser la base de donnÃ©es en cas de rÃ©gression de version
+     * Cette méthode permet de réinitialiser la base de données en cas de régression de version
      * @param database
      * @param oldVersion
      * @param newVersion
@@ -172,9 +172,9 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Cette mÃ©thode permet de crÃ©er une table Ã  partir d'une classe de maniÃ¨re automatique
+     * Cette méthode permet de créer une table à partir d'une classe de manière automatique
      * @param aClass
-     * @return une requÃªte sql pour la crÃ©ation de la table
+     * @return une requête sql pour la création de la table
      * @throws NoSuchFieldException
      * @throws IllegalAccessException
      */
@@ -212,10 +212,10 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Cette mÃ©thode permet de stocker le contenu de la base de donnÃ©es avant une altÃ©ration de la base
+     * Cette méthode permet de stocker le contenu de la base de données avant une altération de la base
      * @param database
      * @param tableName
-     * @return Cursor de sauvegarde des donnÃ©es
+     * @return Cursor de sauvegarde des données
      */
     private static Cursor store(SQLiteDatabase database, String tableName) {
         database.execSQL(String.format("ALTER TABLE %s RENAME TO %s", tableName, "_"+tableName+"_"));
@@ -229,7 +229,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Cette mÃ©thode permet de restaurer le contenu de la base de donnÃ©es aprÃ¨s une altÃ©ration
+     * Cette méthode permet de restaurer le contenu de la base de données après une altération
      * @param database
      * @param tableName
      * @param c
@@ -267,7 +267,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Cette mÃ©thode permet de crÃ©er des tables Ã  partir de la liste de classe fournie en paramÃ¨tre
+     * Cette méthode permet de créer des tables à partir de la liste de classe fournie en paramètre
      * @param database
      * @param listClasses
      * @throws NoSuchFieldException
@@ -283,7 +283,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Cette mÃ©thode permet de crÃ©er des triggers Ã  partir de la liste de classe fournie en paramÃ¨tre
+     * Cette méthode permet de créer des triggers à partir de la liste de classe fournie en paramètre
      * @param database
      * @param listClasses
      * @throws InvocationTargetException
@@ -302,7 +302,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Cette mÃ©thode permet de supprimer tous les triggers qui sont crÃ©es
+     * Cette méthode permet de supprimer tous les triggers qui sont crées
      * @param database
      */
     private static void dropAllTriggers(SQLiteDatabase database)
@@ -320,7 +320,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Cette mÃ©thode permet de supprimer toutes les tables de la base de donnÃ©es
+     * Cette méthode permet de supprimer toutes les tables de la base de données
      * @param database
      */
     private static void dropAllTables(SQLiteDatabase database)

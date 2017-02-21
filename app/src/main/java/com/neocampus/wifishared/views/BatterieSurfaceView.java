@@ -27,13 +27,14 @@ public class BatterieSurfaceView extends SurfaceView implements
         SurfaceHolder.Callback, Runnable, View.OnTouchListener{
 
     private SurfaceHolder holder;
+
     private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
     private Paint paintText = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
     private int limiteBatterie = 0;
     private float MinBatterieH = 0;
     private float MaxBatterieH = 0;
     private Rect textBounds = new Rect();
-    private int colorText, colorBackgroundOn, colorBackgroundOff;
+    private int colorText;
     private int colorContent, colorEmpty;
 
     public BatterieSurfaceView(Context context) {

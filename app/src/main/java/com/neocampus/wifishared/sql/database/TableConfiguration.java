@@ -7,10 +7,10 @@ import com.neocampus.wifishared.sql.annotations.SqlType;
 import com.neocampus.wifishared.sql.annotations.Table;
 
 /**
- * <b>TableConfiguration est la table qui staocke les informations liÃ©es Ã  la configuration de la borne.</b>
+ * <b>TableConfiguration est la table qui staocke les informations liées à la configuration de la borne.</b>
  * <p>
- * Les informations stockÃ©es par cette table sont : la limite de batterie, limite de consommation,
- * la limite de temps et la date dÃ©marrage de la borne.
+ * Les informations stockées par cette table sont : la limite de batterie, limite de consommation,
+ * la limite de temps et la date démarrage de la borne.
  *
  * </p>
  * @author NALINGA
@@ -30,7 +30,7 @@ public class TableConfiguration extends SqlDataSchema {
     public static final String _ID =  "Column_ID";
 
     /**
-     * Configuration de point d'accÃ¨s
+     * Configuration de point d'accès
      */
     @Column(Type = SqlType.BLOB, Nullable = true, value = "null")
     public static final String _Wifi_Configuration = "Column_Wifi_Configuration";
@@ -57,19 +57,19 @@ public class TableConfiguration extends SqlDataSchema {
     public static final String _LimiteTemps = "Column_Temps";
 
     /**
-     * Colonne de date de dÃ©marrage de la borne
+     * Colonne de date de démarrage de la borne
      */
     @Column(Type = SqlType.INTEGER, Nullable = true, value = "0")
     public static final String _DataT0 = "Column_Data_T0";
 
     /**
-     * Date de dÃ©clenchement de l'alarme pour une session courante
+     * Date de déclenchement de l'alarme pour une session courante
      */
     @Column(Type = SqlType.INTEGER, Nullable = true, value = "0")
     public static final String _DateAlarm = "Column_Date_Alarm";
 
     /**
-     * Colonne qui indique si une donnÃ©e est sauvegardÃ©e de force
+     * Colonne qui indique si une donnée est sauvegardée de force
      */
     @Column(Type = SqlType.INTEGER, Nullable = true, value = "0")
     public static final String _Stored = "Column_Stored";
@@ -81,7 +81,7 @@ public class TableConfiguration extends SqlDataSchema {
     public static final String _Notification = "Column_Notification";
 
     /**
-     * Constructeur par dÃ©faut de la classe
+     * Constructeur par défaut de la classe
      * @param values
      */
     public TableConfiguration(ContentValues values) {
@@ -89,7 +89,7 @@ public class TableConfiguration extends SqlDataSchema {
     }
 
     /**
-     * MÃ©thode qui retourne identifiant d'une ligne de la table
+     * Méthode qui retourne identifiant d'une ligne de la table
      * @return ID d'une ligne de la table
      */
     public int getID(){
@@ -97,28 +97,28 @@ public class TableConfiguration extends SqlDataSchema {
     }
 
     /**
-     * MÃ©thode qui met Ã  jour identifiant d'une ligne de la table
+     * Méthode qui met à jour identifiant d'une ligne de la table
      * @param iduser
      */
     public void setID(String iduser){
         this.values.put(_ID, iduser);}
 
     /**
-     * MÃ©thode qui retourne les informations de configuration de la borne
+     * Méthode qui retourne les informations de configuration de la borne
      * @return les informations de configuration de la borne
      */
     public byte[] getWifiConfiguration(){
         return  this.values.getAsByteArray(_Wifi_Configuration); }
 
     /**
-     * MÃ©thode qui met Ã  jour les informations de configuration de la borne
+     * Méthode qui met à jour les informations de configuration de la borne
      * @param configuration
      */
     public void setWifiConfiguration(byte[] configuration){
         this.values.put(_Wifi_Configuration, configuration);}
 
     /**
-     * MÃ©thode qui retourne la valeur limite de la batterie
+     * Méthode qui retourne la valeur limite de la batterie
      * @return la valeur limite de la batterie
      */
     public int getLimiteBatterie() {
@@ -126,7 +126,7 @@ public class TableConfiguration extends SqlDataSchema {
     }
 
     /**
-     * MÃ©thode qui met Ã  jour la valeur limite de la batterie
+     * Méthode qui met à jour la valeur limite de la batterie
      * @param value
      */
     public void setLimiteBatterie(int value) {
@@ -134,7 +134,7 @@ public class TableConfiguration extends SqlDataSchema {
     }
 
     /**
-     * MÃ©thode qui retourne la valeur limite de donnÃ©es offertes
+     * Méthode qui retourne la valeur limite de données offertes
      * @return le Mo offert pour le partage de connexion
      */
     public long getLimiteConsommation() {
@@ -142,7 +142,7 @@ public class TableConfiguration extends SqlDataSchema {
     }
 
     /**
-     * MÃ©thode qui met Ã  jour la valeur limite de donnÃ©es offertes
+     * Méthode qui met à jour la valeur limite de données offertes
      * @param value
      */
     public void setLimiteConsommation(long value) {
@@ -150,7 +150,7 @@ public class TableConfiguration extends SqlDataSchema {
     }
 
     /**
-     * MÃ©thode qui retourne la valeur limite de temps de partage de connexion
+     * Méthode qui retourne la valeur limite de temps de partage de connexion
      * @return la limite de temps de partage de connexion
      */
     public long getLimiteTemps() {
@@ -158,7 +158,7 @@ public class TableConfiguration extends SqlDataSchema {
     }
 
     /**
-     * MÃ©thode qui met Ã  jour la valeur limite de temps de partage de connexion
+     * Méthode qui met à jour la valeur limite de temps de partage de connexion
      * @param value
      */
     public void setLimiteTemps(long value) {
@@ -166,15 +166,15 @@ public class TableConfiguration extends SqlDataSchema {
     }
 
     /**
-     * MÃ©thode qui retourne la date de dÃ©but de partage de connexion
-     * @return la date de dÃ©but de partage de connexion
+     * Méthode qui retourne la date de début de partage de connexion
+     * @return la date de début de partage de connexion
      */
     public long getDataT0() {
         return this.values.getAsLong(_DataT0);
     }
 
     /**
-     * MÃ©thode qui met Ã  jour la date de dÃ©but de partage de connexion
+     * Méthode qui met à jour la date de début de partage de connexion
      * @param value
      */
     public void setDataT0(long value) {
@@ -182,7 +182,7 @@ public class TableConfiguration extends SqlDataSchema {
     }
 
     /**
-     * MÃ©thode qui retourne la date de dÃ©clenchement de l'alarme d'une session courante
+     * Méthode qui retourne la date de déclenchement de l'alarme d'une session courante
      * @return la date de fin de partage de connexion
      */
     public long getDateAlarm() {
@@ -190,7 +190,7 @@ public class TableConfiguration extends SqlDataSchema {
     }
 
     /**
-     * MÃ©thode qui met Ã  jour la date de dÃ©clenchement de l'alarme d'une session courante
+     * Méthode qui met à jour la date de déclenchement de l'alarme d'une session courante
      * @param value
      */
     public void setDateAlarm(long value) {
@@ -198,15 +198,15 @@ public class TableConfiguration extends SqlDataSchema {
     }
 
     /**
-     * MÃ©thode qui retourne la valeur indiquant si une information est sauvegardÃ©e de force ou pas
-     * @return indicateur de sauvegarde de donnÃ©es
+     * Méthode qui retourne la valeur indiquant si une information est sauvegardée de force ou pas
+     * @return indicateur de sauvegarde de données
      */
     public boolean isStored() {
         return this.values.getAsBoolean(_Stored);
     }
 
     /**
-     * MÃ©thode qui met Ã  jour la valeur indiquant si une information est sauvegardÃ©e de force ou pas
+     * Méthode qui met à jour la valeur indiquant si une information est sauvegardée de force ou pas
      * @param value
      */
     public void setStored(boolean value) {
@@ -214,7 +214,7 @@ public class TableConfiguration extends SqlDataSchema {
     }
 
     /**
-     * MÃ©thode qui retourne le code de notification indiquant les notifications actives
+     * Méthode qui retourne le code de notification indiquant les notifications actives
      * @return le code de notification
      */
     public int getNotification() {
@@ -222,7 +222,7 @@ public class TableConfiguration extends SqlDataSchema {
     }
 
     /**
-     * MÃ©thode qui met Ã  jour le code de notification
+     * Méthode qui met à jour le code de notification
      * @param value
      */
     public void setNotification(int value) {

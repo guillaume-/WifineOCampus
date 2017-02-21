@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * DexUtils permet d'Ã©ffectuer des actions en relation avec la compilation de l'application
+ * DexUtils permet d'éffectuer des actions en relation avec la compilation de l'application
  */
 public class DexUtils {
 

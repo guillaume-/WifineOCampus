@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * AnnotationUtils permet d'Ã©ffectuer des actions en relation les annotations
+ * AnnotationUtils permet d'éffectuer des actions en relation les annotations
  */
 public class AnnotationUtils {
 
@@ -21,7 +21,7 @@ public class AnnotationUtils {
      * @return la liste des classes ayant l'annotation
      *
      * @throws PackageManager.NameNotFoundException si le package n'existe pas
-     * @throws IOException si le fichier comprÃ©ssÃ© des classes n'existe pas
+     * @throws IOException si le fichier compréssé des classes n'existe pas
      * @throws ClassNotFoundException si la classe n'existe pas
      *
      * @see ClassUtils#getClasses(Context, String)
@@ -42,10 +42,10 @@ public class AnnotationUtils {
     }
 
     /**
-     * Liste les mÃ©thodes d'une classe ayant une certaine annotation
-     * @param aClass classe dont on recherche les mÃ©thodes
+     * Liste les méthodes d'une classe ayant une certaine annotation
+     * @param aClass classe dont on recherche les méthodes
      * @param annotation  permettant le filtre
-     * @return Liste des mÃ©thodes ayant l'annotation
+     * @return Liste des méthodes ayant l'annotation
      *
      * @see Class#getMethods()
      * @see Method#isAnnotationPresent(Class)

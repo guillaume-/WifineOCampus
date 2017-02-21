@@ -15,8 +15,10 @@ import com.neocampus.wifishared.R;
 import java.util.List;
 import java.util.Locale;
 
+
 /**
- * Created by Hirochi â˜  on 25/01/17.
+ * ChronoTimeView est la vue graphique permettant de définir le seuil du temps d'activation
+ * @author Hirochi ?
  */
 
 public class ChronoTimeView extends LinearLayout implements

@@ -363,7 +363,7 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
                 result[2] = "\uD83D\uDD0B";
             }
             if(NotificationUtils.isTimeEnabled(notificationCode)) {
-                result[0] = "?";
+                result[0] = "\u23F0";
             }
             if(NotificationUtils.isDataEnabled(notificationCode)) {
                 result[1] = "\uD83D\uDCF6";

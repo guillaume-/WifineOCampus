@@ -50,7 +50,7 @@ public class FragmentBatterie extends Fragment implements OnFragmentConfigListen
     private int notificationCode;
 
     /**
-     * Interface de communication avec l'activitÃ© principale {@link com.neocampus.wifishared.activity.MainActivity}
+     * Interface de communication avec l'activité principale {@link com.neocampus.wifishared.activity.MainActivity}
      * #see {@link OnActivitySetListener}
      */
     private OnActivitySetListener mListener;
@@ -63,7 +63,7 @@ public class FragmentBatterie extends Fragment implements OnFragmentConfigListen
     }
 
     /**
-     * CrÃ©e une instance en initialisant le seuil de la batterie
+     * Crée une instance en initialisant le seuil de la batterie
      *
      * @param batterie seuil initial de la batterie
      * @param notificationCode code de notification
@@ -79,7 +79,7 @@ public class FragmentBatterie extends Fragment implements OnFragmentConfigListen
     }
 
     /**
-     * RÃ©cupÃ¨re le seuil initial de la batterie
+     * Récupère le seuil initial de la batterie
      *
      * @see Fragment#onCreate(Bundle)
      */
@@ -93,7 +93,7 @@ public class FragmentBatterie extends Fragment implements OnFragmentConfigListen
     }
 
     /**
-     * CrÃ©e la vue affichÃ© par le fragment
+     * Crée la vue affiché par le fragment
      *
      * @see Fragment#onCreateView(LayoutInflater, ViewGroup, Bundle)
      */
@@ -150,7 +150,7 @@ public class FragmentBatterie extends Fragment implements OnFragmentConfigListen
     }
 
     /**
-     * @return seuil indiquÃ© par l'utilisateur
+     * @return seuil indiqué par l'utilisateur
      *
      * @see BatterieSurfaceView#getLimiteBatterie()
      * @see OnFragmentConfigListener#getLimiteBatterie()
@@ -178,9 +178,9 @@ public class FragmentBatterie extends Fragment implements OnFragmentConfigListen
     }
 
     /**
-     * Modifier le code de notification, en cas d'activation ou de dÃ©ssactivÃ© de notification pour la batterie
-     * @param buttonView Vue sur laquelle l'utilisateur a cliquÃ©
-     * @param isChecked Indique si la notification est activÃ© ou pas
+     * Modifier le code de notification, en cas d'activation ou de déssactivé de notification pour la batterie
+     * @param buttonView Vue sur laquelle l'utilisateur a cliqué
+     * @param isChecked Indique si la notification est activé ou pas
      */
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

@@ -6,12 +6,12 @@ import android.content.IntentFilter;
 import android.os.BatteryManager;
 
 /**
- * BatterieUtils permet d'Ã©ffectuer des actions en relation avec la batterie
+ * BatterieUtils permet d'éffectuer des actions en relation avec la batterie
  */
 public class BatterieUtils {
 
     /**
-     * Limite par dÃ©faut du niveau de la batterie
+     * Limite par défaut du niveau de la batterie
      */
     public static int BATTERIE_DEFAULT_LIMIT = 30;
 

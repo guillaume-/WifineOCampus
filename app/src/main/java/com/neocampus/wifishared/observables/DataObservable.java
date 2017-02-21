@@ -11,22 +11,22 @@ import java.util.Observable;
 public class DataObservable extends Observable {
 
     /**
-     * Total de la consommation de donnÃ©es actuelle
+     * Total de la consommation de données actuelle
      */
     private long lastValue = 0;
 
     /**
-     * Renvoi la total consommation de donnÃ©es actuelle
-     *@return total consommation de donnÃ©es
+     * Renvoi la total consommation de données actuelle
+     *@return total consommation de données
      */
     public long getValue() {
         return lastValue;
     }
 
     /**
-     * Tente de modifier la total de consommmation de donnÃ©es, et notifie
-     * le changement en cas de succÃ¨s
-     *@param dataTx total de consommation de donnÃ©es observÃ©
+     * Tente de modifier la total de consommmation de données, et notifie
+     * le changement en cas de succès
+     *@param dataTx total de consommation de données observé
      *
      */
     public void setValue(long dataTx) {

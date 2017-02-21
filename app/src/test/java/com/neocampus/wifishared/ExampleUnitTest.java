@@ -2,7 +2,7 @@ package com.neocampus.wifishared;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Example local unit TrafficUtils, which will execute on the development machine (host).

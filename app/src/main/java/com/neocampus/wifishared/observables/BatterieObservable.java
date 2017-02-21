@@ -28,8 +28,8 @@ public class BatterieObservable extends Observable {
     }
 
     /**
-     * Tente de modifier le niveau observÃ© de la batterie et notifie le changement de valeur,
-     * si de rÃ©ussite
+     * Tente de modifier le niveau observé de la batterie et notifie le changement de valeur,
+     * si de réussite
      *@param value niveau de la batterie
      */
     public void setValue(int value) {

@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 Daniel Martí
+ * Copyright 2015 Daniel Mart�
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@ import java.util.concurrent.Executors;
 import java.util.regex.Pattern;
 
 /**
- * WifiApControl permet d'éffectuer des actions en relation avec la configuration WIFI-AP
+ * WifiApControl permet d'�ffectuer des actions en relation avec la configuration WIFI-AP
  */
 final public class WifiApControl extends Observable {
 
@@ -180,9 +180,9 @@ final public class WifiApControl extends Observable {
     public static WifiConfiguration getUPSWifiConfiguration() {
 
         WifiConfiguration wifiConfiguration = new WifiConfiguration();
-        wifiConfiguration.SSID = "Wifi neOCampus   ıllıllı";
-        wifiConfiguration.preSharedKey = "Wifi neOCampus   ıllıllı";
-        wifiConfiguration.wepKeys[0] = "Wifi neOCampus   ıllıllı";
+        wifiConfiguration.SSID = "Wifi neOCampus   ?ll?ll?";
+        wifiConfiguration.preSharedKey = "Wifi neOCampus   ?ll?ll?";
+        wifiConfiguration.wepKeys[0] = "Wifi neOCampus   ?ll?ll?";
         wifiConfiguration.hiddenSSID = false;
 
         wifiConfiguration.allowedAuthAlgorithms.clear();

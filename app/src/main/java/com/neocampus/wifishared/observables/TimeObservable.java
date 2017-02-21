@@ -3,13 +3,13 @@ package com.neocampus.wifishared.observables;
 import java.util.Observable;
 
 /**
- * TimeObservable permet d'observer le dÃ©clanchement d'une alarme et de notifier
+ * TimeObservable permet d'observer le déclanchement d'une alarme et de notifier
  * celui-ci
  */
 public class TimeObservable extends Observable {
 
     /**
-     * Date du dÃ©clanchement de l'alarme
+     * Date du déclanchement de l'alarme
      */
     private long date;
 
@@ -21,8 +21,8 @@ public class TimeObservable extends Observable {
     }
 
     /**
-     * Renvoi la date du dÃ©clanchement de l'alarme
-     *@return date du dÃ©clanchement de l'alarme
+     * Renvoi la date du déclanchement de l'alarme
+     *@return date du déclanchement de l'alarme
      */
     public long getDate() {
         return date;
@@ -30,8 +30,8 @@ public class TimeObservable extends Observable {
 
 
     /**
-     * Tente de modifier la date actuelle, notifie le changement en cas de succÃ¨s
-     *@param value nouvelle date de dÃ©clanchement
+     * Tente de modifier la date actuelle, notifie le changement en cas de succès
+     *@param value nouvelle date de déclanchement
      */
     public void setDate(long value) {
         if(this.date != value) {

@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * FragmentSession est un fragment qui affiche une vue contenant les clients actuellements connÃ©ctÃ©s,
+ * FragmentSession est un fragment qui affiche une vue contenant les clients actuellements connéctés,
  * ainsi qu'une historique de connexions pour la session de partage active
  *
  * @see Fragment
@@ -32,22 +32,22 @@ import java.util.List;
 public class FragmentUsers extends Fragment implements OnFragmentSetListener,  OnReachableClientListener {
 
     /**
-     * Vue affichÃ© par le fragment
+     * Vue affiché par le fragment
      */
     private View view;
 
     /**
-     * Objet graphique qui affiche le nombre total de client connectÃ© depuis le lancement de la session de partage
+     * Objet graphique qui affiche le nombre total de client connecté depuis le lancement de la session de partage
      */
     private TextView totalClientCount;
 
     /**
-     * Objet graphique qui affiche le nombre de client connectÃ©
+     * Objet graphique qui affiche le nombre de client connecté
      */
     private TextView reachableClientCount;
 
     /**
-     * Objet graphique qui affiche les informations tous les clients connectÃ©s
+     * Objet graphique qui affiche les informations tous les clients connectés
      */
     private ReachableUserView reachableUserView;
 
@@ -57,8 +57,8 @@ public class FragmentUsers extends Fragment implements OnFragmentSetListener,  O
     private SessionUserView sessionUserView;
 
     /**
-     * Interface de communication avec l'activitÃ© principale {@link com.neocampus.wifishared.activity.MainActivity}
-     * #see {@link OnActivitySetListener}
+     * Interface de communication avec l'activité principale {@link com.neocampus.wifishared.activity.MainActivity}
+     * @see OnActivitySetListener
      */
     private OnActivitySetListener mListener;
     private boolean added;
@@ -71,7 +71,7 @@ public class FragmentUsers extends Fragment implements OnFragmentSetListener,  O
     }
 
     /**
-     * CrÃ©e la vue affichÃ© par le fragment
+     * Crée la vue affiché par le fragment
      *
      * @see Fragment#onCreateView(LayoutInflater, ViewGroup, Bundle)
      */
@@ -124,8 +124,8 @@ public class FragmentUsers extends Fragment implements OnFragmentSetListener,  O
     }
 
     /**
-     * ReÃ§oit la liste des clients connÃ©ctÃ©s
-     * @param clients liste des clients connÃ©ctÃ©s
+     * Reçoit la liste des clients connéctés
+     * @param clients liste des clients connéctés
      */
     @Override
     public void onReachableClients(List<WifiApControl.Client> clients) {
@@ -148,7 +148,7 @@ public class FragmentUsers extends Fragment implements OnFragmentSetListener,  O
      * @see
      */
     /**
-     * Rafraichit le nombre de clients connectÃ©s, suite Ã  la connexion ou dÃ©connexion d'un client
+     * Rafraichit le nombre de clients connectés, suite à la connexion ou déconnexion d'un client
      * @param client information du client
      * @see OnFragmentSetListener#onRefreshClient(WifiApControl.Client)
      */
@@ -190,8 +190,8 @@ public class FragmentUsers extends Fragment implements OnFragmentSetListener,  O
     }
 
     /**
-     * Remet Ã  zÃ©ro le nombre de client connectÃ© en cas d'arrÃªt de la session de partage actuelle
-     * @param observable Observateur de l'Ã©tat du Wi-FI AP
+     * Remet à zéro le nombre de client connecté en cas d'arrêt de la session de partage actuelle
+     * @param observable Observateur de l'état du Wi-FI AP
      *
      * @see OnFragmentSetListener#onRefreshHotpostState(HotspotObservable)
      */
@@ -203,8 +203,8 @@ public class FragmentUsers extends Fragment implements OnFragmentSetListener,  O
     }
 
     /**
-     * Rafraichit la liste des clients connectÃ©s
-     * @param clients nouvelle liste de connectÃ©s
+     * Rafraichit la liste des clients connectés
+     * @param clients nouvelle liste de connectés
      */
     private void onRefreshReachableClients(final List<WifiApControl.Client> clients) {
         if (reachableClientCount != null && reachableUserView != null && added) {
@@ -219,8 +219,8 @@ public class FragmentUsers extends Fragment implements OnFragmentSetListener,  O
     }
 
     /**
-     * Rafraichit l'historique des clients connectÃ©s depuis le lancement de la session de partage actuelle
-     * @param clients nouvelle liste de connectÃ©s
+     * Rafraichit l'historique des clients connectés depuis le lancement de la session de partage actuelle
+     * @param clients nouvelle liste de connectés
      */
     private void onRefreshSessionClients(final List<WifiApControl.Client> clients) {
         if(totalClientCount != null && sessionUserView != null && added) {

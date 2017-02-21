@@ -11,9 +11,8 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Created by Hirochi â˜  on 22/01/17.
+ * ServiceTaskClients permet d'identifier les clients connectés au partage
  */
-
 public class ServiceTaskClients implements Runnable , OnReachableClientListener{
     private ClientObservable observable;
     private WifiApControl apControl;

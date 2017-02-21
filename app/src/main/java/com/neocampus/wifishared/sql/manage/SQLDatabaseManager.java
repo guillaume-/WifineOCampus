@@ -19,7 +19,7 @@ public class SQLDatabaseManager {
     private SQLiteDatabase mDatabase;
 
     /**
-     * MÃ©thode de crÃ©ation et d'initialisation d'une instance de communication
+     * Méthode de création et d'initialisation d'une instance de communication
      * @param helper
      */
     public static synchronized void initializeInstance(SQLiteOpenHelper helper) {
@@ -30,7 +30,7 @@ public class SQLDatabaseManager {
     }
 
     /**
-     * MÃ©thode permettant la crÃ©ation de plusieurs instances de communication
+     * Méthode permettant la création de plusieurs instances de communication
      * @return une instance de communication
      */
     public static synchronized SQLDatabaseManager getInstance() {
@@ -42,8 +42,8 @@ public class SQLDatabaseManager {
     }
 
     /**
-     * MÃ©thode pour ouverture de base de donnÃ©es
-     * @return une instance de communication avec la base de donnÃ©es
+     * Méthode pour ouverture de base de données
+     * @return une instance de communication avec la base de données
      */
     public synchronized SQLiteDatabase openDatabase() {
         if(mOpenCounter.incrementAndGet() == 1) {
@@ -54,7 +54,7 @@ public class SQLDatabaseManager {
     }
 
     /**
-     * MÃ©thode de fermeture de base de donnÃ©es
+     * Méthode de fermeture de base de données
      */
     public synchronized void closeDatabase() {
         if(mOpenCounter.decrementAndGet() == 0) {

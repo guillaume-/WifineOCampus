@@ -19,7 +19,7 @@ import com.neocampus.wifishared.views.CirclePagerAdapter;
 import com.neocampus.wifishared.views.DataSurfaceView;
 
 /**
- * FragmentTraffic est un fragment qui affiche une vue permettant la configuration du seuil de consommation de donnÃ©es
+ * FragmentTraffic est un fragment qui affiche une vue permettant la configuration du seuil de consommation de données
  *
  * @see Fragment
  * @see OnFragmentConfigListener
@@ -27,7 +27,7 @@ import com.neocampus.wifishared.views.DataSurfaceView;
 public class FragmentTraffic extends Fragment implements OnFragmentConfigListener, CompoundButton.OnCheckedChangeListener {
 
     /**
-     * Identifiant de la valeur initiale de consommation de donnÃ©es
+     * Identifiant de la valeur initiale de consommation de données
      */
     private static final String ARG_PARAM1 = "param1";
 
@@ -37,7 +37,7 @@ public class FragmentTraffic extends Fragment implements OnFragmentConfigListene
     private static final String ARG_PARAM2 = "param2";
 
     /**
-     * Valeur du seuil de consommation de donnÃ©es
+     * Valeur du seuil de consommation de données
      */
     private float mLimiteData;
 
@@ -47,19 +47,19 @@ public class FragmentTraffic extends Fragment implements OnFragmentConfigListene
     private int notificationCode;
 
     /**
-     * Objet graphique de configuration de consommation de donnÃ©es en GIGA
+     * Objet graphique de configuration de consommation de données en GIGA
      * @see DataSurfaceView
      */
     private DataSurfaceView gigaSurfaceView;
 
     /**
-     * Objet graphique de configuration de consommation de donnÃ©es en MEGA
+     * Objet graphique de configuration de consommation de données en MEGA
      * @see DataSurfaceView
      */
     private DataSurfaceView megaSurfaceView;
 
     /**
-     * Interface de communication avec l'activitÃ© principale {@link com.neocampus.wifishared.activity.MainActivity}
+     * Interface de communication avec l'activité principale {@link com.neocampus.wifishared.activity.MainActivity}
      * #see {@link OnActivitySetListener}
      */
     private OnActivitySetListener mListener;
@@ -72,9 +72,9 @@ public class FragmentTraffic extends Fragment implements OnFragmentConfigListene
     }
 
     /**
-     * CrÃ©e une instance en initialisant le seuil de consommation de donnÃ©es
+     * Crée une instance en initialisant le seuil de consommation de données
      *
-     * @param limite_data seuil de consommation de donnÃ©es
+     * @param limite_data seuil de consommation de données
      * @param notificationCode code de notification
      * @return une nouvelle instance de FragmentTraffic
      */
@@ -88,7 +88,7 @@ public class FragmentTraffic extends Fragment implements OnFragmentConfigListene
     }
 
     /**
-     * RÃ©cupÃ¨re le seuil initial de consommation de donnÃ©es
+     * Récupère le seuil initial de consommation de données
      *
      * @see Fragment#onCreate(Bundle)
      */
@@ -102,7 +102,7 @@ public class FragmentTraffic extends Fragment implements OnFragmentConfigListene
     }
 
     /**
-     * CrÃ©e la vue affichÃ© par le fragment
+     * Crée la vue affiché par le fragment
      *
      * @see Fragment#onCreateView(LayoutInflater, ViewGroup, Bundle)
      */
@@ -162,7 +162,7 @@ public class FragmentTraffic extends Fragment implements OnFragmentConfigListene
 
     /**
      *
-     * @return seuil indiquÃ© par l'utilisateur
+     * @return seuil indiqué par l'utilisateur
      *
      * @see DataSurfaceView#getDataValue()
      */
@@ -202,9 +202,9 @@ public class FragmentTraffic extends Fragment implements OnFragmentConfigListene
     }
 
     /**
-     * Modifier le code de notification, en cas d'activation ou de dÃ©ssactivÃ© de notification pour le traffic
-     * @param buttonView Vue sur laquelle l'utilisateur a cliquÃ©
-     * @param isChecked Indique si la notification est activÃ© ou pas
+     * Modifier le code de notification, en cas d'activation ou de déssactivé de notification pour le traffic
+     * @param buttonView Vue sur laquelle l'utilisateur a cliqué
+     * @param isChecked Indique si la notification est activé ou pas
      */
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

@@ -3,7 +3,7 @@ package com.neocampus.wifishared.observables;
 import java.util.Observable;
 
 /**
- * NetworkObservable permet d'observer l'Ã©tat de la connexion internet mobile de l'utilisateur
+ * NetworkObservable permet d'observer l'état de la connexion internet mobile de l'utilisateur
  *
  */
 public class NetworkObservable extends Observable {
@@ -29,8 +29,8 @@ public class NetworkObservable extends Observable {
     }
 
     /**
-     * Tente de modifier l'Ã©tat de l'accÃ¨s internet mobile,
-     * notifie le changement en cas de succÃ¨s
+     * Tente de modifier l'état de l'accès internet mobile,
+     * notifie le changement en cas de succès
      *@param enabled vrai si accessible, faux sinon
      */
     public void setEnabled(boolean enabled) {

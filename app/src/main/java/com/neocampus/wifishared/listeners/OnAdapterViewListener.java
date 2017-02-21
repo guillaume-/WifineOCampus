@@ -3,17 +3,17 @@ package com.neocampus.wifishared.listeners;
 import android.view.View;
 
 /**
- * OnAdapterViewListener permet de dÃ©finir l'affichage d'un Ã©lÃ©ment d'une listView
+ * OnAdapterViewListener permet de définir l'affichage d'un élément d'une listView
  *
- * @author Hirochi â˜ 
+ * @author Hirochi ?
  */
 public interface OnAdapterViewListener {
 
     /**
-     * Cette mÃ©thode est appelÃ© pour afficher un Ã©lÃ©ment
+     * Cette méthode est appelé pour afficher un élément
      * @param view conteneur graphique
-     * @param o Ã©lÃ©ment a affiche
-     * @return conteneur graphique traitÃ©
+     * @param o élément a affiche
+     * @return conteneur graphique traité
      */
    View showView(View view, Object o);
 }

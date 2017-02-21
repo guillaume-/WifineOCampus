@@ -22,6 +22,7 @@ import java.util.Date;
  *
  * @see Fragment
  * @see OnFragmentConfigListener
+ * @author Hirochi ?
  */
 public class FragmentTime extends Fragment implements OnFragmentConfigListener, CompoundButton.OnCheckedChangeListener {
 

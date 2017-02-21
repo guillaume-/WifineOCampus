@@ -5,7 +5,7 @@ import android.content.ContentValues;
 
 
 /**
- * <b> Cette classe contient et gÃ¨re les differentes valeurs d'un tuple d'une table </b>
+ * <b> Cette classe contient et gère les differentes valeurs d'un tuple d'une table </b>
  *
  * @author NALINGA
  */
@@ -22,11 +22,11 @@ public abstract class SqlDataSchema {
     }
 
     /**
-     * Cette mÃ©thode permet de rÃ©cuperer la valeur d'un champ d'une table en fonction de son nom et son type
+     * Cette méthode permet de récuperer la valeur d'un champ d'une table en fonction de son nom et son type
      * @param valueClass
      * @param key
      * @param <T>
-     * @return valeur recherchÃ©
+     * @return valeur recherché
      */
     public <T> T get(Class<T> valueClass, String key) {
         if (!values.containsKey(key))
@@ -54,7 +54,7 @@ public abstract class SqlDataSchema {
     }
 
     /**
-     * Cette mÃ©thode permet de mettre Ã  jour la valeur d'un champ d'une table en fonction de son nom et son type
+     * Cette méthode permet de mettre à jour la valeur d'un champ d'une table en fonction de son nom et son type
      * @param key
      * @param value
      * @param <T>

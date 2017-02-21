@@ -2,6 +2,7 @@ package com.neocampus.wifishared.services;
 
 import android.content.Context;
 import android.net.TrafficStats;
+
 import com.neocampus.wifishared.observables.DataObservable;
 import com.neocampus.wifishared.utils.TrafficUtils;
 
