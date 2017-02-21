@@ -27,13 +27,13 @@ import java.util.Locale;
 public class FragmentSession extends Fragment implements AdapterView.OnItemClickListener, View.OnClickListener {
 
     /**
-     * Interface de communication avec l'activité principale {@link com.neocampus.wifishared.activity.MainActivity}
+     * Interface de communication avec l'activit? principale {@link com.neocampus.wifishared.activity.MainActivity}
      * #see {@link OnActivitySetListener}
      */
     private OnActivitySetListener mListener;
 
     /**
-     * Objet graphique qui permet de changer la vue et d'afficher les détails d'une session de partage
+     * Objet graphique qui permet de changer la vue et d'afficher les d?tails d'une session de partage
      */
     private ViewSwitcher simpleViewSwitcher;
 
@@ -43,7 +43,7 @@ public class FragmentSession extends Fragment implements AdapterView.OnItemClick
     private UsersHistoView histoView;
 
     /**
-     * Objet graphique qui permet d'afficher le title des détails de la session de partage selectionné
+     * Objet graphique qui permet d'afficher le title des d?tails de la session de partage selectionn?
      */
     private TextView titleView;
 
@@ -55,7 +55,7 @@ public class FragmentSession extends Fragment implements AdapterView.OnItemClick
     }
 
     /**
-     * Crée la vue affiché par le fragment
+     * Cr?e la vue affich? par le fragment
      *
      * @see Fragment#onCreateView(LayoutInflater, ViewGroup, Bundle)
      */
@@ -99,11 +99,11 @@ public class FragmentSession extends Fragment implements AdapterView.OnItemClick
     }
 
     /**
-     * En cas de clique sur une session de partage, cette méthode
-     * affiche les détails de la session de partage selectionnée
+     * En cas de clique sur une session de partage, cette m?thode
+     * affiche les d?tails de la session de partage selectionn?e
      *
      * @param parent objet graphique contenant la vue de la session de partage
-     * @param view objet graphique représentant la vue de la session de partage
+     * @param view objet graphique repr?sentant la vue de la session de partage
      * @param position position de l'item dans la liste des sessions de partage
      * @param id identifiant de l'item dans la liste des sessions de partage
      *
@@ -114,13 +114,13 @@ public class FragmentSession extends Fragment implements AdapterView.OnItemClick
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         histoView.changeUtilisateurs(mListener.getUtilisateurs(view.getId()));
-        titleView.setText(String.format(Locale.FRANCE, "Détails de la session N°%d", view.getId()));
+        titleView.setText(String.format(Locale.FRANCE, "D?tails de la session N?%d", view.getId()));
         simpleViewSwitcher.showNext();
     }
 
     /**
-     * En cas de clique sur le bouton Revenir, réaffiche la liste des sessions de partage
-     * @param v button sur lequel l'utilisateur a cliqué
+     * En cas de clique sur le bouton Revenir, r?affiche la liste des sessions de partage
+     * @param v button sur lequel l'utilisateur a cliqu?
      */
     @Override
     public void onClick(View v) {

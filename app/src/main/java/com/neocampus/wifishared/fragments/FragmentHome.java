@@ -40,17 +40,17 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
         OnReachableClientListener, Chronometer.OnChronometerTickListener {
 
     /**
-     * Vue affich√© par le fragment
+     * Vue affichÈ par le fragment
      */
     private View view;
 
     /**
-     * Objet graphique qui affiche le nombre de client connect√©
+     * Objet graphique qui affiche le nombre de client connectÈ
      */
     private TextView clientCount;
 
     /**
-     * Objet graphique qui affiche le niveau restant de la batterie avant l'arr√™t forc√© d'une session de partage
+     * Objet graphique qui affiche le niveau restant de la batterie avant l'arrÍt forcÈ d'une session de partage
      */
     private TextView batterieLevel;
 
@@ -60,17 +60,17 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
     private TextView batterieLimite;
 
     /**
-     * Objet graphique qui affiche le total de la consommation de donn√©es
+     * Objet graphique qui affiche le total de la consommation de donnÈes
      */
     private TextView dataLevel;
 
     /**
-     * Objet graphique qui affiche le seuil de la consommation de donn√©es
+     * Objet graphique qui affiche le seuil de la consommation de donnÈes
      */
     private TextView dataLimite;
 
     /**
-     * Objet graphique qui affiche le temps restant avant l'arr√™t forc√© d'une session de partage
+     * Objet graphique qui affiche le temps restant avant l'arrÍt forcÈ d'une session de partage
      */
     private Chronometer chronometer;
 
@@ -85,12 +85,12 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
     private TextView notification1;
 
     /**
-     * Objet graphique qui permet d'activer ou de d√©sactiver une session de partage
+     * Objet graphique qui permet d'activer ou de dÈsactiver une session de partage
      */
     private Button hotSpotButton;
 
     /**
-     * Interface de communication avec l'activit√© principale {@link com.neocampus.wifishared.activity.MainActivity}
+     * Interface de communication avec l'activitÈ principale {@link com.neocampus.wifishared.activity.MainActivity}
      * #see {@link OnActivitySetListener}
      */
     private OnActivitySetListener onActivitySetListener;
@@ -104,7 +104,7 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
     }
 
     /**
-     * Cr√©e la vue affich√© par le fragment
+     * CrÈe la vue affichÈ par le fragment
      *
      * @see Fragment#onCreateView(LayoutInflater, ViewGroup, Bundle)
      */
@@ -154,8 +154,8 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
     }
 
     /**
-     * Re√ßoit la liste des clients conn√©ct√©s
-     * @param clients liste des clients conn√©ct√©s
+     * ReÁoit la liste des clients connÈctÈs
+     * @param clients liste des clients connÈctÈs
      */
     @Override
     public void onReachableClients(List<WifiApControl.Client> clients) {
@@ -184,8 +184,8 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
     }
 
     /**
-     * Rafraichit le nombre de clients connect√©s
-     * @param newCount nouveau nombre de connect√©s
+     * Rafraichit le nombre de clients connectÈs
+     * @param newCount nouveau nombre de connectÈs
      *
      * @see OnFragmentSetListener#onRefreshClientCount(int)
      */
@@ -223,8 +223,8 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
     }
 
     /**
-     * Rafraichit l'√©tat d'une session de partage
-     * @param observable Observateur de l'√©tat du Wi-FI AP
+     * Rafraichit l'Ètat d'une session de partage
+     * @param observable Observateur de l'Ètat du Wi-FI AP
      *
      * @see OnFragmentSetListener#onRefreshHotpostState(HotspotObservable)
      */
@@ -262,8 +262,8 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
     }
 
     /**
-     * Rafraichit le total de consommation de donn√©es
-     * @param dataTrafficOctet nouveau total de consommation de donn√©es
+     * Rafraichit le total de consommation de donnÈes
+     * @param dataTrafficOctet nouveau total de consommation de donnÈes
      *
      * @see OnFragmentSetListener#onRefreshDataTraffic(long)
      */
@@ -363,7 +363,7 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
                 result[2] = "\uD83D\uDD0B";
             }
             if(NotificationUtils.isTimeEnabled(notificationCode)) {
-                result[0] = "‚è∞";
+                result[0] = "?";
             }
             if(NotificationUtils.isDataEnabled(notificationCode)) {
                 result[1] = "\uD83D\uDCF6";
@@ -374,7 +374,7 @@ public class FragmentHome extends Fragment implements OnFragmentSetListener,
     }
 
     /**
-     * Met √† jour le temps restant d'activation
+     * Met ‡ jour le temps restant d'activation
      * @param chronometer
      *
      * @see Chronometer.OnChronometerTickListener#onChronometerTick(Chronometer)

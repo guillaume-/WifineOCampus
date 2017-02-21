@@ -26,7 +26,7 @@ public abstract class SqlDataSchema {
      * @param valueClass
      * @param key
      * @param <T>
-     * @return
+     * @return valeur recherché
      */
     public <T> T get(Class<T> valueClass, String key) {
         if (!values.containsKey(key))

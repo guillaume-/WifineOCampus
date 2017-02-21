@@ -774,7 +774,6 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
 
     /**
      * demande à l'utilisateur s'il souhaite activé sa géo-localisation
-     * @return resultat de la vérification
      */
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);

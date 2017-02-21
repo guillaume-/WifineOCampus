@@ -103,7 +103,7 @@ public class ClientObservable extends Observable {
 
     /**
      * Renvoi le nombre de client connecté
-     * @return
+     * @return le nombre de client connecté
      */
     public int getCount() {
         return clients.size();

@@ -52,8 +52,8 @@ public class FragmentTime extends Fragment implements OnFragmentConfigListener, 
     private ChronoTimeView timeView;
 
     /**
-     * Interface de communication avec l'activit√© principale {@link com.neocampus.wifishared.activity.MainActivity}
-     * #see {@link OnActivitySetListener}
+     * Interface de communication avec l'activitÈ principale {@link com.neocampus.wifishared.activity.MainActivity}
+     * @see OnActivitySetListener
      */
     private OnActivitySetListener mListener;
 
@@ -65,7 +65,7 @@ public class FragmentTime extends Fragment implements OnFragmentConfigListener, 
     }
 
     /**
-     * Cr√©e une instance en initialisant le seuil du temps d'activation
+     * CrÈe une instance en initialisant le seuil du temps d'activation
      *
      * @param time seuil initial du temps d'activation
      * @param notificationCode code de notification
@@ -81,7 +81,7 @@ public class FragmentTime extends Fragment implements OnFragmentConfigListener, 
     }
 
     /**
-     * R√©cup√®re le seuil initial du temps d'activation
+     * RÈcup√®re le seuil initial du temps d'activation
      *
      * @see Fragment#onCreate(Bundle)
      */
@@ -95,7 +95,7 @@ public class FragmentTime extends Fragment implements OnFragmentConfigListener, 
     }
 
     /**
-     * Cr√©e la vue affich√© par le fragment
+     * CrÈe la vue affichÈ par le fragment
      *
      * @see Fragment#onCreateView(LayoutInflater, ViewGroup, Bundle)
      */
@@ -167,7 +167,7 @@ public class FragmentTime extends Fragment implements OnFragmentConfigListener, 
     }
 
     /**
-     * @return seuil indiqu√© par l'utilisateur
+     * @return seuil indiquÈ par l'utilisateur
      *
      * @see ChronoTimeView#getHours()
      * @see ChronoTimeView#getMinute()
@@ -187,9 +187,9 @@ public class FragmentTime extends Fragment implements OnFragmentConfigListener, 
     }
 
     /**
-     * Modifier le code de notification, en cas d'activation ou de d√©ssactiv√© de notification pour le temps
-     * @param buttonView Vue sur laquelle l'utilisateur a cliqu√©
-     * @param isChecked Indique si la notification est activ√© ou pas
+     * Modifier le code de notification, en cas d'activation ou de dÈssactivation de la notification pour le temps
+     * @param buttonView Vue sur laquelle l'utilisateur a cliquÈ
+     * @param isChecked Indique si la notification est activÈe ou pas
      */
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

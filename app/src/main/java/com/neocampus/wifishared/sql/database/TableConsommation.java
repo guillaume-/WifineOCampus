@@ -194,7 +194,7 @@ public class TableConsommation extends SqlDataSchema {
 
     /**
      * Méthode qui met à jour la localisation
-     * @param pos
+     * @param value
      */
     public void setUPSLocation(boolean value){ this.values.put(_UPS_Location, value); }
 

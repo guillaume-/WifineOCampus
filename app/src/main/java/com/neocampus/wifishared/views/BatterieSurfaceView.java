@@ -19,7 +19,8 @@ import com.neocampus.wifishared.R;
 import java.util.Locale;
 
 /**
- * Created by Hirochi â˜  on 21/01/17.
+ * BatterieSurfaceView est la vue graphique permettant de définir le seuil de la batterie
+ * @author Hirochi ?
  */
 
 public class BatterieSurfaceView extends SurfaceView implements

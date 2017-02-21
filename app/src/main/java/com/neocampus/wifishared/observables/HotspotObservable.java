@@ -88,7 +88,7 @@ public class HotspotObservable extends Observable {
 
     /**
      * Renvoi l'identifiant de la session actuelle
-     * @return
+     * @return l'identifiant de la session actuelle
      */
     public int getSessionId() {
         return sessionId;

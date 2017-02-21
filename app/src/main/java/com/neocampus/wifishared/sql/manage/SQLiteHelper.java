@@ -215,7 +215,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
      * Cette méthode permet de stocker le contenu de la base de données avant une altération de la base
      * @param database
      * @param tableName
-     * @return
+     * @return Cursor de sauvegarde des données
      */
     private static Cursor store(SQLiteDatabase database, String tableName) {
         database.execSQL(String.format("ALTER TABLE %s RENAME TO %s", tableName, "_"+tableName+"_"));
