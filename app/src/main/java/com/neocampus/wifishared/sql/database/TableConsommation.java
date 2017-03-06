@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.neocampus.wifishared.sql.annotations.Column;
+import com.neocampus.wifishared.sql.annotations.MetaData;
 import com.neocampus.wifishared.sql.annotations.SqlType;
 import com.neocampus.wifishared.sql.annotations.Table;
 import com.neocampus.wifishared.sql.annotations.Trigger;
@@ -36,7 +37,7 @@ public class TableConsommation extends SqlDataSchema {
      * Colonne date
      */
     @Column(Type = SqlType.INTEGER, Nullable = false)
-    public static final String _Date_Start = "Column_Date";
+    public static final String _Date_Start = "Column_Date_Begin";
 
     /**
      * Colonne date expiration de partage
@@ -94,6 +95,7 @@ public class TableConsommation extends SqlDataSchema {
      * Méthode qui retourne la date de début de partage d'une session
      * @return date de début de partage
      */
+    @MetaData(name = "date_begin")
     public long getDate(){
         return  this.values.getAsLong(_Date_Start);
     }
@@ -110,6 +112,7 @@ public class TableConsommation extends SqlDataSchema {
      * Méthode qui retourne le nombre de user sur une borne
      * @return le nombre des users d'une borne
      */
+    @MetaData(name = "nb_user")
     public int getNbreUser(){
         return this.values.getAsInteger(_NbreUser);
     }
@@ -126,6 +129,7 @@ public class TableConsommation extends SqlDataSchema {
      * Méthode qui retourne la période de partage de connexion
      * @return la période de partage de connexion
      */
+    @MetaData(name = "using_periode")
     public int getPeriode(){
         return this.values.getAsInteger(_Periode);
     }
@@ -142,6 +146,7 @@ public class TableConsommation extends SqlDataSchema {
      * Méthode qui retourne la date d'expiration de durée de partage de connexion
      * @return date de fin de partage de connexion
      */
+    @MetaData(name = "date_end")
     public long getDateEnd(){
         return this.values.getAsLong(_Date_End);
     }
@@ -155,9 +160,10 @@ public class TableConsommation extends SqlDataSchema {
     }
 
     /**
-     * Méthode qui retourne le Mo de partage défini
-     * @return le Mo de partage défini
+     * Méthode qui retourne la consommation en début de partage
+     * @return la consommation en début de partage
      */
+    @MetaData(name = "conso_begin")
     public long getConsommationT0(){
         return this.values.getAsLong(_Consommation_T0);
     }
@@ -171,15 +177,16 @@ public class TableConsommation extends SqlDataSchema {
     }
 
     /**
-     * Méthode qui retourne le Mo déjà consommé
-     * @return le Mo déjà consommé
+     * Méthode qui retourne la consommation en fin de partage
+     * @return la consommation en fin de partage
      */
+    @MetaData(name = "conso_end")
     public long getConsommationTx(){
         return this.values.getAsLong(_Consommation_Tx);
     }
 
     /**
-     * Méthode qui met à jour le Mo déjà consommé
+     * Méthode qui met à jour la consommation en début de partage
      * @param consommation
      */
     public void setConsommationTx(long consommation){

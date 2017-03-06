@@ -54,10 +54,11 @@ public class AnnotationUtils {
                                                     Class<? extends Annotation> annotation)
     {
         Set<Method> results = new HashSet<>();
-        Method[] methods = aClass.getMethods();
+        Method[] methods = aClass.getDeclaredMethods();
         if(methods != null) {
             for (Method method : methods) {
                 if(method.isAnnotationPresent(annotation)) {
+                    method.setAccessible(true);
                     results.add(method);
                 }
             }

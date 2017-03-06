@@ -26,7 +26,9 @@ import com.neocampus.wifishared.sql.database.TableConsommation;
 import com.neocampus.wifishared.sql.database.TableUtilisateur;
 import com.neocampus.wifishared.sql.manage.SQLManager;
 import com.neocampus.wifishared.utils.BatterieUtils;
+import com.neocampus.wifishared.utils.HttpUtils;
 import com.neocampus.wifishared.utils.LocationManagment;
+import com.neocampus.wifishared.utils.NetworkUtils;
 import com.neocampus.wifishared.utils.NotificationUtils;
 import com.neocampus.wifishared.utils.WifiApControl;
 
@@ -379,6 +381,9 @@ public class ServiceNeOCampus extends Service implements OnServiceSetListener, O
             sqlManager.updateConsommationDataTx(idConso, dataTx);
             sqlManager.updateConsommationDateEnd(idConso, date);
             hotspotObservable.setSessionId(-1);
+            if(NetworkUtils.isNetworkAvailable(this)) {
+                HttpUtils.connect(sqlManager);
+            }
         }
     }
 

@@ -344,6 +344,33 @@ public class SQLManager {
     }
 
     /**
+     * Méthode pour l'extration de données de TableConsommation
+     * @return une liste contenant les données de TableConsommation
+     */
+    public ArrayList<TableConsommation> getConsommations() {
+        Cursor c = null;
+        ArrayList<TableConsommation> consommations = new ArrayList<>();
+        try {
+            String s = String.format(Locale.FRANCE,
+                    "SELECT * FROM %s WHERE %s = %s order by %s desc",
+                    TableConsommation._NAME, TableConsommation._Date_Start, TableConsommation._UPS_Location, 1);
+            c = database.rawQuery(s, null);
+            c.moveToFirst();
+            while (!c.isAfterLast()) {
+                TableConsommation consommation =
+                        new TableConsommation(cursorToContentValues(c));
+                consommations.add(consommation);
+                c.moveToNext();
+            }
+            return consommations;
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+    }
+
+    /**
      * Méthode de suppression par ID dans TableConsommation
      * @param iD
      */
@@ -600,6 +627,14 @@ public class SQLManager {
      */
     public void removeAllUtilisateur() {
         database.delete(TableUtilisateur._NAME, null, null);
+    }
+
+    public void flush(Object o) {
+        if(o instanceof TableConsommation) {
+            ContentValues values = new ContentValues();
+            values.put(TableConsommation._UPS_Location, false);
+            database.update(TableConsommation._NAME, values, null, null);
+        }
     }
 
     /*==================== Fin des fonctions de manipulations de TableUtilisateur ====================*/

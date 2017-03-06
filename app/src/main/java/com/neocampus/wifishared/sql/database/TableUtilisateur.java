@@ -3,6 +3,7 @@ package com.neocampus.wifishared.sql.database;
 import android.content.ContentValues;
 
 import com.neocampus.wifishared.sql.annotations.Column;
+import com.neocampus.wifishared.sql.annotations.MetaData;
 import com.neocampus.wifishared.sql.annotations.SqlType;
 import com.neocampus.wifishared.sql.annotations.Table;
 
@@ -104,6 +105,7 @@ public class TableUtilisateur extends SqlDataSchema {
      * Cette méthode retourne adresse IP d'un user de la borne
      * @return une adresse IP connectée sur la borne
      */
+    @MetaData(name = "host")
     public String getAdressIP(){ return this.values.getAsString(_ADRESSE_IP); }
 
     /**
@@ -116,6 +118,7 @@ public class TableUtilisateur extends SqlDataSchema {
      * Cette méthode retourne date de début de connexion
      * @return la date de début de connexion
      */
+    @MetaData(name = "date_connexion")
     public long getDateDebutCnx(){ return this.values.getAsLong(_DATE_DEBUT_CNX); }
 
     /**
@@ -128,6 +131,7 @@ public class TableUtilisateur extends SqlDataSchema {
      * Cette méthode retourne la date de fin de connexion
      * @return la date de fin de connexion
      */
+    @MetaData(name = "date_deconnexion")
     public long getDateFinCnx(){ return this.values.getAsLong(_DATE_FIN_CNX); }
 
     /**
