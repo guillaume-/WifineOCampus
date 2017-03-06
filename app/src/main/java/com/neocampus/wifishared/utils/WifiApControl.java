@@ -180,9 +180,9 @@ final public class WifiApControl extends Observable {
     public static WifiConfiguration getUPSWifiConfiguration() {
 
         WifiConfiguration wifiConfiguration = new WifiConfiguration();
-        wifiConfiguration.SSID = "Wifi neOCampus   ?ll?ll?";
-        wifiConfiguration.preSharedKey = "Wifi neOCampus   ?ll?ll?";
-        wifiConfiguration.wepKeys[0] = "Wifi neOCampus   ?ll?ll?";
+        wifiConfiguration.SSID = "Wifi neOCampus";
+        wifiConfiguration.preSharedKey = "Wifi neOCampus";
+        wifiConfiguration.wepKeys[0] = "Wifi neOCampus";
         wifiConfiguration.hiddenSSID = false;
 
         wifiConfiguration.allowedAuthAlgorithms.clear();
