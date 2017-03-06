@@ -131,11 +131,16 @@ public class ProgressSurfaceView extends SurfaceView implements
             valueProgress--;
             postDelayed(this, vitessProgress);
         } else {
-            Object o = getTag();
-            if (o != null
-                    && o instanceof Dialog) {
-                ((Dialog) o).dismiss();
-            }
+            post(new Runnable() {
+                @Override
+                public void run() {
+                    Object o = getTag();
+                    if (o != null
+                            && o instanceof Dialog) {
+                        ((Dialog) o).dismiss();
+                    }
+                }
+            });
         }
 
     }
