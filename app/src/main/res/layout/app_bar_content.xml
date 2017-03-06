@@ -14,28 +14,48 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="15dp"
-        android:layout_gravity="center_vertical"
-        android:onClick="onClickToRefresh">
+        android:layout_gravity="center_vertical">
 
-        <ImageView
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/progress"
-            android:layout_alignBottom="@+id/progress"
-            android:layout_alignEnd="@+id/progress"
-            android:layout_alignStart="@+id/progress"
-            android:src="@drawable/cu_bar_update_rotate"
-            android:id="@+id/updatebutton" />
+            android:padding="15dp"
+            android:onClick="onClickToRefresh"
+            android:id="@+id/app_bar_refresh">
 
-        <ProgressBar
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/progress"
+                android:layout_alignBottom="@+id/progress"
+                android:layout_alignEnd="@+id/progress"
+                android:layout_alignStart="@+id/progress"
+                android:src="@drawable/cu_bar_update_rotate"
+                android:id="@+id/updatebutton" />
+
+            <ProgressBar
+                android:indeterminateDrawable="@drawable/cu_bar_update_rotate"
+                android:indeterminateBehavior="repeat"
+                android:indeterminateDuration="700"
+                android:id="@+id/progress"
+                android:visibility="invisible"
+                android:layout_width="50dp"
+                android:layout_height="50dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:indeterminateDrawable="@drawable/cu_bar_update_rotate"
-            android:indeterminateBehavior="repeat"
-            android:indeterminateDuration="700"
-            android:id="@+id/progress"
-            android:visibility="invisible" />
+            android:padding="15dp"
+            android:id="@+id/app_bar_save_config"
+            android:onClick="onClickToSaveConfig">
+
+            <ImageView
+                android:src="@drawable/ic_save_config"
+                android:id="@+id/update_config"
+                android:layout_width="50dp"
+                android:layout_height="50dp" />
+        </RelativeLayout>
 
     </RelativeLayout>
 

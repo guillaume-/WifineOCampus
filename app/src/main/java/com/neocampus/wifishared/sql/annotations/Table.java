@@ -6,9 +6,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Comparator;
 
-/**
- * Created by Hirochi ☠ on 09/01/17.
- */
 
 @Target(ElementType.TYPE )
 @Retention(RetentionPolicy.RUNTIME)

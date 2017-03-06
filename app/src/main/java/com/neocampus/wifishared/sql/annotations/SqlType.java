@@ -1,8 +1,6 @@
 package com.neocampus.wifishared.sql.annotations;
 
-/**
- * Created by Hirochi ☠ on 09/01/17.
- */
+
 
 public enum SqlType {
     TEXT ("TEXT"),

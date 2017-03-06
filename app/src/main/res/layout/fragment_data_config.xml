@@ -1,0 +1,110 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.neocampus.wifishared.fragments.FragmentTraffic">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/cu_solid_bottom_border"
+                android:padding="10dp"
+                android:text="Consommation des données "
+                android:textSize="18sp"
+                android:typeface="serif" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/cu_solid_bottom_border"
+                android:orientation="vertical">
+
+                <Switch
+                    android:id="@+id/switch1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:padding="10dp"
+                    android:showText="true"
+                    android:switchTextAppearance="@style/SwitchTextAppearance"
+                    android:text="Notification"
+                    android:textColor="?android:attr/textColorTertiary"
+                    android:textOff="Non"
+                    android:textOn="Oui"
+                    android:textSize="16sp"
+                    android:thumb="@drawable/cu_switch_thumb_selector"
+                    android:thumbTextPadding="10dp"
+                    android:track="@drawable/cu_switch_track_bg"
+                    android:typeface="serif" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:padding="20dp">
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/id_view_pager"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+
+                    <com.neocampus.wifishared.views.DataSurfaceView
+                        android:id="@+id/echelle_surface"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" />
+
+                    <com.neocampus.wifishared.views.DataSurfaceView
+                        android:id="@+id/data_configuration"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"/>
+
+
+                </android.support.v4.view.ViewPager>
+
+            <com.neocampus.wifishared.views.CirclePageIndicator
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/id_circle_indicator"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginBottom="10dp">
+
+            </com.neocampus.wifishared.views.CirclePageIndicator>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="50dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

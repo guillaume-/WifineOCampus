@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Hirochi on 15/12/2016.
+ * CirclePagerAdapter permet de gérer une vue multi-page
+ * @author Hirochi ? 
  */
-
 public class CirclePagerAdapter extends PagerAdapter {
 
     private List<View> views = new ArrayList<>();
@@ -31,6 +31,12 @@ public class CirclePagerAdapter extends PagerAdapter {
         view.setLayoutParams(lp);
         collection.addView(view);
         return view;
+    }
+
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        View view = views.get(position);
+        container.removeView(view);
     }
 
     @Override

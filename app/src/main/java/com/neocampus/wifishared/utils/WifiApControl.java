@@ -1,12 +1,12 @@
 /**
- * Copyright 2015 Daniel Martí
- *
+ * Copyright 2015 Daniel Mart�
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,6 +22,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.DhcpInfo;
 import android.net.Uri;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
@@ -44,6 +45,7 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Observable;
@@ -52,10 +54,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Pattern;
 
-// WifiApControl provides control over Wi-Fi APs using the singleton pattern.
-// Even though isSupported should be reliable, the underlying hidden APIs that
-// are obtained via reflection to provide the main features may not work as
-// expected.
+/**
+ * WifiApControl permet d'�ffectuer des actions en relation avec la configuration WIFI-AP
+ */
 final public class WifiApControl extends Observable {
 
     private static final String TAG = "WifiApControl";
@@ -65,6 +66,7 @@ final public class WifiApControl extends Observable {
     private static Method isWifiApEnabledMethod;
     private static Method setWifiApEnabledMethod;
     private static Method setWifiApConfiguration;
+    private static Method getDhcpInfo;
 
     static {
         for (Method method : WifiManager.class.getDeclaredMethods()) {
@@ -84,27 +86,31 @@ final public class WifiApControl extends Observable {
                 case "setWifiApEnabled":
                     setWifiApEnabledMethod = method;
                     break;
+                case "getDhcpInfo":
+                    getDhcpInfo = method;
+                    break;
             }
         }
     }
 
 
+    private static int CODE_WRITE_SETTINGS_PERMISSION = 1555;
 
-    public static int CODE_WRITE_SETTINGS_PERMISSION = 1555;
-
+    public static final String ACTION_CONNECTIVITY_CHANGE = "android.net.conn.CONNECTIVITY_CHANGE";
+    public static final String ACTION_WIFI_AP_CHANGED = "android.net.wifi.WIFI_AP_STATE_CHANGED";
     public static final String EXTRA_WIFI_AP_STATE = "wifi_state";
 
     public static final int WIFI_AP_STATE_DISABLING = 10;
-    public static final int WIFI_AP_STATE_DISABLED  = 11;
-    public static final int WIFI_AP_STATE_ENABLING  = 12;
-    public static final int WIFI_AP_STATE_ENABLED   = 13;
-    public static final int WIFI_AP_STATE_FAILED    = 14;
+    public static final int WIFI_AP_STATE_DISABLED = 11;
+    public static final int WIFI_AP_STATE_ENABLING = 12;
+    public static final int WIFI_AP_STATE_ENABLED = 13;
+    public static final int WIFI_AP_STATE_FAILED = 14;
 
     public static final int STATE_DISABLING = WIFI_AP_STATE_DISABLING;
-    public static final int STATE_DISABLED  = WIFI_AP_STATE_DISABLED;
-    public static final int STATE_ENABLING  = WIFI_AP_STATE_ENABLING;
-    public static final int STATE_ENABLED   = WIFI_AP_STATE_ENABLED;
-    public static final int STATE_FAILED    = WIFI_AP_STATE_FAILED;
+    public static final int STATE_DISABLED = WIFI_AP_STATE_DISABLED;
+    public static final int STATE_ENABLING = WIFI_AP_STATE_ENABLING;
+    public static final int STATE_ENABLED = WIFI_AP_STATE_ENABLED;
+    public static final int STATE_FAILED = WIFI_AP_STATE_FAILED;
 
     private static boolean isSoftwareSupported() {
         return (getWifiApStateMethod != null
@@ -145,8 +151,7 @@ final public class WifiApControl extends Observable {
         return instance;
     }
 
-    public static boolean checkPermission(Context context, boolean... request)
-    {
+    public static boolean checkPermission(Context context, boolean... request) {
         boolean permission;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             permission = Settings.System.canWrite(context);
@@ -175,14 +180,18 @@ final public class WifiApControl extends Observable {
     public static WifiConfiguration getUPSWifiConfiguration() {
 
         WifiConfiguration wifiConfiguration = new WifiConfiguration();
-        wifiConfiguration.SSID = "Wifi neOCampus   ıllıllı";
-        wifiConfiguration.preSharedKey = "Wifi neOCampus   ıllıllı";
-        wifiConfiguration.wepKeys[0] = "Wifi neOCampus   ıllıllı";
+        wifiConfiguration.SSID = "Wifi neOCampus";
+        wifiConfiguration.preSharedKey = "Wifi neOCampus";
+        wifiConfiguration.wepKeys[0] = "Wifi neOCampus";
         wifiConfiguration.hiddenSSID = false;
 
+        wifiConfiguration.allowedAuthAlgorithms.clear();
         wifiConfiguration.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
+        wifiConfiguration.allowedProtocols.clear();
         wifiConfiguration.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
+        wifiConfiguration.allowedKeyManagement.clear();
         wifiConfiguration.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+        wifiConfiguration.allowedGroupCiphers.clear();
         wifiConfiguration.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
 
         return wifiConfiguration;
@@ -260,7 +269,7 @@ final public class WifiApControl extends Observable {
 
     // newStateNumber adapts the state constants to the current values in
     // the SDK. They were changed on 4.0 to have higher integer values.
-    public static int newStateNumber(int state) {
+    private static int newStateNumber(int state) {
         if (state < 10) {
             return state + 10;
         }
@@ -333,6 +342,13 @@ final public class WifiApControl extends Observable {
         return setEnabled(null, false);
     }
 
+    public DhcpInfo getDhcpInfo() {
+        Object result = invokeQuietly(getDhcpInfo, wm);
+        if (result == null)
+            return null;
+        return (DhcpInfo) result;
+    }
+
     // getInet6Address returns the IPv6 address that the device has in its
     // own Wi-Fi AP local network. Will return null if no Wi-Fi AP is
     // currently enabled.
@@ -379,34 +395,89 @@ final public class WifiApControl extends Observable {
         return null;
     }
 
-    public static boolean equals(WifiConfiguration configuration1,
-                                 WifiConfiguration configuration2)
+    private static boolean isNotEquals(byte[] bytes1, byte[] bytes2)
     {
-        byte[] bytes1 = ParcelableUtil.marshall(configuration1);
-        byte[] bytes2 = ParcelableUtil.marshall(configuration2);
-        return Arrays.equals(bytes1, bytes2);
+        if(bytes1.length != bytes2.length)
+            return true;
+        float count = 0.0f;
+        for(int i = 0; i < bytes1.length; i++) {
+            if (bytes1[i] != bytes2[i]) {
+                count++;
+            }
+        }
+        return  (count / bytes1.length) > 0.1f;
     }
+
+    public static boolean equals(WifiConfiguration configuration1,
+                                 WifiConfiguration configuration2) {
+        byte[] bytes1 = ParcelableUtils.marshall(configuration1);
+        byte[] bytes2 = ParcelableUtils.marshall(configuration2);
+        return Arrays.equals(bytes1, bytes2) || !isNotEquals(bytes1, bytes2);
+    }
+
+    public static boolean isUPSWifiConfiguration(Context context) {
+        if (WifiApControl.checkPermission(context)) {
+            WifiApControl apControl
+                    = WifiApControl.getInstance(context);
+            return apControl.isUPSWifiConfiguration();
+        }
+        return false;
+    }
+
+    public boolean isUPSWifiConfiguration() {
+        WifiConfiguration
+                configuration = getWifiApConfiguration();
+        WifiConfiguration upsConfig = WifiApControl.getUPSWifiConfiguration();
+        if (WifiApControl.equals(configuration, upsConfig)) {
+            return true;
+        }
+        return false;
+    }
+
+    public static class DataSync {
+        public int id = -1;
+
+        public long connected = new Date().getTime();
+
+        public long disconnected;
+    }
+
 
     // Client describes a Wi-Fi AP device connected to the network.
     public static class Client {
 
+        public boolean connected;
         // ipAddr is the raw string of the IP Address client
         public String ipAddr;
 
         // hwAddr is the raw string of the MAC of the client
         public String hwAddr;
 
+
+        public DataSync date;
+
         public Client(String ipAddr, String hwAddr) {
+            this.date = null;
+            this.connected = true;
             this.ipAddr = ipAddr;
             this.hwAddr = hwAddr;
         }
 
         @Override
         public boolean equals(Object obj) {
-            if(obj instanceof Client) {
-                return ((Client)obj).hwAddr.equals(hwAddr);
+            if (obj instanceof Client) {
+                if (((Client) obj).hwAddr.equals(hwAddr))
+                    synchro((Client) obj);
+                return true;
             }
             return super.equals(obj);
+        }
+
+        private void synchro(Client client) {
+            if (this.date == null)
+                this.date = client.date;
+            else
+                client.date = this.date;
         }
 
         @Override
@@ -414,6 +485,63 @@ final public class WifiApControl extends Observable {
             return 1;
         }
     }
+
+    /*// Client describes a Wi-Fi AP device connected to the network.
+    public static class Client {
+
+        public int[] id;
+
+        public boolean connected;
+        // ipAddr is the raw string of the IP Address client
+        public String ipAddr;
+
+        // hwAddr is the raw string of the MAC of the client
+        public String hwAddr;
+
+        public long connected;
+
+        public long disconnected;
+
+        public Client(String ipAddr, String hwAddr) {
+            this.ipAddr = ipAddr;
+            this.hwAddr = hwAddr;
+            this.connected = true;
+            this.connected = 0;
+            this.disconnected = 0;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof Client) {
+                return synchro((Client) obj);
+            }
+            return super.equals(obj);
+        }
+
+        private boolean synchro(Client client) {
+            if (client.hwAddr.equals(hwAddr)) {
+                long connected = this.connected == 0 ? client.connected : this.connected;
+                long disconnected = this.disconnected < client.disconnected ?
+                        client.disconnected : this.disconnected;
+                this.connected = connected;
+                client.connected = connected;
+                this.disconnected = disconnected;
+                client.disconnected = disconnected;
+                if(id == null) {
+                    id = client.id;
+                } else {
+                    client.id = id;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return 1;
+        }
+    }*/
 
     // getReachableClients returns a list of all clients connected to the network.
     // Since the information is pulled from ARP, which is cached for up to
@@ -487,9 +615,8 @@ final public class WifiApControl extends Observable {
                     try {
                         InetAddress ip = InetAddress.getByName(c.ipAddr);
                         if (ip.isReachable(timeout)) {
-                            listener.onReachableClient(c);
-                        }
-                        else {
+//                            listener.onReachableClient(c);
+                        } else {
                             clients.remove(c);
                         }
                     } catch (IOException e) {

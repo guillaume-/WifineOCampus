@@ -9,4 +9,8 @@
 
     <dimen name="text_size_small_material">18sp</dimen>
     <dimen name="cu_circle_size">15dp</dimen>
+
+    <dimen name="cu_session_users_width">150dp</dimen>
+    <dimen name="cu_session_users_nwidth">100dp</dimen>
+
 </resources>

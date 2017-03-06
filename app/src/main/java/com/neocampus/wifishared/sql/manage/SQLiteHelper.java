@@ -10,10 +10,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.neocampus.wifishared.sql.annotations.Column;
 import com.neocampus.wifishared.sql.annotations.SqlType;
 import com.neocampus.wifishared.sql.annotations.Table;
+import com.neocampus.wifishared.sql.annotations.Trigger;
 import com.neocampus.wifishared.utils.AnnotationUtils;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,11 +24,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-
+/**
+ * <b>Cette classe permet de mettre à niveau automatiquement la base de données lors de changement de structure</b>
+ * @author NALINGA
+ */
 public class SQLiteHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "database.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 6;
     private Context context;
 
     public SQLiteHelper(Context context) {
@@ -33,6 +39,10 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         this.context = context;
     }
 
+    /**
+     *  Cette méthode permet de créer un ensemble de table à partir d'un ensemble de classe
+     * @param database
+     */
     @Override
     public void onCreate(SQLiteDatabase database) {
         try {
@@ -46,18 +56,22 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 }
             }
             Collections.sort(listClasses, new Table.IComparator());
-            for (Class<?> aClass : listClasses) {
-                String createTable = buildSQL(aClass);
-                database.execSQL(createTable);
-                System.out.println(createTable);
-            }
-        } catch (ClassNotFoundException | PackageManager.NameNotFoundException |
-                IOException | NoSuchFieldException | IllegalAccessException e) {
+
+            createAllTables(database, listClasses);
+            createAllTriggers(database, listClasses);
+
+        } catch (ClassNotFoundException | PackageManager.NameNotFoundException | IOException |
+                NoSuchFieldException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
-
     }
 
+    /**
+     * Cette méthode permet de mettre à jour la structure de table en cas de modification de la version de base de données
+     * @param database
+     * @param oldVersion
+     * @param newVersion
+     */
     @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
         HashMap<String, Cursor> hashMap = new HashMap<>();
@@ -74,32 +88,43 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             Collections.sort(listClasses, new Table.IComparator());
 
             /*Store all tables to duplicate*/
-            for (Class<?> aClass : listClasses) {
-                Table table = aClass.getAnnotation(Table.class);
-                Cursor cursor = store( database, table.TableName());
-                try {
-                    hashMap.put(table.TableName(), cursor);
-                } catch (Exception e) {
+            Cursor c = database.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
+            if (c.moveToFirst()) {
+                while ( !c.isAfterLast() ) {
+                    String tableName = c.getString(0);
+                    if(!"android_metadata".equals(tableName)
+                            && !"sqlite_sequence".equals(tableName)) {
+                        Cursor cursor = store( database, tableName);
+                        try {
+                            hashMap.put(tableName, cursor);
+                        } catch (Exception e) {
+                        }
+                    }
+                    c.moveToNext();
                 }
             }
 
-            /*Drop all tables*/
+            /*Drop all tables without duplicate*/
             for (Class<?> aClass : listClasses) {
                 Table table = aClass.getAnnotation(Table.class);
                 database.execSQL("DROP TABLE IF EXISTS " + table.TableName());
             }
 
-            /*Create all tables*/
-            for (Class<?> aClass : listClasses) {
-                String createTable = buildSQL(aClass);
-                database.execSQL(createTable);
-            }
+            createAllTables(database, listClasses);
 
             /*Restore all tables*/
-            for (Class<?> aClass : listClasses) {
-                Table table = aClass.getAnnotation(Table.class);
-                restore(database, table.TableName(), hashMap.get(table.TableName()));
+            if (c.moveToFirst()) {
+                while ( !c.isAfterLast() ) {
+                    String tableName = c.getString(0);
+                    if(!"android_metadata".equals(tableName)
+                            && !"sqlite_sequence".equals(tableName)) {
+                        restore(database, tableName, hashMap.get(tableName));
+                    }
+                    c.moveToNext();
+                }
             }
+
+            createAllTriggers(database, listClasses);
 
             /*Drop all duplicate tables*/
             for (Class<?> aClass : listClasses) {
@@ -107,13 +132,52 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 database.execSQL("DROP TABLE IF EXISTS _" + table.TableName()+"_");
             }
 
-        } catch (ClassNotFoundException | PackageManager.NameNotFoundException
-                | IOException | NoSuchFieldException | IllegalAccessException e) {
+        } catch (ClassNotFoundException | PackageManager.NameNotFoundException | IOException |
+                NoSuchFieldException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Cette méthode permet de réinitialiser la base de données en cas de régression de version
+     * @param database
+     * @param oldVersion
+     * @param newVersion
+     */
+    @Override
+    public void onDowngrade(SQLiteDatabase database, int oldVersion, int newVersion) {
+        try {
+            Set<Class<?>> classes = AnnotationUtils.
+                    getAnnotationClasses(context, Table.class);
+            List<Class<?>> listClasses = new ArrayList<>();
+            for (Class<?> aClass : classes) {
+                Table table = aClass.getAnnotation(Table.class);
+                if (table.enabled()) {
+                    listClasses.add(aClass);
+                }
+            }
 
+            Collections.sort(listClasses, new Table.IComparator());
+
+            dropAllTriggers(database);
+            dropAllTables(database);
+
+            createAllTables(database, listClasses);
+            createAllTriggers(database, listClasses);
+
+        } catch (ClassNotFoundException | PackageManager.NameNotFoundException |
+                IOException | NoSuchFieldException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Cette méthode permet de créer une table à partir d'une classe de manière automatique
+     * @param aClass
+     * @return une requête sql pour la création de la table
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
     private static String buildSQL(Class<?> aClass)
             throws NoSuchFieldException, IllegalAccessException {
 
@@ -147,6 +211,12 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         return s.toString();
     }
 
+    /**
+     * Cette méthode permet de stocker le contenu de la base de données avant une altération de la base
+     * @param database
+     * @param tableName
+     * @return Cursor de sauvegarde des données
+     */
     private static Cursor store(SQLiteDatabase database, String tableName) {
         database.execSQL(String.format("ALTER TABLE %s RENAME TO %s", tableName, "_"+tableName+"_"));
         Cursor c;
@@ -158,6 +228,12 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Cette méthode permet de restaurer le contenu de la base de données après une altération
+     * @param database
+     * @param tableName
+     * @param c
+     */
     private static void restore(SQLiteDatabase database,String tableName, Cursor c) {
         c.moveToFirst();
         while (!c.isAfterLast()) {
@@ -190,42 +266,77 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         c.close();
     }
 
-    @Override
-    public void onDowngrade(SQLiteDatabase database, int oldVersion, int newVersion) {
-        try {
-            Set<Class<?>> classes = AnnotationUtils.
-                    getAnnotationClasses(context, Table.class);
-            List<Class<?>> listClasses = new ArrayList<>();
-            for (Class<?> aClass : classes) {
-                Table table = aClass.getAnnotation(Table.class);
-                if (table.enabled()) {
-                    listClasses.add(aClass);
-                }
-            }
-            Collections.sort(listClasses, new Table.IComparator());
-
-            Cursor c = database.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
-            if (c.moveToFirst()) {
-                while ( !c.isAfterLast() ) {
-                    String tableName = c.getString(0);
-                    if(!"android_metadata".equals(tableName)
-                            && !"sqlite_sequence".equals(tableName)) {
-                        database.execSQL("DROP TABLE IF EXISTS " + tableName);
-                        System.out.println("DROP TABLE IF EXISTS " + tableName);
-                    }
-                    c.moveToNext();
-                }
-            }
-
-            /*Create all tables*/
-            for (Class<?> aClass : listClasses) {
-                String createTable = buildSQL(aClass);
-                database.execSQL(createTable);
-            }
-
-        } catch (ClassNotFoundException | PackageManager.NameNotFoundException
-                | IOException | NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
+    /**
+     * Cette méthode permet de créer des tables à partir de la liste de classe fournie en paramètre
+     * @param database
+     * @param listClasses
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
+    private static void createAllTables(SQLiteDatabase database, List<Class<?>> listClasses)
+            throws NoSuchFieldException, IllegalAccessException {
+        /*Create all tables*/
+        for (Class<?> aClass : listClasses) {
+            String createTable = buildSQL(aClass);
+            database.execSQL(createTable);
         }
     }
+
+    /**
+     * Cette méthode permet de créer des triggers à partir de la liste de classe fournie en paramètre
+     * @param database
+     * @param listClasses
+     * @throws InvocationTargetException
+     * @throws IllegalAccessException
+     */
+    private static void createAllTriggers(SQLiteDatabase database, List<Class<?>> listClasses)
+            throws InvocationTargetException, IllegalAccessException {
+        for (Class<?> aClass : listClasses) {
+            Set<Method> methods = AnnotationUtils
+                    .getAnnotationsMethods(aClass, Trigger.class);
+            for(Method method : methods) {
+                Trigger trigger = method.getAnnotation(Trigger.class);
+                method.invoke(null, database, trigger.name());
+            }
+        }
+    }
+
+    /**
+     * Cette méthode permet de supprimer tous les triggers qui sont crées
+     * @param database
+     */
+    private static void dropAllTriggers(SQLiteDatabase database)
+    {
+        Cursor cursor = database.rawQuery("SELECT name FROM sqlite_master WHERE type='trigger'", null);
+        if (cursor.moveToFirst()) {
+            while ( !cursor.isAfterLast() ) {
+                String triggerName = cursor.getString(0);
+                database.execSQL("DROP TRIGGER IF EXISTS " + triggerName);
+                System.out.println("DROP TRIGGER IF EXISTS " + triggerName);
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+    }
+
+    /**
+     * Cette méthode permet de supprimer toutes les tables de la base de données
+     * @param database
+     */
+    private static void dropAllTables(SQLiteDatabase database)
+    {
+        Cursor cursor = database.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
+        if (cursor.moveToFirst()) {
+            while ( !cursor.isAfterLast() ) {
+                String tableName = cursor.getString(0);
+                if(!"android_metadata".equals(tableName) && !"sqlite_sequence".equals(tableName)) {
+                    database.execSQL("DROP TABLE IF EXISTS " + tableName);
+                    System.out.println("DROP TABLE IF EXISTS " + tableName);
+                }
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+    }
+
 }

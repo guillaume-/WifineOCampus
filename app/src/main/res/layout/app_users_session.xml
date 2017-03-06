@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/connect_session"
+                android:typeface="serif"
+                android:textAppearance="@style/AppTheme.TextSmallStyle"
+                android:textStyle="normal|bold"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:text="@string/utilisateurs_sessions"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorTextContent"
+                    android:typeface="monospace"
+                    android:fontFamily="serif"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="0.7"
+                    android:layout_width="0dp" />
+
+                <TextView
+                    android:text="@string/deux_points"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorTextContent"
+                    android:typeface="monospace"
+                    android:fontFamily="serif"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="0.05"
+                    android:layout_width="0dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp" />
+
+                <TextView
+                    android:text="@string/wait_count"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorTextContent"
+                    android:typeface="monospace"
+                    android:fontFamily="serif"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.35"
+                    android:id="@+id/total_client_count" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@drawable/cu_solid_bottom_border"
+        android:layout_marginBottom="10dp">
+
+    </LinearLayout>
+
+    <com.neocampus.wifishared.views.SessionUserView
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/session_users"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/cu_solid_bottom_border"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:text="@string/adresse_physique"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorTextContent"
+                android:typeface="monospace"
+                android:fontFamily="serif"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/cu_solid_end_border"
+                android:gravity="center_vertical"
+                android:layout_width="0dp"
+                android:layout_weight="0.40" />
+
+            <TextView
+                android:text="@string/adresse_ip"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorTextContent"
+                android:typeface="monospace"
+                android:fontFamily="serif"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/cu_solid_end_border"
+                android:gravity="center_vertical|center_horizontal"
+                android:layout_width="0dp"
+                android:layout_weight="0.40" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.15"
+                android:background="@color/colorPrimaryDark" />
+
+
+        </LinearLayout>
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/lvClients"
+            android:dividerHeight="-2dp" />
+
+    </com.neocampus.wifishared.views.SessionUserView>
+
+
+</LinearLayout>

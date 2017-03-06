@@ -1,0 +1,11 @@
+com.neocampus.wifishared.activity
+com.neocampus.wifishared.fragments
+com.neocampus.wifishared.listeners
+com.neocampus.wifishared.observables
+com.neocampus.wifishared.receivers
+com.neocampus.wifishared.services
+com.neocampus.wifishared.sql.annotations
+com.neocampus.wifishared.sql.database
+com.neocampus.wifishared.sql.manage
+com.neocampus.wifishared.utils
+com.neocampus.wifishared.views

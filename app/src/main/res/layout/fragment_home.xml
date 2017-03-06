@@ -5,8 +5,6 @@
     tools:context="com.neocampus.wifishared.activity.MainActivity"
     android:padding="10dp">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -16,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/button"
-            android:paddingTop="20dp">
+            android:paddingTop="10dp">
 
             <LinearLayout
                 android:orientation="vertical"
@@ -47,13 +45,13 @@
                         android:layout_weight="1">
 
                         <TextView
-                            android:text="@string/utilisateurs"
+                            android:text="@string/utilisateurs_actifs"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorTextContent"
                             android:typeface="monospace"
                             android:fontFamily="serif"
                             android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.7"
+                            android:layout_weight="@integer/scale_a"
                             android:layout_width="0dp" />
 
                         <TextView
@@ -77,7 +75,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_width="0dp"
                             android:layout_weight="0.35"
-                            android:id="@+id/iDClientCount" />
+                            android:id="@+id/reachable_client_count" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -93,6 +91,12 @@
 
             </LinearLayout>
 
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fillViewport="true"
+                android:layout_weight="1">
+
             <android.support.v4.view.ViewPager
                 android:id="@+id/id_view_pager"
                 android:layout_width="fill_parent"
@@ -100,368 +104,23 @@
                 android:layout_weight="1">
 
 
-                <LinearLayout
-                    android:id="@+id/page_one"
-                    android:orientation="vertical"
+                <include
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_above="@+id/button"
-                    android:padding="10dp">
+                    layout="@layout/app_utilisation_layout"
+                    android:id="@+id/page_one" />
 
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/utilisations"
-                            android:typeface="serif"
-                            android:textAppearance="@style/AppTheme.TextSmallStyle"
-                            android:textStyle="normal|bold" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp">
-
-                        <TextView
-                            android:text="@string/total_transmission"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/colorTextContent"
-                            android:typeface="monospace"
-                            android:fontFamily="serif"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.7"
-                            android:layout_width="0dp" />
-
-                        <TextView
-                            android:text="@string/deux_points"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/colorTextContent"
-                            android:typeface="monospace"
-                            android:fontFamily="serif"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.05"
-                            android:layout_width="0dp"
-                            android:layout_marginEnd="10dp"
-                            android:layout_marginStart="10dp" />
-
-                        <TextView
-                            android:text="@string/wait_info"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/colorTextContent"
-                            android:typeface="monospace"
-                            android:fontFamily="serif"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.35"
-                            android:layout_width="0dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp">
-
-                        <TextView
-                            android:text="@string/taux_batterie_restant"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/colorTextContent"
-                            android:typeface="monospace"
-                            android:fontFamily="serif"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.7"
-                            android:layout_width="0dp" />
-
-                        <TextView
-                            android:text="@string/deux_points"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/colorTextContent"
-                            android:typeface="monospace"
-                            android:fontFamily="serif"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.05"
-                            android:layout_width="0dp"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginEnd="10dp" />
-
-                        <TextView
-                            android:text="@string/wait_info"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/colorTextContent"
-                            android:typeface="monospace"
-                            android:fontFamily="serif"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.35"
-                            android:layout_width="0dp"
-                            android:id="@+id/batterie_level_result" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp">
-
-                        <TextView
-                            android:text="@string/temps_d_utilisation_restant"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/colorTextContent"
-                            android:typeface="monospace"
-                            android:fontFamily="serif"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.7"
-                            android:layout_width="0dp" />
-
-                        <TextView
-                            android:text="@string/deux_points"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/colorTextContent"
-                            android:typeface="monospace"
-                            android:fontFamily="serif"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.05"
-                            android:layout_width="0dp"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginEnd="10dp" />
-
-                        <TextView
-                            android:text="@string/wait_info"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/colorTextContent"
-                            android:typeface="monospace"
-                            android:fontFamily="serif"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.35"
-                            android:layout_width="0dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp">
-
-                        <TextView
-                            android:text="@string/arret_automatique"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/colorTextContent"
-                            android:typeface="monospace"
-                            android:fontFamily="serif"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.7"
-                            android:layout_width="0dp" />
-
-                        <TextView
-                            android:text="@string/deux_points"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/colorTextContent"
-                            android:typeface="monospace"
-                            android:fontFamily="serif"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.05"
-                            android:layout_width="0dp"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginEnd="10dp" />
-
-                        <TextView
-                            android:text="@string/wait_info"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/colorTextContent"
-                            android:typeface="monospace"
-                            android:fontFamily="serif"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.35"
-                            android:layout_width="0dp" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
+                <include
                     android:id="@+id/page_two"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_above="@+id/button"
-                    android:padding="10dp">
-
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/limite_d_utilisations"
-                            android:typeface="serif"
-                            android:textAppearance="@style/AppTheme.TextSmallStyle"
-                            android:textStyle="normal|bold" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp">
-
-                        <TextView
-                            android:text="@string/seuil_de_transmission"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/colorTextContent"
-                            android:typeface="monospace"
-                            android:fontFamily="serif"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.7"
-                            android:layout_width="0dp" />
-
-                        <TextView
-                            android:text="@string/deux_points"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/colorTextContent"
-                            android:typeface="monospace"
-                            android:fontFamily="serif"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.05"
-                            android:layout_width="0dp"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginEnd="10dp" />
-
-                        <TextView
-                            android:text="@string/wait_info"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/colorTextContent"
-                            android:typeface="monospace"
-                            android:fontFamily="serif"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.35"
-                            android:layout_width="0dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp">
-
-                        <TextView
-                            android:text="@string/seuil_de_la_batterie"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/colorTextContent"
-                            android:typeface="monospace"
-                            android:fontFamily="serif"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.7"
-                            android:layout_width="0dp" />
-
-                        <TextView
-                            android:text=":"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/colorTextContent"
-                            android:typeface="monospace"
-                            android:fontFamily="serif"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.05"
-                            android:layout_width="0dp"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginEnd="10dp" />
-
-                        <TextView
-                            android:text="@string/wait_info"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/colorTextContent"
-                            android:typeface="monospace"
-                            android:fontFamily="serif"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.35"
-                            android:layout_width="0dp"
-                            android:id="@+id/batterie_level_limit" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp">
-
-                        <TextView
-                            android:text="@string/seuil_de_temps"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/colorTextContent"
-                            android:typeface="monospace"
-                            android:fontFamily="serif"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.7"
-                            android:layout_width="0dp" />
-
-                        <TextView
-                            android:text="@string/deux_points"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/colorTextContent"
-                            android:typeface="monospace"
-                            android:fontFamily="serif"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.05"
-                            android:layout_width="0dp"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginEnd="10dp" />
-
-                        <TextView
-                            android:text="@string/wait_info"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/colorTextContent"
-                            android:typeface="monospace"
-                            android:fontFamily="serif"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.35"
-                            android:layout_width="0dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp">
-
-                        <TextView
-                            android:text="@string/arret_automatique"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/colorTextContent"
-                            android:typeface="monospace"
-                            android:fontFamily="serif"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.7"
-                            android:layout_width="0dp" />
-
-                        <TextView
-                            android:text="@string/deux_points"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/colorTextContent"
-                            android:typeface="monospace"
-                            android:fontFamily="serif"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.05"
-                            android:layout_width="0dp"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginEnd="10dp" />
-
-                        <TextView
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/colorTextContent"
-                            android:typeface="monospace"
-                            android:fontFamily="serif"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_weight="0.35"
-                            android:layout_width="0dp"
-                            android:text="@string/wait_info" />
-                    </LinearLayout>
-                </LinearLayout>
+                    layout="@layout/app_limitation_layout" />
 
 
             </android.support.v4.view.ViewPager>
+
+            </ScrollView>
 
             <com.neocampus.wifishared.views.CirclePageIndicator
                 android:layout_width="wrap_content"
@@ -469,7 +128,7 @@
                 android:orientation="horizontal"
                 android:id="@+id/id_circle_indicator"
                 android:layout_gravity="center_vertical|center_horizontal"
-                android:layout_marginBottom="30dp">
+                android:layout_marginBottom="10dp">
 
             </com.neocampus.wifishared.views.CirclePageIndicator>
 

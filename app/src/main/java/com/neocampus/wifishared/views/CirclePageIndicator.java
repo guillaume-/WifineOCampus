@@ -10,9 +10,9 @@ import android.widget.LinearLayout;
 import com.neocampus.wifishared.R;
 
 /**
- * Created by Hirochi on 15/12/2016.
+ * CirclePageIndicator permet d'affiche le cercle pour changer de page sur une vue multi-page
+ * @author Hirochi ?
  */
-
 public class CirclePageIndicator extends LinearLayout {
 
     private ViewPager viewPager;

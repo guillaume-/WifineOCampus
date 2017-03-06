@@ -5,11 +5,17 @@ import com.neocampus.wifishared.utils.WifiApControl;
 import java.util.List;
 
 /**
- * Created by Hirochi â˜  on 12/01/17.
+ * OnReachableClientListener permet de transmettre une liste de clients
+ *
+ * @author Hirochi ?
+ * @version 1.0.0
  */
-
 public interface OnReachableClientListener {
-    void onReachableClient(WifiApControl.Client client);
+
+    /**
+     * Reçoit une liste de clients
+     * @param clients liste de clients
+     */
     void onReachableClients(List<WifiApControl.Client> clients);
 
 }

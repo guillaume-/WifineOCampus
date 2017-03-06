@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimary">#3f51b5</color>
     <color name="colorPrimaryDark">#303f9f</color>
-    <color name="colorAccent">#18791c</color>
+    <color name="colorAccent">#3f453f</color>
 
-    <color name="list_item_bg_pressed">#22b6b6b6</color>
+    <color name="colorGrayTransparent">#22b6b6b6</color>
     <color name="colorShared">#74182c4a</color>
     <color name="colorNavigation">#f62e3e4c</color>
     <color name="colorPageIndicator">@android:color/black</color>
     <color name="colorGrayLight">#6ac6c0c0</color>
-
+    <color name="colorSwitchEnable">#cf365775</color>
+    <color name="colorSwitchDisable">#c7c1c1</color>
+    <color name="colorSurfaceBackground">#f5f3f3</color>
+    <color name="colorSurfaceText">#7c879b</color>
+    <color name="colorBatterieText">#b2b4b8</color>
+    <color name="colorBatterieBackgroundOn">#eff1f4</color>
+    <color name="colorBatterieBackgroundOff">#7c879b</color>
     <color name="colorTextContent">#545454</color>
+    <color name="colorTitleSetting">#303f9f</color>
+
+    <color name="colorPageIndicator1">@android:color/black</color>
+    <color name="colorPageIndicator2">@android:color/black</color>
+    <color name="colorPageIndicator3">@android:color/white</color>
+    <color name="colorPageIndicatorBorder">@android:color/white</color>
 </resources>

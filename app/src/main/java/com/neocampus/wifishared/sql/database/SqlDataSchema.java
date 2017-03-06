@@ -3,19 +3,31 @@ package com.neocampus.wifishared.sql.database;
 import android.content.ContentValues;
 
 
+
 /**
- * Created by Hirochi on 02/10/2016.
+ * <b> Cette classe contient et gère les differentes valeurs d'un tuple d'une table </b>
+ *
+ * @author NALINGA
  */
-
-
 public abstract class SqlDataSchema {
 
     protected ContentValues values;
 
+    /**
+     * Constructeur par defaut de la classe
+     * @param values
+     */
     public SqlDataSchema(ContentValues values) {
         this.values = values;
     }
 
+    /**
+     * Cette méthode permet de récuperer la valeur d'un champ d'une table en fonction de son nom et son type
+     * @param valueClass
+     * @param key
+     * @param <T>
+     * @return valeur recherché
+     */
     public <T> T get(Class<T> valueClass, String key) {
         if (!values.containsKey(key))
             return null;
@@ -41,6 +53,12 @@ public abstract class SqlDataSchema {
         return (T) this.values.get(key);
     }
 
+    /**
+     * Cette méthode permet de mettre à jour la valeur d'un champ d'une table en fonction de son nom et son type
+     * @param key
+     * @param value
+     * @param <T>
+     */
     public <T> void set(String key, T value) {
         if (value instanceof Byte) {
             this.values.put(key, (Byte) value);

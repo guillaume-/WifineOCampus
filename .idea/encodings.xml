@@ -1,6 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="Encoding">
-    <file url="PROJECT" charset="UTF-8" />
+  <component name="Encoding" defaultCharsetForPropertiesFiles="ISO-8859-1">
+    <file url="file://$PROJECT_DIR$/app/build.gradle" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/activity/MainActivity.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/fragments/FragmentBatterie.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/fragments/FragmentHome.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/fragments/FragmentSession.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/fragments/FragmentSettings.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/fragments/FragmentTime.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/fragments/FragmentTraffic.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/fragments/FragmentUsers.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/listeners/OnActivitySetListener.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/listeners/OnAdapterViewListener.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/listeners/OnFragmentConfigListener.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/listeners/OnFragmentSetListener.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/listeners/OnReachableClientListener.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/listeners/OnServiceSetListener.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/observables/BatterieObservable.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/observables/ClientObservable.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/observables/DataObservable.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/observables/HotspotObservable.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/observables/NetworkObservable.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/observables/TimeObservable.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/receivers/OnAlarmReceiver.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/receivers/OnBatterieReceiver.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/receivers/OnBootCompleted.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/receivers/OnHotspotReceiver.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/receivers/OnNetworkReceiver.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/services/ServiceDataTraffic.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/services/ServiceNeOCampus.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/services/ServiceTaskClients.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/sql/annotations/Column.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/sql/annotations/SqlType.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/sql/annotations/Table.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/sql/annotations/Trigger.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/sql/database/SqlDataSchema.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/sql/database/TableConfiguration.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/sql/database/TableConsommation.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/sql/database/TableUtilisateur.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/sql/manage/SQLDatabaseManager.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/sql/manage/SQLManager.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/sql/manage/SQLiteHelper.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/utils/AnnotationUtils.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/utils/BatterieUtils.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/utils/ClassUtils.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/utils/DexUtils.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/utils/FragmentUtils.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/utils/NetworkUtils.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/utils/NotificationUtils.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/utils/ParcelableUtils.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/utils/TimeLog.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/utils/TrafficUtils.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/utils/WifiApControl.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/views/BatterieSurfaceView.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/views/ChronoTimeView.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/views/CirclePageIndicator.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/views/CirclePagerAdapter.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/views/DataSurfaceView.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/views/KeyboardViews.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/views/ListClientAdapter.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/views/ProgressSurfaceView.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/views/ReachableUserView.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/views/SessionHistoView.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/views/SessionUserView.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/neocampus/wifishared/views/UsersHistoView.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/build.gradle" charset="UTF-8" />
+    <file url="PROJECT" charset="ISO-8859-1" />
   </component>
 </project>

@@ -15,7 +15,7 @@
         android:layout_width="0dp"
         android:padding="5dp"
         android:gravity="center_vertical|center_horizontal"
-        android:id="@+id/iDAddressPhysique" />
+        android:id="@+id/addressPhysique" />
 
     <TextView
         android:text="Adresse IP"
@@ -28,7 +28,7 @@
         android:layout_width="0dp"
         android:padding="5dp"
         android:gravity="center_vertical|center_horizontal"
-        android:id="@+id/iDAdressIP" />
+        android:id="@+id/adressIP" />
 
     <Space
         android:layout_width="0dp"
